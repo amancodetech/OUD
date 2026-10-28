@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:17.11-alpine
+    container_name: oud_erp_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: oud_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+      POSTGRES_DB: oud_erp
+    volumes:
+      - oud_pgdata:/var/lib/postgresql/data
+      - ./backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U oud_user -d oud_erp"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: oud_erp_app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://oud_user:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}@db:5432/oud_erp?schema=public
+      SESSION_SECRET: ${SESSION_SECRET:?Set SESSION_SECRET}
+      NODE_ENV: production
+      APP_URL: ${APP_URL:?Set APP_URL}
+    ports:
+      - "3000:3000"
+
+volumes:
+  oud_pgdata:

@@ -1,0 +1,10 @@
+[Unit]
+Description=Hourly check of OUD backup freshness
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+Unit=oud-backup-health.service
+
+[Install]
+WantedBy=timers.target

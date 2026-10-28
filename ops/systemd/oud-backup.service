@@ -1,0 +1,14 @@
+[Unit]
+Description=OUD encrypted database backup
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/Desktop/OUD
+EnvironmentFile=%h/.config/oud/backup.env
+ExecStart=/usr/bin/node scripts/backup-scheduled.mjs
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+TimeoutStartSec=2h

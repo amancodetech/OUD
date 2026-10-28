@@ -1,0 +1,456 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// ENUMS (التعدادات الثابتة)
+// ==========================================
+
+enum UserRole {
+  ADMIN       // المالك / المدير: صلاحية كاملة + الإعدادات + فك قفل الفترة + إلغاء المستندات
+  ACCOUNTANT  // المحاسب: كل الحركات والتقارير بدون تعديل إعدادات التأسيس
+  CASHIER     // البائع / الكاشير: المبيعات، تحصيل العملاء، عملاء السائقين، صرف التستر
+}
+
+enum RecordStatus {
+  POSTED      // معتمد ويدخل في كل الحسابات (مكافئ BaseValid = 1)
+  VOID        // ملغى مع بقاء أثره في سجل التدقيق (مكافئ BaseValid = 0)
+}
+
+enum PartyType {
+  CLIENT      // عميل (C001)
+  SUPPLIER    // مورد (SUP001)
+  DRIVER      // سائق (D001)
+  PARTNER     // شريك (PR001)
+  FUNDER      // ممول - مثل أخ المالك (F001)
+}
+
+enum ItemRole {
+  MERCHANDISE // بضاعة (تُشترى وتُباع مباشرة)
+  RAW         // خام (مكونات وتغليف)
+  FINISHED    // منتج تام (يُصنع في المحل من الخامات)
+}
+
+enum SaleLineType {
+  SALE        // بيع عادي
+  DRIVER_GIFT // هدية سائق عينية من المخزون
+}
+
+enum CashAccountType {
+  CASH        // خزينة
+  BANK        // بنك
+}
+
+enum CashTransactionType {
+  CUSTOMER_COLLECTION     // تحصيل عميل (+)
+  CUSTOMER_REFUND         // رد مبلغ لعميل (-)
+  SUPPLIER_PAYMENT        // سداد مورد (-)
+  SUPPLIER_REFUND         // استرداد من مورد (+)
+  CASH_EXPENSE            // مصروف نقدي (-)
+  DRIVER_AMOUNT           // مبلغ سائق (-)
+  DRIVER_CASH_GIFT        // هدية نقدية لسائق (-)
+  EXTERNAL_SALES_PROFIT   // ربح مبيعات خارجية (+)
+  ASSET_PURCHASE          // شراء أصل (-)
+  PARTNER_CONTRIBUTION    // مساهمة شريك (+)
+  PARTNER_DRAWING         // مسحوبات شريك (-)
+  PROFIT_DISTRIBUTION     // توزيع أرباح (-)
+  LOAN_RECEIVED           // قرض مستلم (+)
+  LOAN_REPAYMENT          // سداد أصل قرض (-)
+  OWNER_BROTHER_FINANCING // تمويل أخ المالك (+)
+  OWNER_BROTHER_REPAYMENT // رد تمويل أخ المالك (-)
+  INTERNAL_TRANSFER       // تحويل بين الخزينة والبنك (ميزة ويب)
+}
+
+enum ReturnType {
+  SALE_RETURN     // مرتجع بيع
+  PURCHASE_RETURN // مرتجع شراء
+}
+
+enum SaleReturnCondition {
+  GOOD    // صالح (يعود للمخزون)
+  DAMAGED // تالف (لا يعود للمخزون ويُحمّل كمصروف تلف بتكلفة البيع)
+}
+
+enum StockIssueType {
+  TESTER  // تستر مستهلك
+  SAMPLE  // عينة
+  DAMAGED // تالف
+}
+
+// ==========================================
+// 1. المستخدمون، التدقيق، الإعدادات
+// ==========================================
+
+model User {
+  id           String    @id @default(cuid())
+  username     String    @unique
+  displayName  String
+  passwordHash String
+  role         UserRole  @default(CASHIER)
+  permissions  Json?     // صلاحيات مخصصة لكل حساب (مثل حساب الريسبشن)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  auditLogs    AuditLog[]
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  action     String   // CREATE | UPDATE | VOID | UNLOCK_PERIOD | IMPORT
+  entityType String   // SaleInvoice | PurchaseInvoice | CashTransaction | ...
+  entityCode String   // S000001 | C000001 | P001 ...
+  reason     String?  // سبب التعديل أو الإلغاء
+  beforeJson Json?
+  afterJson  Json?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityCode])
+  @@index([createdAt])
+}
+
+model SystemSetting {
+  id                      Int       @id @default(1) // صف واحد دائماً (id = 1)
+  storeName               String    @default("محل العود والعطور")
+  currencyLabel           String    @default("روبية (IDR)")
+  currencyCode            String    @default("IDR") // IDR | SAR | AED | USD
+  startYear               Int       @default(2026)  // سنة البداية الثابتة (B12)
+  openingCash             Decimal   @default(0) @db.Decimal(18, 4) // رصيد الخزينة عند البداية (B8)
+  openingBank             Decimal   @default(0) @db.Decimal(18, 4) // رصيد البنك عند البداية (B9)
+  openingReviewed         Boolean   @default(false) // تمت مراجعة أرصدة البداية؟ (B10)
+  approveOpeningAssets    Boolean   @default(false) // اعتماد القيم الافتتاحية للأصول؟ (الأصول L3)
+  openingLoans            Decimal   @default(0) @db.Decimal(18, 4) // قروض افتتاحية (الأصول L14)
+  openingRetainedEarnings Decimal   @default(0) @db.Decimal(18, 4) // أرباح مرحلة افتتاحية (الأصول L15)
+  allowNegativeStock      Boolean   @default(false) // منع البيع/الصرف بالسالب افتراضياً مع خيار السماح للمدير
+  lockedThroughDate       DateTime? @db.Date        // إقفال الفترة المحاسبية حتى تاريخ معين
+  updatedAt               DateTime  @updatedAt
+}
+
+// ==========================================
+// 2. البيانات الأساسية (Master Data)
+// ==========================================
+
+model ItemCategory {
+  id        String  @id @default(cuid())
+  name      String  @unique // عود طبيعي، دهن عود...
+  prefix    String  // NA, EN, PE, OO, MX, PF, BA, BX, SB, WD, CF, RM
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+  items     Item[]
+}
+
+model UnitOption {
+  id        String  @id @default(cuid())
+  name      String  @unique // قطعة، جرام، كيلوجرام، ملليلتر، لتر، تولة...
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+  items     Item[]
+}
+
+model Item {
+  id               String       @id @default(cuid())
+  code             String       @unique // المعرف الثابت: P001, P002 ...
+  name             String       @unique // اسم الصنف بالعربية
+  nameId           String?      // اسم الصنف بالإندونيسية (Bahasa Indonesia)
+  nameEn           String?      // اسم الصنف بالإنجليزية (English)
+  categoryId       String
+  category         ItemCategory @relation(fields: [categoryId], references: [id])
+  unitId           String
+  unit             UnitOption   @relation(fields: [unitId], references: [id])
+  role             ItemRole     @default(MERCHANDISE) // بضاعة | خام | منتج تام
+  reorderLevel     Decimal      @default(0) @db.Decimal(18, 4) // حد إعادة الطلب
+  openingQty       Decimal      @default(0) @db.Decimal(18, 4) // كمية أول المدة
+  openingValue     Decimal      @default(0) @db.Decimal(18, 4) // قيمة أول المدة
+  customCode       String?      // كود بديل اختياري
+  defaultSalePrice Decimal?     @db.Decimal(18, 4) // سعر بيع افتراضي اختياري لتسريع الإدخال في الويب
+  isActive         Boolean      @default(true)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  purchaseLines   PurchaseLine[]
+  saleLines       SaleLine[]
+  stockIssues     StockIssue[]
+  batchesProduced ProductionBatch[]
+  batchMaterials  BatchMaterial[]
+}
+
+model Party {
+  id                  String    @id @default(cuid())
+  code                String    @unique // الكود الثابت: C001, SUP001, D001, PR001, F001
+  name                String    // الاسم بالعربية
+  nameId              String?   // الاسم بالإندونيسية
+  nameEn              String?   // الاسم بالإنجليزية
+  type                PartyType // عميل | مورد | سائق | شريك | ممول
+  phone               String?
+  country             String?
+  address             String?
+  supplierCategory    String?   // فئة المورد / اسم المؤسسة والمتجر بالعربية
+  supplierCategoryEn  String?   // اسم المؤسسة / المتجر بالإنجليزية (Nama Perusahaan / Toko dalam Bahasa Inggris)
+  carNumber           String?   // رقم السيارة (للسائق)
+  openingInvoice      Decimal   @default(0) @db.Decimal(18, 4) // إجمالي الفاتورة الافتتاحية
+  openingPaid         Decimal   @default(0) @db.Decimal(18, 4) // تم السداد من الفاتورة الافتتاحية
+  openingBalance      Decimal   @default(0) @db.Decimal(18, 4) // رصيد أول المدة الصافي (+ مدين لنا / علينا للمورد، - دائن)
+  profitShareRatio    Decimal   @default(0) @db.Decimal(7, 4)  // نسبة ربح الشريك (مثلاً 0.6000 = 60%)
+  openingCapital      Decimal   @default(0) @db.Decimal(18, 4) // رأس مال أول المدة للشريك (ورقة الشركاء)
+  carryoverReferrals  Int       @default(0) // عملاء مرحلون دون هدية عند بدء النظام (ورقة هدايا السائقين)
+  isDriverGiftEnabled Boolean   @default(false) // هل يظهر في كشف هدايا السائقين؟
+  isActive            Boolean   @default(true)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  purchaseInvoices PurchaseInvoice[]
+  saleInvoices     SaleInvoice[]     @relation("CustomerSales")
+  driverGiftLines  SaleLine[]        @relation("DriverGiftSales")
+  cashTransactions CashTransaction[]
+  returns          ReturnLine[]
+  referrals        DriverReferral[]
+
+  @@unique([name, type]) // منع تكرار نفس الاسم لنفس نوع التعامل كما في تنبيه ورقة الأسماء
+}
+
+model FixedAsset {
+  id             String            @id @default(cuid())
+  code           String            @unique // معرف ثابت: FA001 .. FA014
+  name           String            // اسم الأصل بالعربية
+  nameId         String?           // اسم الأصل بالإندونيسية
+  nameEn         String?           // اسم الأصل بالإنجليزية
+  acquiredDate   DateTime?         @db.Date
+  submittedValue Decimal           @default(0) @db.Decimal(18, 4) // قيمة مقدمة قبل التشغيل
+  notes          String?
+  isActive       Boolean           @default(true)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  cashAdditions  CashTransaction[]
+}
+
+model GiftPolicy {
+  id                 String   @id @default(cuid())
+  effectiveDate      DateTime @unique @db.Date // تاريخ بدء التطبيق (فريد)
+  customersPerGift   Int      // عدد العملاء لكل هدية (عدد صحيح >= 1، مثلاً 10)
+  giftValue          Decimal  @db.Decimal(18, 4) // قيمة الهدية (مثلاً 100,000)
+  notes              String?
+  createdAt          DateTime @default(now())
+}
+
+// ==========================================
+// 3. المشتريات والمبيعات (رأس فاتورة + سطور)
+// ==========================================
+
+model PurchaseInvoice {
+  id          String       @id @default(cuid())
+  invoiceNo   String       // رقم الفاتورة كما في مستند المورد (مثل P-1001)
+  invoiceYear Int          // YEAR(invoiceDate)
+  invoiceKey  String       // "<invoiceYear> | <invoiceNo>" (مثل "2026 | P-1001")
+  invoiceDate DateTime     @db.Date
+  dueDate     DateTime?    @db.Date // تاريخ الاستحقاق الموحد للفاتورة
+  supplierId  String
+  supplier    Party        @relation(fields: [supplierId], references: [id])
+  notes       String?
+  status      RecordStatus @default(POSTED)
+  voidReason  String?
+  voidedAt    DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  lines       PurchaseLine[]
+
+  @@unique([supplierId, invoiceKey]) // فرادة مفتاح الفاتورة للمورد الواحد
+  @@index([invoiceDate])
+  @@index([invoiceKey])
+}
+
+model PurchaseLine {
+  id             String          @id @default(cuid())
+  code           String          @unique // معرف سطر الشراء الفريد: P000001
+  invoiceId      String
+  invoice        PurchaseInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  itemId         String
+  item           Item            @relation(fields: [itemId], references: [id])
+  qty            Decimal         @db.Decimal(18, 4) // الكمية الأساسية (> 0)
+  unitCost       Decimal         @db.Decimal(18, 4) // تكلفة الوحدة (>= 0)
+  landedCost     Decimal         @default(0) @db.Decimal(18, 4) // حصة تكلفة الوصول (>= 0)
+  discount       Decimal         @default(0) @db.Decimal(18, 4) // خصم البند (>= 0)
+  lineTotalCost  Decimal         @db.Decimal(18, 4) // qty * unitCost + landedCost - discount (>= 0)
+  status         RecordStatus    @default(POSTED)
+
+  returns        ReturnLine[]
+
+  @@index([itemId])
+}
+
+model SaleInvoice {
+  id          String       @id @default(cuid())
+  invoiceNo   String       // رقم الفاتورة (مثل S-1001 أو GIFT-0001 لهدايا السائقين)
+  invoiceYear Int          // YEAR(invoiceDate)
+  invoiceKey  String       // "<invoiceYear> | <invoiceNo>"
+  invoiceDate DateTime     @db.Date
+  dueDate     DateTime?    @db.Date
+  customerId  String?      // إلزامي في البيع العادي، فارغ في هدية السائق العينية
+  customer    Party?       @relation("CustomerSales", fields: [customerId], references: [id])
+  notes       String?
+  status      RecordStatus @default(POSTED)
+  voidReason  String?
+  voidedAt    DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  lines       SaleLine[]
+
+  @@index([customerId, invoiceKey])
+  @@index([invoiceDate])
+}
+
+model SaleLine {
+  id                        String       @id @default(cuid())
+  code                      String       @unique // معرف سطر البيع الفريد: S000001
+  invoiceId                 String
+  invoice                   SaleInvoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  lineType                  SaleLineType @default(SALE) // SALE | DRIVER_GIFT
+  itemId                    String
+  item                      Item         @relation(fields: [itemId], references: [id])
+  qty                       Decimal      @db.Decimal(18, 4) // الكمية الأساسية (> 0)
+  unitPrice                 Decimal      @default(0) @db.Decimal(18, 4) // سعر الوحدة (0 في هدية السائق)
+  discount                  Decimal      @default(0) @db.Decimal(18, 4) // خصم البند (0 في هدية السائق)
+  netSaleAmount             Decimal      @default(0) @db.Decimal(18, 4) // في البيع: qty*unitPrice - discount، وفي هدية السائق: 0
+  driverId                  String?      // في حالة DRIVER_GIFT فقط
+  driver                    Party?       @relation("DriverGiftSales", fields: [driverId], references: [id])
+  driverGiftSettlementValue Decimal      @default(0) @db.Decimal(18, 4) // قيمة تسوية هدية السائق
+  status                    RecordStatus @default(POSTED)
+
+  returns                   ReturnLine[]
+
+  @@index([itemId])
+  @@index([driverId])
+}
+
+// ==========================================
+// 4. الحسابات والمدفوعات، المرتجعات، المخزون، التصنيع، السائقون
+// ==========================================
+
+model CashTransaction {
+  id                String              @id @default(cuid())
+  code              String              @unique // رقم حركة فريد: C000001
+  txDate            DateTime            @db.Date
+  type              CashTransactionType
+  account           CashAccountType     // CASH (خزينة) | BANK (بنك)
+  transferToAccount CashAccountType?    // يُستخدم فقط إذا كان النوع INTERNAL_TRANSFER
+  amount            Decimal             @db.Decimal(18, 4) // المبلغ (> 0)
+  partyId           String?             // العميل / المورد / السائق / الشريك / الممول حسب النوع
+  party             Party?              @relation(fields: [partyId], references: [id])
+  invoiceKey        String?             // "2026 | S-1001" أو "افتتاحي" (لتحصيل/رد عميل أو سداد/استرداد مورد)
+  assetId           String?             // عند نوع ASSET_PURCHASE فقط
+  asset             FixedAsset?         @relation(fields: [assetId], references: [id])
+  description       String?             // البيان
+  status            RecordStatus        @default(POSTED)
+  voidReason        String?
+  voidedAt          DateTime?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  @@index([txDate])
+  @@index([partyId, invoiceKey])
+  @@index([type])
+}
+
+model ReturnLine {
+  id                   String               @id @default(cuid())
+  code                 String               @unique // معرف سطر المرتجع: R000001
+  returnDocNo          String               // رقم مستند المرتجع: RT-001
+  returnDate           DateTime             @db.Date
+  type                 ReturnType           // SALE_RETURN | PURCHASE_RETURN
+  partyId              String
+  party                Party                @relation(fields: [partyId], references: [id])
+  invoiceKey           String               // الفاتورة الأصلية مع سنتها "2026 | S-1001"
+  sourceSaleLineId     String?
+  sourceSaleLine       SaleLine?            @relation(fields: [sourceSaleLineId], references: [id])
+  sourcePurchaseLineId String?
+  sourcePurchaseLine   PurchaseLine?        @relation(fields: [sourcePurchaseLineId], references: [id])
+  qty                  Decimal              @db.Decimal(18, 4) // الكمية المرتجعة (> 0)
+  saleReturnCondition  SaleReturnCondition? // GOOD | DAMAGED (في مرتجع البيع فقط)
+  supplierCreditNote   Decimal?             @db.Decimal(18, 4) // إشعار المورد الفعلي (اختياري في مرتجع الشراء)
+  reason               String               // السبب (إلزامي كما في Excel)
+  notes                String?
+  status               RecordStatus         @default(POSTED)
+  voidReason           String?
+  voidedAt             DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+
+  @@index([returnDate])
+  @@index([partyId, invoiceKey])
+}
+
+model StockIssue {
+  id          String         @id @default(cuid())
+  code        String         @unique // معرف صرف ثابت: IS000001
+  issueDate   DateTime       @db.Date
+  type        StockIssueType // TESTER | SAMPLE | DAMAGED
+  itemId      String
+  item        Item           @relation(fields: [itemId], references: [id])
+  qty         Decimal        @db.Decimal(18, 4) // الكمية المستهلكة (> 0)
+  testerRef   String?        // مرجع التستر
+  reason      String         // السبب/المناسبة (إلزامي كما في Excel)
+  notes       String?
+  status      RecordStatus   @default(POSTED)
+  voidReason  String?
+  voidedAt    DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([issueDate])
+  @@index([itemId])
+}
+
+model ProductionBatch {
+  id             String          @id @default(cuid())
+  code           String          @unique // رقم دفعة فريد: B-001
+  completionDate DateTime        @db.Date
+  finishedItemId String
+  finishedItem   Item            @relation(fields: [finishedItemId], references: [id])
+  producedQty    Decimal         @db.Decimal(18, 4) // الكمية الناتجة (> 0)
+  notes          String?
+  status         RecordStatus    @default(POSTED)
+  voidReason     String?
+  voidedAt       DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  materials      BatchMaterial[]
+
+  @@index([completionDate])
+}
+
+model BatchMaterial {
+  id          String          @id @default(cuid())
+  batchId     String
+  batch       ProductionBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  rawItemId   String
+  rawItem     Item            @relation(fields: [rawItemId], references: [id])
+  consumedQty Decimal         @db.Decimal(18, 4) // الكمية المستهلكة (> 0)
+
+  @@index([batchId])
+  @@index([rawItemId])
+}
+
+model DriverReferral {
+  id               String       @id @default(cuid())
+  code             String       @unique // معرف زيارة ثابت: VIS000001
+  visitDate        DateTime     @db.Date
+  visitorUniqueKey String       @unique // هاتف العميل أو كود فريد (لا يتكرر أبداً في النظام)
+  visitorName      String       // اسم العميل الزائر
+  driverId         String
+  driver           Party        @relation(fields: [driverId], references: [id])
+  notes            String?
+  status           RecordStatus @default(POSTED)
+  voidReason       String?
+  voidedAt         DateTime?
+  createdAt        DateTime     @default(now())
+
+  @@index([driverId, visitDate, code])
+}

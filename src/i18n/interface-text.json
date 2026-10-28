@@ -1,0 +1,3834 @@
+{
+  "العربية": {
+    "en": "English",
+    "id": "Bahasa Indonesia"
+  },
+  "rtl": {
+    "en": "ltr",
+    "id": "ltr"
+  },
+  "مؤسسة سدرة العود": {
+    "en": "Sidrat Al-Oud",
+    "id": "Sidrat Al-Oud"
+  },
+  "النظام المالي والمخزني المتكامل": {
+    "en": "Integrated Oud & Perfume Financial & Inventory ERP",
+    "id": "Sistem ERP Keuangan & Inventaris Gaharu & Parfum Terpadu"
+  },
+  "حفظ": {
+    "en": "Save",
+    "id": "Simpan"
+  },
+  "جاري الحفظ...": {
+    "en": "Saving...",
+    "id": "Menyimpan..."
+  },
+  "إلغاء": {
+    "en": "Cancel",
+    "id": "Batal"
+  },
+  "حذف": {
+    "en": "Delete",
+    "id": "Hapus"
+  },
+  "تعديل": {
+    "en": "Edit",
+    "id": "Ubah"
+  },
+  "إضافة": {
+    "en": "Add",
+    "id": "Tambah"
+  },
+  "بحث...": {
+    "en": "Search...",
+    "id": "Cari..."
+  },
+  "تصفية": {
+    "en": "Filter",
+    "id": "Filter"
+  },
+  "الكل": {
+    "en": "All",
+    "id": "Semua"
+  },
+  "جاري التحميل...": {
+    "en": "Loading...",
+    "id": "Memuat..."
+  },
+  "لا توجد بيانات مسجلة حالياً": {
+    "en": "No records found",
+    "id": "Tidak ada data"
+  },
+  "إجراءات": {
+    "en": "Actions",
+    "id": "Aksi"
+  },
+  "ملاحظات": {
+    "en": "Notes",
+    "id": "Catatan"
+  },
+  "التاريخ": {
+    "en": "Date",
+    "id": "Tanggal"
+  },
+  "المبلغ": {
+    "en": "Amount",
+    "id": "Jumlah"
+  },
+  "الإجمالي": {
+    "en": "Total",
+    "id": "Total"
+  },
+  "الكمية": {
+    "en": "Qty",
+    "id": "Jumlah"
+  },
+  "سعر الوحدة": {
+    "en": "Unit Price",
+    "id": "Harga Satuan"
+  },
+  "تكلفة الوحدة": {
+    "en": "Unit Cost",
+    "id": "Harga Pokok Satuan"
+  },
+  "الخصم": {
+    "en": "Discount",
+    "id": "Diskon"
+  },
+  "الضريبة": {
+    "en": "Tax",
+    "id": "Pajak"
+  },
+  "الصافي": {
+    "en": "Net Total",
+    "id": "Total Bersih"
+  },
+  "المدفوع": {
+    "en": "Paid",
+    "id": "Dibayar"
+  },
+  "المتبقي (آجل)": {
+    "en": "Remaining (Credit)",
+    "id": "Sisa (Kredit)"
+  },
+  "الحالة": {
+    "en": "Status",
+    "id": "Status"
+  },
+  "نشط": {
+    "en": "Active",
+    "id": "Aktif"
+  },
+  "غير نشط": {
+    "en": "Inactive",
+    "id": "Nonaktif"
+  },
+  "نعم": {
+    "en": "Yes",
+    "id": "Ya"
+  },
+  "لا": {
+    "en": "No",
+    "id": "Tidak"
+  },
+  "طباعة": {
+    "en": "Print",
+    "id": "Cetak"
+  },
+  "تصدير إكسل": {
+    "en": "Export Excel",
+    "id": "Ekspor Excel"
+  },
+  "استيراد إكسل": {
+    "en": "Import Excel",
+    "id": "Impor Excel"
+  },
+  "إغلاق": {
+    "en": "Close",
+    "id": "Tutup"
+  },
+  "هل أنت متأكد من الحذف؟": {
+    "en": "Are you sure you want to delete this record?",
+    "id": "Apakah Anda yakin ingin menghapus data ini?"
+  },
+  "تم الحفظ بنجاح": {
+    "en": "Saved successfully",
+    "id": "Berhasil disimpan"
+  },
+  "حدث خطأ أثناء العملية": {
+    "en": "An error occurred while processing",
+    "id": "Terjadi kesalahan saat memproses"
+  },
+  "هذا الحقل مطلوب": {
+    "en": "This field is required",
+    "id": "Kolom ini wajib diisi"
+  },
+  "اختر...": {
+    "en": "Select...",
+    "id": "Pilih..."
+  },
+  "افتتاحي": {
+    "en": "Opening Balance",
+    "id": "Saldo Awal"
+  },
+  "رجوع": {
+    "en": "Back",
+    "id": "Kembali"
+  },
+  "تحديث": {
+    "en": "Refresh",
+    "id": "Segarkan"
+  },
+  "التفاصيل": {
+    "en": "Details",
+    "id": "Rincian"
+  },
+  "روبية": {
+    "en": "IDR",
+    "id": "IDR"
+  },
+  "الفترة:": {
+    "en": "Period:",
+    "id": "Periode:"
+  },
+  "السنة كاملة": {
+    "en": "Full Year",
+    "id": "Setahun Penuh"
+  },
+  "طوال فترة الإدخال (تراكمي)": {
+    "en": "All Time (Cumulative)",
+    "id": "Sepanjang Waktu (Kumulatif)"
+  },
+  "أشهر السنة": {
+    "en": "Months of the Year",
+    "id": "Bulan dalam Setahun"
+  },
+  "حالة التأسيس: مكتمل وجاهز للعمل": {
+    "en": "Setup Status: Complete & Ready",
+    "id": "Status Pengaturan: Selesai & Siap"
+  },
+  "تنبيه التأسيس (C7):": {
+    "en": "Setup Alert (C7):",
+    "id": "Peringatan Pengaturan (C7):"
+  },
+  "معالج التهيئة": {
+    "en": "Setup Wizard",
+    "id": "Panduan Pengaturan"
+  },
+  "الإقفال اليومي": {
+    "en": "Daily Closing",
+    "id": "Penutupan Harian"
+  },
+  "اللغة": {
+    "en": "Language",
+    "id": "Bahasa"
+  },
+  "التحليلات والتقارير": {
+    "en": "Analytics & Reports",
+    "id": "Analisis & Laporan"
+  },
+  "العمليات اليومية": {
+    "en": "Daily Operations",
+    "id": "Operasional Harian"
+  },
+  "المستودع والتشغيل": {
+    "en": "Warehouse & Production",
+    "id": "Gudang & Produksi"
+  },
+  "البيانات الأساسية": {
+    "en": "Master Data",
+    "id": "Data Master"
+  },
+  "لوحة التحكم": {
+    "en": "Dashboard",
+    "id": "Dasbor"
+  },
+  "المخزون وبطاقة الصنف": {
+    "en": "Inventory & Stock Card",
+    "id": "Inventaris & Kartu Stok"
+  },
+  "الديون وكشف الحساب": {
+    "en": "Debts & Statements",
+    "id": "Piutang & Hutang"
+  },
+  "المبيعات": {
+    "en": "Sales & Billing",
+    "id": "Penjualan & Faktur"
+  },
+  "المشتريات": {
+    "en": "Purchases",
+    "id": "Pembelian"
+  },
+  "الصندوق والمدفوعات": {
+    "en": "Cash & Payments",
+    "id": "Kas & Pembayaran"
+  },
+  "المرتجعات": {
+    "en": "Returns",
+    "id": "Retur"
+  },
+  "صرف المخزون والعينات": {
+    "en": "Stock Issues & Samples",
+    "id": "Pengeluaran Stok & Sampel"
+  },
+  "التصنيع والتركيب": {
+    "en": "Manufacturing & Blending",
+    "id": "Produksi & Peracikan"
+  },
+  "ترشيحات وهدايا السائقين": {
+    "en": "Driver Referrals & Gifts",
+    "id": "Rujukan Supir & Hadiah"
+  },
+  "العملاء والموردين": {
+    "en": "Customers & Suppliers",
+    "id": "Pelanggan & Supplier"
+  },
+  "دليل الأصناف": {
+    "en": "Items Catalog",
+    "id": "Katalog Produk"
+  },
+  "الشركاء والأصول": {
+    "en": "Partners & Fixed Assets",
+    "id": "Mitra & Aset Tetap"
+  },
+  "معالج التأسيس": {
+    "en": "Setup Wizard",
+    "id": "Panduan Pengaturan"
+  },
+  "الإعدادات والنسخ الاحتياطي": {
+    "en": "Settings & Backup",
+    "id": "Pengaturan & Cadangan"
+  },
+  "توسيع القائمة": {
+    "en": "Expand Sidebar",
+    "id": "Perluas Menu"
+  },
+  "طي القائمة": {
+    "en": "Collapse Sidebar",
+    "id": "Ciutkan Menu"
+  },
+  "تسجيل الخروج": {
+    "en": "Sign Out",
+    "id": "Keluar"
+  },
+  "هل تريد تسجيل الخروج من النظام؟": {
+    "en": "Are you sure you want to sign out?",
+    "id": "Apakah Anda yakin ingin keluar?"
+  },
+  "تسجيل الدخول إلى النظام": {
+    "en": "Sign In to ERP System",
+    "id": "Masuk ke Sistem ERP"
+  },
+  "مؤسسة سدرة العود — الإدارة المالية والمخزنية": {
+    "en": "Sidrat Al-Oud — Financial & Inventory Management",
+    "id": "Sidrat Al-Oud — Manajemen Keuangan & Inventaris"
+  },
+  "اسم المستخدم": {
+    "en": "Username",
+    "id": "Nama Pengguna"
+  },
+  "كلمة المرور": {
+    "en": "Password",
+    "id": "Kata Sandi"
+  },
+  "دخول للنظام": {
+    "en": "Sign In",
+    "id": "Masuk"
+  },
+  "جاري التحقق...": {
+    "en": "Signing in...",
+    "id": "Sedang masuk..."
+  },
+  "اسم المستخدم أو كلمة المرور غير صحيحة": {
+    "en": "Invalid username or password",
+    "id": "Nama pengguna atau kata sandi salah"
+  },
+  "لوحة التحكم والمؤشرات المالية": {
+    "en": "Executive Financial & Inventory Dashboard",
+    "id": "Dasbor Eksekutif Keuangan & Inventaris"
+  },
+  "ملخص الأداء المالي والمخزني والديون للفترة المحددة": {
+    "en": "Overview of sales, profitability, cash flow, inventory valuation, and receivables",
+    "id": "Ikhtisar penjualan, laba, arus kas, penilaian inventaris, dan piutang"
+  },
+  "صافي المبيعات": {
+    "en": "Net Sales",
+    "id": "Penjualan Bersih"
+  },
+  "إجمالي الربح التشغيلي": {
+    "en": "Gross Operating Profit",
+    "id": "Laba Kotor Operasional"
+  },
+  "صافي الربح النهائي": {
+    "en": "Net Profit",
+    "id": "Laba Bersih"
+  },
+  "رصيد الصندوق النقدي": {
+    "en": "Cash on Hand",
+    "id": "Saldo Kas & Bank"
+  },
+  "قيمة المخزون الحالي": {
+    "en": "Total Inventory Value",
+    "id": "Total Nilai Inventaris"
+  },
+  "ديون لنا عند العملاء": {
+    "en": "Accounts Receivable (Customers)",
+    "id": "Piutang Pelanggan"
+  },
+  "ديون للموردين علينا": {
+    "en": "Accounts Payable (Suppliers)",
+    "id": "Hutang ke Supplier"
+  },
+  "المصاريف التشغيلية": {
+    "en": "Operating Expenses",
+    "id": "Beban Operasional"
+  },
+  "المبيعات والأرباح الشهرية": {
+    "en": "Monthly Sales & Profit Trend",
+    "id": "Tren Penjualan & Laba Bulanan"
+  },
+  "الأصناف الأكثر مبيعاً وربحية": {
+    "en": "Top Selling & Most Profitable Items",
+    "id": "Produk Terlaris & Paling Menguntungkan"
+  },
+  "تحليل المصاريف التشغيلية": {
+    "en": "Operating Expenses Breakdown",
+    "id": "Rincian Beban Operasional"
+  },
+  "إجراءات سريعة": {
+    "en": "Quick Actions",
+    "id": "Aksi Cepat"
+  },
+  "فاتورة بيع جديدة": {
+    "en": "New Sales Invoice",
+    "id": "Faktur Penjualan Baru"
+  },
+  "فاتورة شراء جديدة": {
+    "en": "New Purchase Invoice",
+    "id": "Faktur Pembelian Baru"
+  },
+  "سند قبض / صرف": {
+    "en": "Cash Receipt / Voucher",
+    "id": "Transaksi Kas / Bukti Kas"
+  },
+  "تنبيهات نواقص المخزون": {
+    "en": "Low Stock Alerts",
+    "id": "Peringatan Stok Rendah"
+  },
+  "الديون المتأخرة": {
+    "en": "Overdue Receivables",
+    "id": "Piutang Jatuh Tempo"
+  },
+  "الفترة المحاسبية المحددة:": {
+    "en": "Selected Accounting Period:",
+    "id": "Periode Akuntansi Terpilih:"
+  },
+  "إلى": {
+    "en": "to",
+    "id": "sampai"
+  },
+  "مراجعة نهاية اليوم (Checklist)": {
+    "en": "End of Day Review (Checklist)",
+    "id": "Tinjauan Akhir Hari (Daftar Periksa)"
+  },
+  "قائمة الدخل ومؤشرات الأرصدة (14 بنداً محاسبياً)": {
+    "en": "Income Statement & Balance Indicators (14 Line Items)",
+    "id": "Laporan Laba Rugi & Indikator Saldo (14 Pos Utama)"
+  },
+  "1. صافي المبيعات (B10)": {
+    "en": "1. Net Sales (B10)",
+    "id": "1. Penjualan Bersih (B10)"
+  },
+  "بعد المرتجعات بتاريخها": {
+    "en": "After dated returns",
+    "id": "Setelah dikurangi retur penjualan"
+  },
+  "2. تكلفة المبيعات (B11)": {
+    "en": "2. Cost of Goods Sold (B11)",
+    "id": "2. Harga Pokok Penjualan - HPP (B11)"
+  },
+  "بعد عكس تكلفة المرتجعات": {
+    "en": "After reversing returns cost",
+    "id": "Setelah membalikkan biaya retur"
+  },
+  "3. مجمل الربح (B12)": {
+    "en": "3. Gross Profit (B12)",
+    "id": "3. Laba Kotor (B12)"
+  },
+  "المبيعات ناقص التكلفة": {
+    "en": "Sales minus cost of goods sold",
+    "id": "Penjualan dikurangi HPP"
+  },
+  "4. المصروفات النقدية (B13)": {
+    "en": "4. Cash Operating Expenses (B13)",
+    "id": "4. Beban Operasional Tunai (B13)"
+  },
+  "بحسب تاريخ الصرف والنثريات": {
+    "en": "By disbursement date and petty cash",
+    "id": "Berdasarkan tanggal pengeluaran dan kas kecil"
+  },
+  "5. تستر وعينات وتالف وفروق": {
+    "en": "5. Testers, Samples, Damaged & Variance",
+    "id": "5. Penguji, Sampel & Barang Rusak"
+  },
+  "خسائر مخزون ومصروف تالف": {
+    "en": "Inventory write-offs and damaged losses",
+    "id": "Penghapusan inventaris dan kerugian kerusakan"
+  },
+  "6. الربح التشغيلي (B14)": {
+    "en": "6. Operating Profit (B14)",
+    "id": "6. Laba Operasional (B14)"
+  },
+  "صافي ربح التشغيل للفترة قبل الإهلاك": {
+    "en": "Operating net profit for period before depreciation",
+    "id": "Laba bersih operasional periode sebelum penyusutan"
+  },
+  "14. أرباح متراكمة منذ البداية (B35)": {
+    "en": "14. Cumulative Profit Since Inception (B35)",
+    "id": "14. Laba Kumulatif Sejak Awal (B35)"
+  },
+  "تراكمي لحساب الشركاء": {
+    "en": "Cumulative for partners equity",
+    "id": "Kumulatif untuk ekuitas para mitra"
+  },
+  "7. قيمة المخزون (B15)": {
+    "en": "7. Inventory Value (B15)",
+    "id": "7. Nilai Inventaris (B15)"
+  },
+  "رصيد المخزون الفعلي (عود + دهن عود + عطور)": {
+    "en": "Actual inventory balance (Oud + Oil + Perfumes)",
+    "id": "Saldo fisik inventaris (Gaharu + Minyak + Parfum)"
+  },
+  "8. الخزينة والبنك (B16)": {
+    "en": "8. Cash & Bank (B16)",
+    "id": "8. Kas & Bank (B16)"
+  },
+  "خزينة": {
+    "en": "Drawer",
+    "id": "Laci Kas"
+  },
+  "بنك": {
+    "en": "Bank",
+    "id": "Bank"
+  },
+  "9. مستحق العملاء (B17)": {
+    "en": "9. Customer Receivables (B17)",
+    "id": "9. Piutang Pelanggan (B17)"
+  },
+  "مديونية العملاء لنا": {
+    "en": "Debts owed by customers to store",
+    "id": "Hutang pelanggan kepada toko"
+  },
+  "10. مستحق الموردين (J9)": {
+    "en": "10. Supplier Payables (J9)",
+    "id": "10. Hutang Supplier (J9)"
+  },
+  "مستحقات الموردين علينا": {
+    "en": "Store liabilities owed to suppliers",
+    "id": "Kewajiban toko kepada supplier"
+  },
+  "11. دائن العملاء (J10)": {
+    "en": "11. Customer Credits (J10)",
+    "id": "11. Saldo Kredit Pelanggan (J10)"
+  },
+  "مقدمات أو مرتجعات": {
+    "en": "Advances or return credits",
+    "id": "Uang muka atau saldo kredit retur pelanggan"
+  },
+  "12. دائن الموردين (J11)": {
+    "en": "12. Supplier Credits (J11)",
+    "id": "12. Saldo Kredit di Supplier (J11)"
+  },
+  "رصيد لنا عند الموردين (مقدمات/مرتجعات)": {
+    "en": "Our balance held with suppliers (advances/returns)",
+    "id": "Saldo toko yang tersimpan di supplier (DP/retur)"
+  },
+  "13. فرق الافتتاح (J16)": {
+    "en": "13. Opening Balance Difference (J16)",
+    "id": "13. Selisih Saldo Awal (J16)"
+  },
+  "متوازن تماماً ✅": {
+    "en": "Fully Balanced ✅",
+    "id": "Sepenuhnya Seimbang ✅"
+  },
+  "بانتظار مطابقة التأسيس": {
+    "en": "Awaiting opening reconciliation",
+    "id": "Menunggu rekonsiliasi saldo awal"
+  },
+  "المقارنة الشهرية لحركة السنة": {
+    "en": "Monthly Comparison for the Year",
+    "id": "Perbandingan Bulanan Sepanjang Tahun"
+  },
+  "تتبع صافي المبيعات، التكلفة، المصروفات، والربح التشغيلي على مدار الـ 12 شهراً": {
+    "en": "Track net sales, COGS, expenses, and operating profit across all 12 months",
+    "id": "Pantau penjualan bersih, HPP, pengeluaran, dan laba operasional selama 12 bulan"
+  },
+  "الربح التشغيلي": {
+    "en": "Operating Profit",
+    "id": "Laba Operasional"
+  },
+  "الشهر": {
+    "en": "Month",
+    "id": "Bulan"
+  },
+  "تكلفة المبيعات": {
+    "en": "COGS",
+    "id": "HPP"
+  },
+  "مجمل الربح": {
+    "en": "Gross Profit",
+    "id": "Laba Kotor"
+  },
+  "مصروفات نقدية": {
+    "en": "Cash Expenses",
+    "id": "Biaya Tunai"
+  },
+  "قيمة المخزون": {
+    "en": "Inventory Value",
+    "id": "Nilai Stok"
+  },
+  "صافي المبيعات حسب الفئات الـ 12": {
+    "en": "Net Sales by 12 Categories",
+    "id": "Penjualan Bersih berdasarkan 12 Kategori"
+  },
+  "إجمالي مبيعات الفئات للفترة المحددة ومساهمة كل فئة في الإيراد الكلي": {
+    "en": "Total category sales for period and contribution to overall revenue",
+    "id": "Total penjualan per kategori untuk periode dan kontribusinya terhadap pendapatan"
+  },
+  "إجمالي مبيعات الفئات:": {
+    "en": "Total Category Sales:",
+    "id": "Total Penjualan Kategori:"
+  },
+  "من الإجمالي": {
+    "en": "of total",
+    "id": "dari total"
+  },
+  "إدارة المبيعات والفواتير": {
+    "en": "Sales & Invoicing Management",
+    "id": "Manajemen Penjualan & Faktur"
+  },
+  "تسجيل فواتير البيع النقدي والآجل وحساب تكلفة البضاعة المباعة والربح تلقائياً": {
+    "en": "Record cash and credit sales with automatic COGS and profit calculation",
+    "id": "Catat penjualan tunai dan kredit dengan perhitungan HPP dan laba otomatis"
+  },
+  "فاتورة مبيعات جديدة": {
+    "en": "New Sales Invoice",
+    "id": "Faktur Penjualan Baru"
+  },
+  "رقم الفاتورة": {
+    "en": "Invoice No.",
+    "id": "No. Faktur"
+  },
+  "العميل": {
+    "en": "Customer",
+    "id": "Pelanggan"
+  },
+  "اختر العميل...": {
+    "en": "Select Customer...",
+    "id": "Pilih Pelanggan..."
+  },
+  "تاريخ الفاتورة": {
+    "en": "Invoice Date",
+    "id": "Tanggal Faktur"
+  },
+  "الصنف": {
+    "en": "Item / Product",
+    "id": "Item / Produk"
+  },
+  "اختر الصنف...": {
+    "en": "Select Item...",
+    "id": "Pilih Produk..."
+  },
+  "المتاح بالمخزون": {
+    "en": "Available Stock",
+    "id": "Stok Tersedia"
+  },
+  "متوسط التكلفة": {
+    "en": "Avg Cost (WAC)",
+    "id": "Biaya Rata-rata (WAC)"
+  },
+  "سعر البيع": {
+    "en": "Selling Price",
+    "id": "Harga Jual"
+  },
+  "خصم السطر": {
+    "en": "Line Discount",
+    "id": "Diskon Baris"
+  },
+  "إجمالي السطر": {
+    "en": "Line Total",
+    "id": "Total Baris"
+  },
+  "ربح السطر": {
+    "en": "Line Profit",
+    "id": "Laba Baris"
+  },
+  "إضافة صنف آخر": {
+    "en": "Add Another Item",
+    "id": "Tambah Item Lain"
+  },
+  "إجمالي الأصناف": {
+    "en": "Items Subtotal",
+    "id": "Subtotal Produk"
+  },
+  "خصم إضافي على الفاتورة": {
+    "en": "Additional Invoice Discount",
+    "id": "Diskon Faktur Tambahan"
+  },
+  "رسوم توصيل / إضافية": {
+    "en": "Delivery / Additional Charges",
+    "id": "Biaya Pengiriman / Biaya Lainnya"
+  },
+  "صافي الفاتورة النهائي": {
+    "en": "Net Invoice Total",
+    "id": "Total Faktur Bersih"
+  },
+  "المبلغ المقبوض نقداً الآن": {
+    "en": "Amount Paid in Cash Now",
+    "id": "Jumlah Dibayar Tunai Sekarang"
+  },
+  "المتبقي في ذمة العميل (آجل)": {
+    "en": "Remaining Balance (On Credit)",
+    "id": "Sisa Pembayaran (Kredit / Piutang)"
+  },
+  "السائق / المرشد السياحي": {
+    "en": "Driver / Tour Guide Referral",
+    "id": "Rujukan Supir / Pemandu Wisata"
+  },
+  "بدون سائق / مباشر": {
+    "en": "Direct Walk-in (No Driver)",
+    "id": "Langsung Datang (Tanpa Supir)"
+  },
+  "حفظ واعتماد الفاتورة": {
+    "en": "Save & Confirm Invoice",
+    "id": "Simpan & Konfirmasi Faktur"
+  },
+  "طباعة الفاتورة": {
+    "en": "Print Invoice",
+    "id": "Cetak Faktur"
+  },
+  "سجل فواتير المبيعات": {
+    "en": "Sales Invoices History",
+    "id": "Riwayat Faktur Penjualan"
+  },
+  "خالص (نقدي)": {
+    "en": "Paid in Full",
+    "id": "Lunas"
+  },
+  "مدفوع جزئياً": {
+    "en": "Partially Paid",
+    "id": "Dibayar Sebagian"
+  },
+  "آجل بالكامل": {
+    "en": "Unpaid (On Credit)",
+    "id": "Belum Lunas (Kredit)"
+  },
+  "الكمية المطلوبة أكبر من الرصيد المتاح في المخزون!": {
+    "en": "Requested quantity exceeds available warehouse stock!",
+    "id": "Jumlah yang diminta melebihi stok gudang yang tersedia!"
+  },
+  "تنبيه: سعر البيع أقل من متوسط التكلفة!": {
+    "en": "Warning: Selling price is below weighted average cost!",
+    "id": "Peringatan: Harga jual berada di bawah harga pokok rata-rata!"
+  },
+  "إدارة المشتريات والتوريد": {
+    "en": "Purchases & Procurement Management",
+    "id": "Manajemen Pembelian & Pengadaan"
+  },
+  "تسجيل فواتير الشراء وتحديث متوسط التكلفة المرجح (WAC) للمخزون تلقائياً": {
+    "en": "Record supplier purchase invoices and automatically recalculate Weighted Average Cost (WAC)",
+    "id": "Catat faktur pembelian supplier dan hitung ulang Biaya Rata-Rata Tertimbang (WAC) secara otomatis"
+  },
+  "فاتورة مشتريات جديدة": {
+    "en": "New Purchase Invoice",
+    "id": "Faktur Pembelian Baru"
+  },
+  "رقم فاتورة الشراء": {
+    "en": "Purchase No.",
+    "id": "No. Pembelian"
+  },
+  "المورد": {
+    "en": "Supplier",
+    "id": "Supplier"
+  },
+  "اختر المورد...": {
+    "en": "Select Supplier...",
+    "id": "Pilih Supplier..."
+  },
+  "تاريخ الشراء": {
+    "en": "Acquisition Date",
+    "id": "Tanggal Perolehan"
+  },
+  "الصنف المشترى": {
+    "en": "Purchased Item",
+    "id": "Item yang Dibeli"
+  },
+  "الكمية الواردة": {
+    "en": "Received Qty",
+    "id": "Jumlah Diterima"
+  },
+  "سعر شراء الوحدة": {
+    "en": "Purchase Unit Price",
+    "id": "Harga Satuan Pembelian"
+  },
+  "نصيب السطر من الشحن": {
+    "en": "Allocated Shipping",
+    "id": "Alokasi Ongkos Kirim"
+  },
+  "مصاريف جمركية/إضافية": {
+    "en": "Customs / Other Costs",
+    "id": "Bea Cukai / Biaya Tambahan"
+  },
+  "التكلفة الفعلية للوحدة": {
+    "en": "Landed Unit Cost",
+    "id": "Harga Pokok Satuan Bersih"
+  },
+  "إجمالي تكلفة السطر": {
+    "en": "Total Line Cost",
+    "id": "Total Biaya Baris"
+  },
+  "المدفوع للمورد الآن": {
+    "en": "Paid to Supplier Now",
+    "id": "Dibayar ke Supplier Sekarang"
+  },
+  "المتبقي للمورد (آجل)": {
+    "en": "Remaining Balance to Supplier",
+    "id": "Sisa Saldo ke Supplier"
+  },
+  "حفظ فاتورة الشراء": {
+    "en": "Save Purchase Invoice",
+    "id": "Simpan Faktur Pembelian"
+  },
+  "سجل فواتير المشتريات": {
+    "en": "Purchase Invoices History",
+    "id": "Riwayat Faktur Pembelian"
+  },
+  "الحسابات والمدفوعات (الخزينة والبنك)": {
+    "en": "Accounts & Payments (Cash & Bank)",
+    "id": "Akun & Pembayaran (Kas & Bank)"
+  },
+  "سندات القبض والصرف، تحصيلات وسدادات الفواتير، التحويلات الداخلية، والرصيد النقدي التراكمي": {
+    "en": "Receipt and payment vouchers, invoice collections and settlements, internal transfers, and running balance",
+    "id": "Kuitansi penerimaan dan pengeluaran kas, pelunasan faktur, transfer internal, dan saldo berjalan"
+  },
+  "تسجيل حركة نقدية جديدة": {
+    "en": "New Cash Transaction",
+    "id": "Transaksi Kas Baru"
+  },
+  "رقم الحركة": {
+    "en": "Transaction No.",
+    "id": "No. Transaksi"
+  },
+  "تاريخ الحركة": {
+    "en": "Date",
+    "id": "Tanggal"
+  },
+  "نوع الحركة النقدية": {
+    "en": "Transaction Type",
+    "id": "Jenis Transaksi"
+  },
+  "قبض (وارد للصندوق +)": {
+    "en": "Cash In (Receipt +)",
+    "id": "Kas Masuk (Penerimaan +)"
+  },
+  "صرف (صادر من الصندوق -)": {
+    "en": "Cash Out (Payment -)",
+    "id": "Kas Keluar (Pengeluaran -)"
+  },
+  "العميل / المورد / الشريك": {
+    "en": "Party",
+    "id": "Pihak Terkait"
+  },
+  "الفاتورة المرتبطة (اختياري)": {
+    "en": "Linked Invoice",
+    "id": "Faktur Terkait"
+  },
+  "بند المصروف": {
+    "en": "Expense Category",
+    "id": "Kategori Pengeluaran"
+  },
+  "البيان / التفاصيل": {
+    "en": "Description / Memo",
+    "id": "Keterangan / Memo"
+  },
+  "وارد (قبض)": {
+    "en": "Cash In (+)",
+    "id": "Kas Masuk (+)"
+  },
+  "صادر (صرف)": {
+    "en": "Cash Out (-)",
+    "id": "Kas Keluar (-)"
+  },
+  "الرصيد التراكمي": {
+    "en": "Running Balance",
+    "id": "Saldo Berjalan"
+  },
+  "رصيد الخزينة الحالي (Cash)": {
+    "en": "Current Cash Balance (Cash)",
+    "id": "Saldo Kas Saat Ini (Laci)"
+  },
+  "حفظ سند الصندوق": {
+    "en": "Save Cash Transaction",
+    "id": "Simpan Transaksi Kas"
+  },
+  "الخزينة فقط": {
+    "en": "Cash Only",
+    "id": "Kas Saja"
+  },
+  "البنك فقط": {
+    "en": "Bank Only",
+    "id": "Bank Saja"
+  },
+  "رصيد البنك الحالي (Bank)": {
+    "en": "Current Bank Balance (Bank)",
+    "id": "Saldo Bank Saat Ini (Bank)"
+  },
+  "إجمالي السيولة النقدية والبنك": {
+    "en": "Total Cash & Bank Liquidity",
+    "id": "Total Likuiditas Kas & Bank"
+  },
+  "تسجيل حركة نقدية سريعة:": {
+    "en": "Quick Cash Action:",
+    "id": "Aksi Kas Cepat:"
+  },
+  "العملاء والموردون:": {
+    "en": "Customers & Suppliers:",
+    "id": "Pelanggan & Supplier:"
+  },
+  "المصروفات والسائقون:": {
+    "en": "Expenses & Drivers:",
+    "id": "Biaya & Supir:"
+  },
+  "الشركاء والتمويل والأصول:": {
+    "en": "Partners, Financing & Assets:",
+    "id": "Mitra, Pendanaan & Aset:"
+  },
+  "+ تحصيل عميل": {
+    "en": "+ Customer Collection",
+    "id": "+ Pelunasan Piutang Pelanggan"
+  },
+  "- سداد مورد": {
+    "en": "- Supplier Payment",
+    "id": "- Pembayaran Hutang Supplier"
+  },
+  "- رد مبلغ لعميل": {
+    "en": "- Customer Refund",
+    "id": "- Pengembalian Dana Pelanggan"
+  },
+  "+ استرداد من مورد": {
+    "en": "+ Supplier Refund",
+    "id": "+ Pengembalian Dana Supplier"
+  },
+  "- تسجيل مصروف نقدي": {
+    "en": "- Record Cash Expense",
+    "id": "- Catat Biaya Operasional"
+  },
+  "- هدية نقدية لسائق": {
+    "en": "- Driver Cash Gift",
+    "id": "- Hadiah Tunai Supir"
+  },
+  "- مبلغ لسائق": {
+    "en": "- Driver Amount",
+    "id": "- Dana Supir"
+  },
+  "تحويل بين الخزينة والبنك": {
+    "en": "Cash & Bank Transfer",
+    "id": "Transfer Kas & Bank"
+  },
+  "حركة شريك": {
+    "en": "Partner Transaction",
+    "id": "Transaksi Mitra"
+  },
+  "شراء أصل ثابت": {
+    "en": "Fixed Asset Purchase",
+    "id": "Pembelian Aset Tetap"
+  },
+  "بحث برقم الحركة (C000001)، اسم الطرف، أو البيان...": {
+    "en": "Search by voucher code (C000001), party name, or memo...",
+    "id": "Cari berdasarkan no bukti (C000001), nama pihak, atau memo..."
+  },
+  "الحساب": {
+    "en": "Account",
+    "id": "Akun"
+  },
+  "الطرف / البيان": {
+    "en": "Party / Memo",
+    "id": "Pihak / Keterangan"
+  },
+  "رصيد الخزينة": {
+    "en": "Cash Balance",
+    "id": "Saldo Kas"
+  },
+  "رصيد البنك": {
+    "en": "Bank Balance",
+    "id": "Saldo Bank"
+  },
+  "إلغاء حركة نقدية (Void)": {
+    "en": "Void Cash Transaction",
+    "id": "Batalkan Transaksi Kas"
+  },
+  "سبب الإلغاء (إلزامي)*": {
+    "en": "Reason for Void (Required)*",
+    "id": "Alasan Pembatalan (Wajib)*"
+  },
+  "اكتب سبب إلغاء الحركة بوضوح...": {
+    "en": "Enter clear reason for voiding transaction...",
+    "id": "Masukkan alasan pembatalan transaksi dengan jelas..."
+  },
+  "تأكيد الإلغاء نهائياً": {
+    "en": "Confirm Void Final",
+    "id": "Konfirmasi Pembatalan Akhir"
+  },
+  "جاري الإلغاء...": {
+    "en": "Voiding...",
+    "id": "Membatalkan..."
+  },
+  "تراجع": {
+    "en": "Cancel",
+    "id": "Batal"
+  },
+  "الحساب النقدي": {
+    "en": "Cash Account",
+    "id": "Akun Kas"
+  },
+  "نقدي (الخزينة)": {
+    "en": "Cash (Drawer)",
+    "id": "Kas Tunai (Laci)"
+  },
+  "تحويل (البنك)": {
+    "en": "Bank (Transfer)",
+    "id": "Bank (Transfer)"
+  },
+  "تحويل من": {
+    "en": "Transfer From",
+    "id": "Transfer Dari"
+  },
+  "تحويل إلى": {
+    "en": "Transfer To",
+    "id": "Transfer Ke"
+  },
+  "اختر الطرف...": {
+    "en": "Select party...",
+    "id": "Pilih pihak..."
+  },
+  "-- اختر الفاتورة --": {
+    "en": "-- Select Invoice --",
+    "id": "-- Pilih Faktur --"
+  },
+  "اختر الأصل الثابت...": {
+    "en": "Select fixed asset...",
+    "id": "Pilih aset tetap..."
+  },
+  "المتبقي": {
+    "en": "Remaining",
+    "id": "Sisa"
+  },
+  "أصل:": {
+    "en": "Asset:",
+    "id": "Aset:"
+  },
+  "سجل المرتجعات (بيع وشراء)": {
+    "en": "Returns Journal (Sales & Purchases)",
+    "id": "Jurnal Retur (Penjualan & Pembelian)"
+  },
+  "إدارة مرتجعات البيع والشراء المربوطة بسطور الفواتير، وفصل المرتجع الصالح عن التالف": {
+    "en": "Manage sales and purchase returns linked to invoice lines with good vs damaged classification",
+    "id": "Kelola retur penjualan dan pembelian yang terhubung ke faktur dengan status barang baik vs rusak"
+  },
+  "تسجيل مرتجع جديد": {
+    "en": "Record New Return",
+    "id": "Catat Retur Baru"
+  },
+  "رقم المرتجع": {
+    "en": "Return No.",
+    "id": "No. Retur"
+  },
+  "نوع المرتجع": {
+    "en": "Return Type",
+    "id": "Jenis Retur"
+  },
+  "مرتجع بيع": {
+    "en": "Sales Return",
+    "id": "Retur Penjualan"
+  },
+  "مرتجع شراء": {
+    "en": "Purchase Return",
+    "id": "Retur Pembelian"
+  },
+  "الفاتورة الأصلية": {
+    "en": "Original Invoice",
+    "id": "Faktur Asal"
+  },
+  "طريقة التسوية المالية": {
+    "en": "Financial Settlement Method",
+    "id": "Metode Penyelesaian Keuangan"
+  },
+  "رد نقدي فوري من/إلى الصندوق": {
+    "en": "Immediate Cash Refund",
+    "id": "Pengembalian Tunai Langsung"
+  },
+  "خصم من رصيد الدين الآجل": {
+    "en": "Deduct from Account Balance",
+    "id": "Potong dari Saldo Akun"
+  },
+  "الكمية المرتجعة": {
+    "en": "Returned Qty",
+    "id": "Jumlah yang Diretur"
+  },
+  "قيمة الوحدة": {
+    "en": "Unit Value",
+    "id": "Nilai Satuan"
+  },
+  "إجمالي قيمة المرتجع": {
+    "en": "Total Return Value",
+    "id": "Total Nilai Retur"
+  },
+  "السبب": {
+    "en": "Return Reason",
+    "id": "Alasan Retur"
+  },
+  "حفظ واعتماد المرتجع": {
+    "en": "Save & Confirm Return",
+    "id": "Simpan & Konfirmasi Retur"
+  },
+  "إجمالي مرتجعات البيع (SalesCredit)": {
+    "en": "Total Sales Returns (SalesCredit)",
+    "id": "Total Retur Penjualan (SalesCredit)"
+  },
+  "إجمالي مرتجعات الشراء (PurchaseCredit)": {
+    "en": "Total Purchase Returns (PurchaseCredit)",
+    "id": "Total Retur Pembelian (PurchaseCredit)"
+  },
+  "مصروف تلف المرتجع (DamagedExpense)": {
+    "en": "Damaged Return Expense (DamagedExpense)",
+    "id": "Beban Retur Rusak (DamagedExpense)"
+  },
+  "بحث برقم المرتجع، رقم الفاتورة، اسم الطرف، أو الصنف...": {
+    "en": "Search by return no, invoice no, party, or item...",
+    "id": "Cari berdasarkan no retur, no faktur, pihak, atau produk..."
+  },
+  "رقم المستند": {
+    "en": "Document No.",
+    "id": "No. Dokumen"
+  },
+  "الحالة / الإشعار": {
+    "en": "Condition / Note",
+    "id": "Kondisi / Catatan"
+  },
+  "أثر المديونية (Credit)": {
+    "en": "Credit Impact",
+    "id": "Dampak Kredit"
+  },
+  "صالح (يعود للمخزون)": {
+    "en": "Good (Returned to Stock)",
+    "id": "Baik (Kembali ke Stok)"
+  },
+  "تالف (مصروف تلف)": {
+    "en": "Damaged (Expense Loss)",
+    "id": "Rusak (Beban Kerugian)"
+  },
+  "تلقائي": {
+    "en": "Automatic",
+    "id": "Otomatis"
+  },
+  "إلغاء سطر مرتجع (Void)": {
+    "en": "Void Return (Void)",
+    "id": "Batalkan Retur (Void)"
+  },
+  "صرف المخزون والعينات والتالف": {
+    "en": "Stock Issues, Samples & Damaged Goods",
+    "id": "Pengeluaran Stok, Sampel & Barang Rusak"
+  },
+  "تسجيل المنصرف غير البيعي (عينات تجربة، ضيافة، هدايا سائقين، أو تالف/فاقد) بتكلفته الفعلية": {
+    "en": "Record non-sale inventory withdrawals (testers, VIP hospitality, driver gifts, or damaged stock) at WAC",
+    "id": "Catat pengeluaran barang non-penjualan (penguji, jamuan VIP, hadiah supir, atau barang rusak) pada biaya WAC"
+  },
+  "إذن صرف مخزني جديد": {
+    "en": "New Stock Issue",
+    "id": "Pengeluaran Stok Baru"
+  },
+  "رقم إذن الصرف": {
+    "en": "Issue No.",
+    "id": "No. Pengeluaran"
+  },
+  "تاريخ الصرف": {
+    "en": "Issue Date",
+    "id": "Tanggal Pengeluaran"
+  },
+  "غرض الصرف": {
+    "en": "Issue Purpose",
+    "id": "Tujuan Pengeluaran"
+  },
+  "عينات وتجربة (Tester)": {
+    "en": "Store Samples & Testers",
+    "id": "Sampel & Tester Toko"
+  },
+  "ضيافة وإكراميات عملاء": {
+    "en": "VIP Customer Hospitality",
+    "id": "Jamuan Pelanggan VIP"
+  },
+  "تالف / فاقد / كسر": {
+    "en": "Damaged / Shrinkage / Loss",
+    "id": "Barang Rusak / Hilang / Penyusutan"
+  },
+  "هدية سائق / مرشد": {
+    "en": "Driver / Tour Guide Gift",
+    "id": "Hadiah Supir / Pemandu Wisata"
+  },
+  "صرف تشغيلي آخر": {
+    "en": "Other Operational Issue",
+    "id": "Pengeluaran Operasional Lainnya"
+  },
+  "تكلفة الوحدة عند الصرف": {
+    "en": "Unit Cost at Issue",
+    "id": "Biaya Satuan saat Dikeluarkan"
+  },
+  "إجمالي تكلفة المنصرف": {
+    "en": "Total Issued Cost",
+    "id": "Total Biaya Pengeluaran"
+  },
+  "المستلم / السائق": {
+    "en": "Recipient / Driver Name",
+    "id": "Nama Penerima / Supir"
+  },
+  "حفظ إذن الصرف": {
+    "en": "Save Stock Issue",
+    "id": "Simpan Pengeluaran Stok"
+  },
+  "تستر تجربة (محل)": {
+    "en": "Store Tester",
+    "id": "Tester Toko"
+  },
+  "عينات وهدايا وضيافة": {
+    "en": "Samples & Hospitality",
+    "id": "Sampel & Jamuan"
+  },
+  "تالف وكسر وفاقد": {
+    "en": "Damaged & Broken Loss",
+    "id": "Kerugian Barang Rusak"
+  },
+  "بحث برقم الإذن، الصنف، الكود، أو السبب...": {
+    "en": "Search by voucher no, item name, code, or reason...",
+    "id": "Cari berdasarkan no bukti, nama produk, kode, atau alasan..."
+  },
+  "المرجع / كود التجربة": {
+    "en": "Tester Reference Code",
+    "id": "Kode Referensi Tester"
+  },
+  "تكلفة الوحدة (WAC)": {
+    "en": "Unit Cost (WAC)",
+    "id": "Biaya Satuan (WAC)"
+  },
+  "إجمالي تكلفة الإذن": {
+    "en": "Total Issue Cost",
+    "id": "Total Biaya Pengeluaran"
+  },
+  "تستر تجربة": {
+    "en": "Store Tester",
+    "id": "Tester Toko"
+  },
+  "عينة ترويجية / هدية": {
+    "en": "Promotional Sample / Gift",
+    "id": "Sampel Promosi / Hadiah"
+  },
+  "تالف / كسر / مفقود": {
+    "en": "Damaged / Broken / Loss",
+    "id": "Barang Rusak / Pecah / Hilang"
+  },
+  "اختر الصنف المنصرف...": {
+    "en": "Select item to issue...",
+    "id": "Pilih produk yang dikeluarkan..."
+  },
+  "إلغاء إذن صرف (Void)": {
+    "en": "Void Stock Issue (Void)",
+    "id": "Batalkan Pengeluaran Stok (Void)"
+  },
+  "التصنيع والتركيب والتعبئة": {
+    "en": "Manufacturing, Blending & Bottling",
+    "id": "Produksi, Peracikan & Pengemasan"
+  },
+  "تحويل المواد الخام (دهن، عود، زجاجات، علب) إلى منتجات نهائية جاهزة للبيع وحساب تكلفتها": {
+    "en": "Convert raw materials (oud oil, essential oils, bottles, boxes) into finished products and compute unit cost",
+    "id": "Ubah bahan baku (minyak gaharu, bibit parfum, botol, kotak) menjadi produk jadi dan hitung harga pokok satuan"
+  },
+  "تشغيلة تصنيع جديدة": {
+    "en": "New Production Batch",
+    "id": "Batch Produksi Baru"
+  },
+  "رقم التشغيلة": {
+    "en": "Batch No.",
+    "id": "No. Batch"
+  },
+  "تاريخ التصنيع": {
+    "en": "Production Date",
+    "id": "Tanggal Produksi"
+  },
+  "المنتج النهائي المصنع": {
+    "en": "Manufactured Finished Product",
+    "id": "Produk Jadi Hasil Produksi"
+  },
+  "الكمية المنتجة": {
+    "en": "Produced Quantity",
+    "id": "Jumlah Diproduksi"
+  },
+  "المواد الخام والعبوات المستهلكة": {
+    "en": "Consumed Raw Materials & Packaging",
+    "id": "Bahan Baku & Kemasan yang Digunakan"
+  },
+  "المادة الخام / العبوة": {
+    "en": "Raw Material / Bottle / Box",
+    "id": "Bahan Baku / Botol / Kotak"
+  },
+  "الكمية المسحوبة": {
+    "en": "Consumed Qty",
+    "id": "Jumlah Digunakan"
+  },
+  "تكلفة الوحدة الخام": {
+    "en": "Raw Unit Cost",
+    "id": "Harga Satuan Bahan"
+  },
+  "إجمالي تكلفة الخام": {
+    "en": "Total Raw Cost",
+    "id": "Total Biaya Bahan"
+  },
+  "تكاليف تشغيل/تغليف إضافية": {
+    "en": "Additional Labor / Packaging Cost",
+    "id": "Biaya Tenaga Kerja / Kemasan Tambahan"
+  },
+  "إجمالي تكلفة التشغيلة": {
+    "en": "Total Batch Production Cost",
+    "id": "Total Biaya Produksi Batch"
+  },
+  "تكلفة إنتاج الوحدة الواحدة": {
+    "en": "Finished Unit Production Cost",
+    "id": "Harga Pokok Satuan Produk Jadi"
+  },
+  "إضافة مادة خام للخلطة": {
+    "en": "Add Raw Material Component",
+    "id": "Tambah Komponen Bahan Baku"
+  },
+  "اعتماد تشغيلة التصنيع": {
+    "en": "Confirm Production Batch",
+    "id": "Konfirmasi Batch Produksi"
+  },
+  "تأكد من إدخال جميع المواد الخام لحساب تكلفة المنتج النهائي بدقة": {
+    "en": "Ensure all raw materials and packaging items are listed for accurate unit costing",
+    "id": "Pastikan semua bahan baku dan item kemasan tercantum untuk penghitungan biaya yang akurat"
+  },
+  "تاريخ الإنجاز": {
+    "en": "Completion Date",
+    "id": "Tanggal Penyelesaian"
+  },
+  "تكلفة الوحدة المنتجة": {
+    "en": "Finished Unit Cost",
+    "id": "Biaya Satuan Jadi"
+  },
+  "إجمالي تكلفة المواد": {
+    "en": "Total Materials Cost",
+    "id": "Total Biaya Bahan"
+  },
+  "بحث برقم التشغيلة، المنتج النهائي، أو الكود...": {
+    "en": "Search by batch no, finished product, or code...",
+    "id": "Cari berdasarkan no batch, produk jadi, atau kode..."
+  },
+  "عرض المواد المستهلكة": {
+    "en": "Show Consumed Materials",
+    "id": "Tampilkan Bahan Digunakan"
+  },
+  "إخفاء المواد المستهلكة": {
+    "en": "Hide Consumed Materials",
+    "id": "Sembunyikan Bahan Digunakan"
+  },
+  "إلغاء تشغيلة تصنيع (Void)": {
+    "en": "Void Production Batch (Void)",
+    "id": "Batalkan Batch Produksi (Void)"
+  },
+  "تسجيل تشغيلة تصنيع جديدة": {
+    "en": "Record New Production Batch",
+    "id": "Catat Batch Produksi Baru"
+  },
+  "ترشيحات وهدايا السائقين والمرشدين": {
+    "en": "Driver & Tour Guide Referrals & Gifts",
+    "id": "Rujukan & Hadiah Supir / Pemandu Wisata"
+  },
+  "متابعة السائقين والمرشدين السياحيين، وزياراتهم، وعمولاتهم النقدية والهدايا العينية": {
+    "en": "Track tourist referrals by drivers and guides, visitor arrivals, cash commissions, and in-kind gifts",
+    "id": "Pantau kedatangan wisatawan yang dirujuk supir/pemandu, komisi tunai, dan hadiah barang"
+  },
+  "تسجيل زيارة / عمولة سائق": {
+    "en": "Record Driver Visit / Commission",
+    "id": "Catat Kunjungan / Komisi Supir"
+  },
+  "اسم السائق / المرشد": {
+    "en": "Driver / Tour Guide Name",
+    "id": "Nama Supir / Pemandu Wisata"
+  },
+  "رقم الجوال": {
+    "en": "Phone / WhatsApp",
+    "id": "Telepon / WhatsApp"
+  },
+  "تاريخ الزيارة": {
+    "en": "Visit Date",
+    "id": "Tanggal Kunjungan"
+  },
+  "عدد الزوار/السياح": {
+    "en": "Number of Tourists",
+    "id": "Jumlah Wisatawan"
+  },
+  "فاتورة البيع المرتبطة": {
+    "en": "Linked Sales Invoice",
+    "id": "Faktur Penjualan Terkait"
+  },
+  "قيمة المبيعات المحققة": {
+    "en": "Generated Sales Amount",
+    "id": "Jumlah Penjualan yang Dihasilkan"
+  },
+  "نسبة العمولة (%)": {
+    "en": "Commission Rate (%)",
+    "id": "Tarif Komisi (%)"
+  },
+  "قيمة العمولة المستحقة": {
+    "en": "Commission Amount",
+    "id": "Jumlah Komisi"
+  },
+  "المسدد من العمولة": {
+    "en": "Commission Paid",
+    "id": "Komisi Dibayarkan"
+  },
+  "صنف الهدية العينية": {
+    "en": "In-Kind Gift Item",
+    "id": "Item Hadiah Barang"
+  },
+  "كمية الهدية": {
+    "en": "Gift Qty",
+    "id": "Jumlah Hadiah"
+  },
+  "تكلفة الهدية": {
+    "en": "Gift Cost",
+    "id": "Biaya Hadiah"
+  },
+  "إجمالي مبيعات السائقين": {
+    "en": "Total Driver-Referred Sales",
+    "id": "Total Penjualan Rujukan Supir"
+  },
+  "إجمالي العمولات والهدايا": {
+    "en": "Total Commissions & Gifts",
+    "id": "Total Komisi & Hadiah"
+  },
+  "حفظ سجل السائق": {
+    "en": "Save Driver Record",
+    "id": "Simpan Data Supir"
+  },
+  "ملخص السائقين ومستحقاتهم": {
+    "en": "Drivers & Entitlements Summary",
+    "id": "Ringkasan Supir & Hak Hadiah"
+  },
+  "سجل الزيارات والترشيحات": {
+    "en": "Referral Visits Log",
+    "id": "Catatan Kunjungan Rujukan"
+  },
+  "تسجيل زيارة سائق سريعة:": {
+    "en": "Quick Driver Visit Registration:",
+    "id": "Pendaftaran Cepat Kunjungan Supir:"
+  },
+  "السائق": {
+    "en": "Driver",
+    "id": "Supir"
+  },
+  "اختر السائق...": {
+    "en": "Select driver...",
+    "id": "Pilih supir..."
+  },
+  "كود / مفتاح الزائر": {
+    "en": "Visitor Code / Key",
+    "id": "Kode / Kunci Pengunjung"
+  },
+  "اسم الزائر / العميل": {
+    "en": "Visitor / Customer Name",
+    "id": "Nama Pengunjung / Pelanggan"
+  },
+  "تسجيل الزيارة": {
+    "en": "Register Visit",
+    "id": "Daftarkan Kunjungan"
+  },
+  "مرحل سابق": {
+    "en": "Carryover",
+    "id": "Bawaan Sebelumnya"
+  },
+  "العملاء المسجلون": {
+    "en": "Registered Clients",
+    "id": "Klien Terdaftar"
+  },
+  "الهدايا المستحقة": {
+    "en": "Earned Gifts",
+    "id": "Hadiah Diperoleh"
+  },
+  "إجمالي المستحق": {
+    "en": "Accrued Amount",
+    "id": "Jumlah Terakumulasi"
+  },
+  "المستلم نقداً": {
+    "en": "Received in Cash",
+    "id": "Diterima Tunai"
+  },
+  "المتبقي للسائق": {
+    "en": "Remaining Balance",
+    "id": "Sisa Saldo"
+  },
+  "المتبقي للهدية القادمة": {
+    "en": "Needed for Next Gift",
+    "id": "Dibutuhkan untuk Hadiah Berikutnya"
+  },
+  "صرف مستحق نقدي": {
+    "en": "Disburse Cash",
+    "id": "Bayar Tunai"
+  },
+  "صرف مستحقات نقدية لسائق": {
+    "en": "Cash Entitlement Payment to Driver",
+    "id": "Pembayaran Hak Tunai ke Supir"
+  },
+  "إلغاء زيارة سائق (Void)": {
+    "en": "Void Driver Visit (Void)",
+    "id": "Batalkan Kunjungan Supir (Void)"
+  },
+  "رقم السيارة": {
+    "en": "Plate Number",
+    "id": "Nomor Plat Mobil"
+  },
+  "رقم الهاتف": {
+    "en": "Phone Number",
+    "id": "Nomor Telepon"
+  },
+  "بحث باسم السائق، كود الزيارة، أو اسم الزائر...": {
+    "en": "Search by driver name, visit code, or visitor...",
+    "id": "Cari berdasarkan nama supir, kode kunjungan, atau pengunjung..."
+  },
+  "سياسة الهدايا والشروط": {
+    "en": "Gift Policy & Rules",
+    "id": "Kebijakan Hadiah & Aturan"
+  },
+  "إجمالي زيارات العملاء المسجلة": {
+    "en": "Total Registered Client Visits",
+    "id": "Total Kunjungan Klien Terdaftar"
+  },
+  "مجموع الهدايا المستحقة المكتسبة": {
+    "en": "Total Earned Gifts",
+    "id": "Total Hadiah yang Diperoleh"
+  },
+  "إجمالي الرصيد المتبقي للصرف": {
+    "en": "Total Remaining Balance",
+    "id": "Total Sisa Saldo"
+  },
+  "عميل زائر": {
+    "en": "Visiting Client",
+    "id": "Klien Pengunjung"
+  },
+  "هدية": {
+    "en": "Gift",
+    "id": "Hadiah"
+  },
+  "عداد الهدية التالية": {
+    "en": "Next Gift Counter",
+    "id": "Penghitung Hadiah Berikutnya"
+  },
+  "إجراءات الصرف": {
+    "en": "Disbursement Actions",
+    "id": "Tindakan Pembayaran"
+  },
+  "مكتملة 🎉": {
+    "en": "Completed 🎉",
+    "id": "Selesai 🎉"
+  },
+  "بقي": {
+    "en": "Left",
+    "id": "Tersisa"
+  },
+  "صرف نقدي": {
+    "en": "Cash Payout",
+    "id": "Pembayaran Tunai"
+  },
+  "هدية بضاعة": {
+    "en": "Goods Gift",
+    "id": "Hadiah Barang"
+  },
+  "لا يوجد رصيد مستحق": {
+    "en": "No balance due",
+    "id": "Tidak ada saldo tertunggak"
+  },
+  "الكود والتاريخ": {
+    "en": "Code & Date",
+    "id": "Kode & Tanggal"
+  },
+  "هاتف/كود العميل": {
+    "en": "Visitor Phone/Code",
+    "id": "Telepon / Kode Pengunjung"
+  },
+  "قبل الزيارة": {
+    "en": "Before Visit",
+    "id": "Sebelum Kunjungan"
+  },
+  "هدايا الزيارة": {
+    "en": "Visit Gifts",
+    "id": "Hadiah Kunjungan"
+  },
+  "بعد الزيارة": {
+    "en": "After Visit",
+    "id": "Setelah Kunjungan"
+  },
+  "مرحلة": {
+    "en": "Posted",
+    "id": "Tercatat"
+  },
+  "ملغاة": {
+    "en": "Void",
+    "id": "Batal"
+  },
+  "تأكيد إلغاء زيارة العميل": {
+    "en": "Confirm Void Visit",
+    "id": "Konfirmasi Pembatalan Kunjungan"
+  },
+  "سبب الإلغاء": {
+    "en": "Void Reason",
+    "id": "Alasan Pembatalan"
+  },
+  "تأكيد الإلغاء": {
+    "en": "Confirm Void",
+    "id": "Konfirmasi Batal"
+  },
+  "حساب الصرف": {
+    "en": "Disbursement Account",
+    "id": "Akun Pembayaran"
+  },
+  "الخزينة النقدية (CASH)": {
+    "en": "Cash Drawer (CASH)",
+    "id": "Laci Kas (CASH)"
+  },
+  "الحساب البنكي (BANK)": {
+    "en": "Bank Account (BANK)",
+    "id": "Akun Bank (BANK)"
+  },
+  "تأكيد وصرف الهدية": {
+    "en": "Confirm & Disburse Gift",
+    "id": "Konfirmasi & Bayar Hadiah"
+  },
+  "المخزون وبطاقة حركة الصنف": {
+    "en": "Warehouse Inventory & Stock Card",
+    "id": "Inventaris Gudang & Kartu Stok"
+  },
+  "مراقبة الأرصدة الفعلية، ومتوسط التكلفة المرجح (WAC)، وكشف حركة كل صنف بالتفصيل": {
+    "en": "Monitor real-time stock quantities, Weighted Average Cost (WAC), and detailed item movement history",
+    "id": "Pantau kuantitas stok langsung, Biaya Rata-Rata Tertimbang (WAC), dan riwayat mutasi barang"
+  },
+  "ملخص أرصدة المخزون": {
+    "en": "Inventory Balances Summary",
+    "id": "Ringkasan Saldo Stok"
+  },
+  "بطاقة الصنف التفصيلية (Stock Card)": {
+    "en": "Detailed Item Stock Card",
+    "id": "Kartu Stok Detail Produk"
+  },
+  "كود المنتج": {
+    "en": "Item Code",
+    "id": "Kode Produk"
+  },
+  "اسم المنتج": {
+    "en": "Item Name",
+    "id": "Nama Produk"
+  },
+  "التصنيف": {
+    "en": "Category",
+    "id": "Kategori"
+  },
+  "طبيعة الصنف": {
+    "en": "Item Role",
+    "id": "Peran Produk"
+  },
+  "الوحدة": {
+    "en": "Unit",
+    "id": "Satuan"
+  },
+  "رصيد أول المدة": {
+    "en": "Opening Qty",
+    "id": "Kuantitas Awal"
+  },
+  "وارد مشتريات (+)": {
+    "en": "Purchased (+)",
+    "id": "Dibeli (+)"
+  },
+  "وارد تصنيع (+)": {
+    "en": "Manufactured In (+)",
+    "id": "Hasil Produksi (+)"
+  },
+  "مرتجع مبيعات (+)": {
+    "en": "Sales Return (+)",
+    "id": "Retur Penjualan (+)"
+  },
+  "صادر مبيعات (-)": {
+    "en": "Sold (-)",
+    "id": "Terjual (-)"
+  },
+  "مرتجع مشتريات (-)": {
+    "en": "Purchase Return (-)",
+    "id": "Retur Pembelian (-)"
+  },
+  "مسحوب للتصنيع (-)": {
+    "en": "Used in Production (-)",
+    "id": "Digunakan Produksi (-)"
+  },
+  "صرف عينات/تالف (-)": {
+    "en": "Samples / Damaged (-)",
+    "id": "Sampel / Rusak (-)"
+  },
+  "الرصيد الفعلي الحالي": {
+    "en": "Current Stock on Hand",
+    "id": "Stok Fisik Saat Ini"
+  },
+  "متوسط التكلفة (WAC)": {
+    "en": "Weighted Avg Cost (WAC)",
+    "id": "Harga Pokok Rata-rata (WAC)"
+  },
+  "القيمة الإجمالية للمخزون": {
+    "en": "Total Inventory Valuation",
+    "id": "Total Penilaian Stok"
+  },
+  "حد إعادة الطلب": {
+    "en": "Reorder Point",
+    "id": "Batas Pemesanan Ulang"
+  },
+  "متوفر": {
+    "en": "In Stock",
+    "id": "Stok Aman"
+  },
+  "منخفض (قارب النفاد)": {
+    "en": "Low Stock",
+    "id": "Stok Rendah"
+  },
+  "نافد (0)": {
+    "en": "Out of Stock (0)",
+    "id": "Habis (0)"
+  },
+  "اختر الصنف لعرض بطاقة حركته التاريخية:": {
+    "en": "Select an item to inspect its chronological Stock Card:",
+    "id": "Pilih produk untuk melihat Kartu Stok kronologisnya:"
+  },
+  "نوع الحركة": {
+    "en": "Transaction Type",
+    "id": "Jenis Transaksi"
+  },
+  "وارد (+)": {
+    "en": "In (+)",
+    "id": "Masuk (+)"
+  },
+  "صادر (-)": {
+    "en": "Out (-)",
+    "id": "Keluar (-)"
+  },
+  "الرصيد بعد الحركة": {
+    "en": "Balance After",
+    "id": "Saldo Setelahnya"
+  },
+  "إجمالي قيمة المخزون (EV):": {
+    "en": "Total Inventory Valuation (EV):",
+    "id": "Total Penilaian Inventaris (EV):"
+  },
+  "متاح": {
+    "en": "Available",
+    "id": "Tersedia"
+  },
+  "أعد الطلب": {
+    "en": "Reorder",
+    "id": "Pesan Ulang"
+  },
+  "مخزون سالب": {
+    "en": "Negative Stock",
+    "id": "Stok Negatif"
+  },
+  "جميع التصنيفات": {
+    "en": "All Categories",
+    "id": "Semua Kategori"
+  },
+  "جميع الحالات": {
+    "en": "All Statuses",
+    "id": "Semua Status"
+  },
+  "بحث باسم المنتج، الكود، أو التصنيف...": {
+    "en": "Search by item name, code, or category...",
+    "id": "Cari berdasarkan nama produk, kode, atau kategori..."
+  },
+  "حتى تاريخ:": {
+    "en": "As of Date:",
+    "id": "Per Tanggal:"
+  },
+  "بطاقة حركة الصنف التفصيلية": {
+    "en": "Detailed Stock Movement Card",
+    "id": "Kartu Pergerakan Stok Detail"
+  },
+  "الكود الظاهر": {
+    "en": "Display Code",
+    "id": "Kode Tampilan"
+  },
+  "المتاح (EQ)": {
+    "en": "Available (EQ)",
+    "id": "Tersedia (EQ)"
+  },
+  "متوسط التكلفة (AVG)": {
+    "en": "Avg Cost (AVG)",
+    "id": "Biaya Rata-rata (AVG)"
+  },
+  "الكارت": {
+    "en": "Card",
+    "id": "Kartu"
+  },
+  "الإجمالي العام": {
+    "en": "Grand Total",
+    "id": "Total Keseluruhan"
+  },
+  "لا نجمع وحدات مختلفة": {
+    "en": "Do not sum different units",
+    "id": "Jangan menjumlahkan satuan yang berbeda"
+  },
+  "مادة خام": {
+    "en": "Raw Material",
+    "id": "Bahan Baku"
+  },
+  "منتج تام": {
+    "en": "Finished Product",
+    "id": "Produk Jadi"
+  },
+  "بضاعة": {
+    "en": "Merchandise",
+    "id": "Barang Dagangan"
+  },
+  "الديون وأعمار الذمم وكشوف الحساب": {
+    "en": "Receivables, Payables, Aging & Statements",
+    "id": "Piutang, Hutang, Umur Piutang & Rekening Koran"
+  },
+  "متابعة مديونيات العملاء ومستحقات الموردين وتعمير الديون (30/60/90 يوم) ومتابعة الفواتير": {
+    "en": "Track customer debts, supplier balances, aging buckets (30/60/90 days), and invoice-level settlements",
+    "id": "Pantau piutang pelanggan, hutang supplier, kelompok umur hutang (30/60/90 hari), dan pelunasan faktur"
+  },
+  "ديون العملاء (لنا عندهم)": {
+    "en": "Customer Receivables (They Owe Us)",
+    "id": "Piutang Pelanggan (Mereka Berhutang ke Toko)"
+  },
+  "مستحقات الموردين (لهم عندنا)": {
+    "en": "Supplier Payables (We Owe Them)",
+    "id": "Hutang ke Supplier (Toko Berhutang ke Mereka)"
+  },
+  "متابعة السداد على مستوى الفاتورة": {
+    "en": "Invoice-Level Payment Tracking",
+    "id": "Pelacakan Pembayaran per Faktur"
+  },
+  "الكود": {
+    "en": "Code",
+    "id": "Kode"
+  },
+  "اسم العميل / المورد": {
+    "en": "Customer / Supplier Name",
+    "id": "Nama Pelanggan / Supplier"
+  },
+  "الرصيد الافتتاحي": {
+    "en": "Opening Balance",
+    "id": "Saldo Awal"
+  },
+  "إجمالي الفواتير الآجلة": {
+    "en": "Total Credit Invoices",
+    "id": "Total Faktur Kredit"
+  },
+  "المرتجعات (-)": {
+    "en": "Total Returns (-)",
+    "id": "Total Retur (-)"
+  },
+  "المسدد / المحصل (-)": {
+    "en": "Total Payments (-)",
+    "id": "Total Pembayaran (-)"
+  },
+  "صافي الرصيد المتبقي": {
+    "en": "Net Outstanding Balance",
+    "id": "Sisa Saldo Bersih"
+  },
+  "آخر حركة": {
+    "en": "Last Activity",
+    "id": "Aktivitas Terakhir"
+  },
+  "أيام التأخير": {
+    "en": "Days Overdue",
+    "id": "Hari Terlewat"
+  },
+  "فئة التعمير": {
+    "en": "Aging Bucket",
+    "id": "Kelompok Umur"
+  },
+  "كشف حساب": {
+    "en": "Statement",
+    "id": "Rekening Koran"
+  },
+  "تحصيل دفعة": {
+    "en": "Collect Payment",
+    "id": "Terima Pembayaran"
+  },
+  "سداد دفعة": {
+    "en": "Pay Supplier",
+    "id": "Bayar Supplier"
+  },
+  "ملخص الأطراف": {
+    "en": "Parties Summary",
+    "id": "Ringkasan Pihak"
+  },
+  "متابعة الفواتير والأعمار": {
+    "en": "Invoices & Aging Followup",
+    "id": "Pelacakan Faktur & Umur Hutang"
+  },
+  "إجمالي ديون العملاء": {
+    "en": "Total Customer Receivables",
+    "id": "Total Piutang Pelanggan"
+  },
+  "إجمالي مستحقات الموردين": {
+    "en": "Total Supplier Payables",
+    "id": "Total Hutang Supplier"
+  },
+  "الرصيد الصافي": {
+    "en": "Signed Net Balance",
+    "id": "Saldo Bersih Ditandatangani"
+  },
+  "غير المغطى": {
+    "en": "Uncovered",
+    "id": "Belum Tertutup"
+  },
+  "تاريخ الاستحقاق": {
+    "en": "Due Date",
+    "id": "Jatuh Tempo"
+  },
+  "أيام التأخر": {
+    "en": "Days Overdue",
+    "id": "Hari Keterlambatan"
+  },
+  "بحث باسم الطرف، الكود، أو رقم الفاتورة...": {
+    "en": "Search by party name, code, or invoice key...",
+    "id": "Cari berdasarkan nama pihak, kode, atau no faktur..."
+  },
+  "الكل (عملاء وموردون)": {
+    "en": "All (Customers & Suppliers)",
+    "id": "Semua (Pelanggan & Supplier)"
+  },
+  "مدينون فقط": {
+    "en": "Debtors Only",
+    "id": "Hanya yang Berhutang"
+  },
+  "دائنون فقط": {
+    "en": "Creditors Only",
+    "id": "Hanya Saldo Kredit"
+  },
+  "مسددون بالكامل": {
+    "en": "Fully Settled",
+    "id": "Lunas Sepenuhnya"
+  },
+  "صافي الموقف المالي": {
+    "en": "Net Financial Position",
+    "id": "Posisi Keuangan Bersih"
+  },
+  "فائض لصالح المحل": {
+    "en": "Surplus for Store",
+    "id": "Surplus untuk Toko"
+  },
+  "عجز والتزامات تفوق المستحقات": {
+    "en": "Deficit & Liabilities Exceed Receivables",
+    "id": "Defisit & Kewajiban Melebihi Piutang"
+  },
+  "عملاء فقط": {
+    "en": "Customers Only",
+    "id": "Pelanggan Saja"
+  },
+  "موردون فقط": {
+    "en": "Suppliers Only",
+    "id": "Supplier Saja"
+  },
+  "ملخص أرصدة الأطراف وتغطية الفواتير": {
+    "en": "Parties Balances Summary & Invoice Coverage",
+    "id": "Ringkasan Saldo Pihak & Penutupan Faktur"
+  },
+  "اضغط على اسم أي طرف للانتقال المباشر إلى كشف الحساب التفصيلي": {
+    "en": "Click any party name to open its detailed statement of account",
+    "id": "Klik nama pihak untuk membuka rekening koran terperinci"
+  },
+  "نوع الطرف": {
+    "en": "Party Type",
+    "id": "Jenis Pihak"
+  },
+  "مستحق الفواتير": {
+    "en": "Invoices Due",
+    "id": "Faktur Jatuh Tempo"
+  },
+  "رصيد دائن للفواتير": {
+    "en": "Credit Balance",
+    "id": "Saldo Kredit"
+  },
+  "مستحق غير مغطى": {
+    "en": "Uncovered Due",
+    "id": "Tagihan Belum Tertutup"
+  },
+  "التغطية": {
+    "en": "Coverage",
+    "id": "Penutupan"
+  },
+  "مقدم على فواتير": {
+    "en": "Prepayment",
+    "id": "Uang Muka"
+  },
+  "كشف الحساب": {
+    "en": "Statement",
+    "id": "Rekening Koran"
+  },
+  "لا توجد أطراف تطابق معايير البحث المحددة": {
+    "en": "No parties matched the search criteria",
+    "id": "Tidak ada pihak yang sesuai dengan kriteria pencarian"
+  },
+  "تفصيل الفواتير وأعمار الديون": {
+    "en": "Invoices Detail & Debt Aging",
+    "id": "Rincian Faktur & Umur Hutang"
+  },
+  "استخدم أزرار التحصيل أو السداد السريع لإنشاء سند قبض/صرف مباشر للفاتورة": {
+    "en": "Use quick collect/pay buttons to create a direct cash voucher for the invoice",
+    "id": "Gunakan tombol terima/bayar cepat untuk membuat kuitansi kas langsung"
+  },
+  "القيمة الأصلية": {
+    "en": "Original Value",
+    "id": "Nilai Asal"
+  },
+  "المرتجع": {
+    "en": "Returns",
+    "id": "Retur"
+  },
+  "المسدد/المحصل": {
+    "en": "Settled/Collected",
+    "id": "Dilunasi / Diterima"
+  },
+  "رد نقدي": {
+    "en": "Cash Refund",
+    "id": "Pengembalian Tunai"
+  },
+  "التأخير (أيام)": {
+    "en": "Overdue (Days)",
+    "id": "Keterlambatan (Hari)"
+  },
+  "فئة العمر": {
+    "en": "Aging Bucket",
+    "id": "Klasifikasi Umur"
+  },
+  "إجراء سريع": {
+    "en": "Quick Action",
+    "id": "Aksi Cepat"
+  },
+  "تحصيل الآن": {
+    "en": "Collect Now",
+    "id": "Terima Sekarang"
+  },
+  "سداد الآن": {
+    "en": "Pay Now",
+    "id": "Bayar Sekarang"
+  },
+  "مسدد بالكامل": {
+    "en": "Fully Settled",
+    "id": "Lunas"
+  },
+  "يوم": {
+    "en": "days",
+    "id": "hari"
+  },
+  "لا يوجد": {
+    "en": "None",
+    "id": "Tepat Waktu"
+  },
+  "دليل العملاء والموردين والسائقين": {
+    "en": "Customers, Suppliers & Drivers Directory",
+    "id": "Buku Kontak Pelanggan, Supplier & Supir"
+  },
+  "إدارة بيانات المتعاملين والأرصدة الافتتاحية وأرقام التواصل": {
+    "en": "Manage contact details, party roles, and opening balances",
+    "id": "Kelola data kontak, peran pihak terkait, saldo awal, dan status saldo"
+  },
+  "إضافة جهة تعامل جديدة": {
+    "en": "Add New Party",
+    "id": "Tambah Pihak Baru"
+  },
+  "كود الجهة": {
+    "en": "Party Code",
+    "id": "Kode Pihak"
+  },
+  "الاسم الكامل": {
+    "en": "Full Name",
+    "id": "Nama Lengkap"
+  },
+  "النوع (عميل / مورد / سائق)": {
+    "en": "Type (Customer / Supplier / Driver)",
+    "id": "Jenis (Pelanggan / Supplier / Supir)"
+  },
+  "رقم الهاتف / واتساب": {
+    "en": "Phone / WhatsApp",
+    "id": "Telepon / WhatsApp"
+  },
+  "المدينة / الدولة": {
+    "en": "City / Country",
+    "id": "Kota / Negara"
+  },
+  "تاريخ الرصيد الافتتاحي": {
+    "en": "Opening Balance Date",
+    "id": "Tanggal Saldo Awal"
+  },
+  "الحد الائتماني": {
+    "en": "Credit Limit",
+    "id": "Batas Kredit"
+  },
+  "اسم المؤسسة / المتجر": {
+    "en": "Company / Store",
+    "id": "Nama Perusahaan / Toko"
+  },
+  "المستحق الحالي": {
+    "en": "Current Due",
+    "id": "Tagihan Saat Ini"
+  },
+  "الرصيد الدائن": {
+    "en": "Credit Balance",
+    "id": "Saldo Kredit"
+  },
+  "حالة التغطية": {
+    "en": "Balance Status",
+    "id": "Status Saldo"
+  },
+  "دليل المنتجات والأصناف": {
+    "en": "Items & Products Master Catalog",
+    "id": "Katalog Master Produk & Barang"
+  },
+  "تعريف منتجات العود ودهن العود والعطور والمواد الخام والعبوات وأرصدة أول المدة": {
+    "en": "Define natural oud, oud oil, perfumes, raw materials, packaging, and opening stock balances",
+    "id": "Definisikan gaharu alami, minyak gaharu, parfum, bahan baku, kemasan, dan saldo awal stok"
+  },
+  "إضافة منتج جديد": {
+    "en": "Add New Item",
+    "id": "Tambah Produk Baru"
+  },
+  "وحدة القياس": {
+    "en": "Unit of Measure",
+    "id": "Satuan Ukuran"
+  },
+  "دور المنتج في النظام": {
+    "en": "Item Role in System",
+    "id": "Peran Produk dalam Sistem"
+  },
+  "سعر البيع الافتراضي": {
+    "en": "Default Selling Price",
+    "id": "Harga Jual Standar"
+  },
+  "كمية أول المدة": {
+    "en": "Opening Quantity",
+    "id": "Kuantitas Awal"
+  },
+  "تكلفة وحدة أول المدة": {
+    "en": "Opening Unit Cost",
+    "id": "Harga Pokok Satuan Awal"
+  },
+  "حد التنبيه للنواقص": {
+    "en": "Minimum Stock Alert Level",
+    "id": "Batas Peringatan Stok Minimum"
+  },
+  "حسابات الشركاء والأصول الثابتة": {
+    "en": "Partners Equity & Fixed Assets",
+    "id": "Ekuitas Mitra & Aset Tetap"
+  },
+  "إدارة رؤوس أموال الشركاء، المسحوبات الشخصية، توزيع الأرباح، وسجل الأصول الثابتة للمحل": {
+    "en": "Manage partner capital shares, personal withdrawals, profit distribution, and store fixed assets",
+    "id": "Kelola porsi modal mitra, penarikan pribadi, bagi hasil laba, dan daftar aset tetap toko"
+  },
+  "الشركاء وتوزيع الأرباح": {
+    "en": "Partners & Profit Sharing",
+    "id": "Mitra & Bagi Hasil Laba"
+  },
+  "سجل الأصول الثابتة": {
+    "en": "Fixed Assets Register",
+    "id": "Daftar Aset Tetap"
+  },
+  "اسم الشريك": {
+    "en": "Partner Name",
+    "id": "Nama Mitra"
+  },
+  "نسبة الشراكة (%)": {
+    "en": "Equity Share (%)",
+    "id": "Porsi Modal (%)"
+  },
+  "رأس المال المدفوع": {
+    "en": "Contributed Capital",
+    "id": "Modal Disetor"
+  },
+  "المسحوبات الشخصية": {
+    "en": "Personal Withdrawals",
+    "id": "Penarikan Pribadi (Prive)"
+  },
+  "نصيب الشريك من صافي الربح": {
+    "en": "Net Profit Share",
+    "id": "Bagian Laba Bersih"
+  },
+  "صافي حساب الشريك الجاري": {
+    "en": "Net Partner Current Balance",
+    "id": "Saldo Akhir Mitra Saat Ini"
+  },
+  "اسم الأصل الثابت": {
+    "en": "Fixed Asset Name",
+    "id": "Nama Aset Tetap"
+  },
+  "تكلفة الشراء": {
+    "en": "Acquisition Cost",
+    "id": "Biaya Perolehan"
+  },
+  "العمر الافتراضي (سنوات)": {
+    "en": "Useful Life (Years)",
+    "id": "Masa Manfaat (Tahun)"
+  },
+  "القيمة الدفترية الحالية": {
+    "en": "Current Book Value",
+    "id": "Nilai Buku Saat Ini"
+  },
+  "معالج التأسيس والتهيئة الأولية": {
+    "en": "Initial System Setup Wizard",
+    "id": "Panduan Pengaturan Awal Sistem"
+  },
+  "خطوات متسلسلة لضبط إعدادات المحل، وأرصدة أول المدة للصندوق والمخزون والديون": {
+    "en": "Step-by-step configuration for store profile, opening cash, opening inventory, and opening balances",
+    "id": "Konfigurasi bertahap profil toko, kas awal, inventaris awal, dan saldo awal pihak"
+  },
+  "1. بيانات المؤسسة والعملة": {
+    "en": "1. Store Profile & Currency",
+    "id": "1. Profil Toko & Mata Uang"
+  },
+  "2. التصنيفات والوحدات": {
+    "en": "2. Categories & Units",
+    "id": "2. Kategori & Satuan"
+  },
+  "3. رصيد الصندوق الافتتاحي": {
+    "en": "3. Opening Cash Balance",
+    "id": "3. Saldo Kas Awal"
+  },
+  "4. أرصدة المخزون الافتتاحية": {
+    "en": "4. Opening Inventory Balances",
+    "id": "4. Saldo Inventaris Awal"
+  },
+  "5. أرصدة العملاء والموردين الافتتاحية": {
+    "en": "5. Opening Receivables & Payables",
+    "id": "5. Saldo Piutang & Hutang Awal"
+  },
+  "اعتماد التأسيس والبدء بالعمل": {
+    "en": "Complete Setup & Start Operations",
+    "id": "Selesaikan Pengaturan & Mulai Operasi"
+  },
+  "إعدادات النظام والنسخ الاحتياطي": {
+    "en": "System Settings & Database Backup",
+    "id": "Pengaturan Sistem & Cadangan Basis Data"
+  },
+  "تخصيص بيانات المؤسسة، العملة، السنة المالية، وتصدير/استيراد قاعدة البيانات": {
+    "en": "Configure store identity, currency symbol, fiscal year, and full Excel export/import",
+    "id": "Konfigurasikan identitas toko, simbol mata uang, tahun fiskal, dan ekspor/impor Excel lengkap"
+  },
+  "اسم المؤسسة / المحل": {
+    "en": "Company / Store Name",
+    "id": "Nama Perusahaan / Toko"
+  },
+  "الوصف الفرعي على الفواتير": {
+    "en": "Invoice Header Subtitle",
+    "id": "Subjudul Header Faktur"
+  },
+  "رمز العملة (ر.س / Rp / $)": {
+    "en": "Currency Symbol (Rp / SAR / $)",
+    "id": "Simbol Mata Uang (Rp / SAR / $)"
+  },
+  "بداية السنة المالية": {
+    "en": "Fiscal Year Start",
+    "id": "Awal Tahun Fiskal"
+  },
+  "رصيد الصندوق الافتتاحي": {
+    "en": "Opening Cash Balance",
+    "id": "Saldo Kas Awal"
+  },
+  "نسبة عمولة السائقين الافتراضية (%)": {
+    "en": "Default Driver Commission (%)",
+    "id": "Tarif Komisi Supir Standar (%)"
+  },
+  "النسخ الاحتياطي وتصدير البيانات": {
+    "en": "Database Backup & Export",
+    "id": "Cadangkan & Ekspor Basis Data"
+  },
+  "تحميل نسخة إكسل شاملة": {
+    "en": "Download Full Excel Workbook",
+    "id": "Unduh Buku Kerja Excel Lengkap"
+  },
+  "قائمة التحقق من الإقفال اليومي ومطابقة الصندوق": {
+    "en": "Daily Closing Checklist & Cash Reconciliation",
+    "id": "Daftar Periksa Penutupan Harian & Rekonsiliasi Kas"
+  },
+  "راجع خطوات نهاية اليوم وطابق النقد الفعلي في الدرج مع رصيد النظام المحاسبي": {
+    "en": "Verify end-of-day operational tasks and reconcile physical cash in drawer against system balance",
+    "id": "Verifikasi tugas operasional akhir hari dan rekonsiliasi kas fisik di laci dengan saldo sistem"
+  },
+  "تم إدخال جميع فواتير المبيعات النقدية والآجلة لليوم": {
+    "en": "All cash and credit sales invoices for today have been entered",
+    "id": "Semua faktur penjualan tunai dan kredit hari ini telah diinput"
+  },
+  "تم تسجيل جميع فواتير المشتريات والتوريدات المستلمة": {
+    "en": "All received supplier purchase invoices have been recorded",
+    "id": "Semua faktur pembelian supplier yang diterima telah dicatat"
+  },
+  "تم تسجيل كافة سندات المصاريف والتحصيلات النقدية": {
+    "en": "All expense vouchers and debt collections have been recorded",
+    "id": "Semua bukti pengeluaran dan pelunasan piutang telah dicatat"
+  },
+  "تم تسجيل المنصرف من العينات والضيافة والتالف": {
+    "en": "All testers, hospitality samples, and damaged items have been logged",
+    "id": "Semua tester, sampel jamuan, dan barang rusak telah dicatat"
+  },
+  "تم تسجيل عمولات وهدايا السائقين والمرشدين لليوم": {
+    "en": "All driver referrals, commissions, and gifts for today are recorded",
+    "id": "Semua rujukan supir, komisi, dan hadiah hari ini telah dicatat"
+  },
+  "رصيد الصندوق الدفتري في النظام": {
+    "en": "System Book Cash Balance",
+    "id": "Saldo Kas Buku Sistem"
+  },
+  "النقد الفعلي المعدود في الدرج الآن": {
+    "en": "Actual Physical Cash Counted",
+    "id": "Kas Fisik yang Dihitung Nyata"
+  },
+  "الفرق (الفعلي - النظام)": {
+    "en": "Cash Variance (Physical - System)",
+    "id": "Selisih Kas (Fisik - Sistem)"
+  },
+  "الصندوق مطابق تماماً (0 فرق)": {
+    "en": "Cash Drawer Perfectly Balanced (0 Variance)",
+    "id": "Laci Kas Seimbang Sempurna (Selisih 0)"
+  },
+  "عجز في الصندوق!": {
+    "en": "Cash Shortage Detected!",
+    "id": "Terdeteksi Kekurangan Kas!"
+  },
+  "زيادة في الصندوق!": {
+    "en": "Cash Surplus Detected!",
+    "id": "Terdeteksi Kelebihan Kas!"
+  },
+  "تأكيد المراجعة والإقفال اليومي": {
+    "en": "Confirm Review & Complete Daily Close",
+    "id": "Konfirmasi Tinjauan & Selesaikan Penutupan Harian"
+  },
+  "المراجعة اليومية قبل الإغلاق (Daily Closing Checklist)": {
+    "en": "Daily Review Before Closing (Daily Closing Checklist)",
+    "id": "Tinjauan Harian Sebelum Penutupan (Daily Closing Checklist)"
+  },
+  "تاريخ يوم الإغلاق المطلوب مراجعته:": {
+    "en": "Closing Date to Review:",
+    "id": "Tanggal Penutupan yang Ditinjau:"
+  },
+  "الدرج مطابق تماماً للرصيد الدفتري ✅": {
+    "en": "Cash drawer matches book balance perfectly ✅",
+    "id": "Kas fisik laci cocok sempurna dengan saldo buku sistem ✅"
+  },
+  "يوجد زيادة في الدرج بمقدار": {
+    "en": "Drawer cash surplus of",
+    "id": "Kelebihan kas fisik laci sebesar"
+  },
+  "يوجد عجز في الدرج بمقدار": {
+    "en": "Drawer cash deficit of",
+    "id": "Kekurangan kas fisik laci sebesar"
+  },
+  "تم إكمال جميع بنود الإغلاق بنجاح": {
+    "en": "All closing checklist items completed successfully",
+    "id": "Semua item daftar periksa penutupan berhasil diselesaikan"
+  },
+  "تم مراجعة": {
+    "en": "Reviewed",
+    "id": "Ditinjau"
+  },
+  "طباعة التقرير": {
+    "en": "Print Report",
+    "id": "Cetak Laporan"
+  },
+  "إغلاق النافذة": {
+    "en": "Close Window",
+    "id": "Tutup Jendela"
+  },
+  "الشريحة 54 من عرض التدريب — مطابقة الصندوق ومراجعة سلامة القيود والتنبيهات": {
+    "en": "Slide 54 of Training Deck — Cash drawer reconciliation and journal integrity review",
+    "id": "Slide 54 Panduan Pelatihan — Rekonsiliasi laci kas dan tinjauan integritas jurnal"
+  },
+  "1. المبيعات والمشتريات المسجلة اليوم": {
+    "en": "1. Sales & Purchases Recorded Today",
+    "id": "1. Penjualan & Pembelian yang Dicatat Hari Ini"
+  },
+  "المبيعات:": {
+    "en": "Sales:",
+    "id": "Penjualan:"
+  },
+  "المشتريات:": {
+    "en": "Purchases:",
+    "id": "Pembelian:"
+  },
+  "فواتير": {
+    "en": "invoices",
+    "id": "faktur"
+  },
+  "2. مطابقة الخزينة والبنك وعدّ النقد في الدرج": {
+    "en": "2. Cash & Bank Reconciliation & Physical Drawer Count",
+    "id": "2. Rekonsiliasi Kas & Bank & Hitungan Fisik Laci"
+  },
+  "رصيد الخزينة الدفتري:": {
+    "en": "Book Cash Balance:",
+    "id": "Saldo Buku Kas:"
+  },
+  "رصيد البنك الدفتري:": {
+    "en": "Book Bank Balance:",
+    "id": "Saldo Buku Bank:"
+  },
+  "أدخل النقد الفعلي المعدود في الدرج الآن (روبية / IDR):": {
+    "en": "Enter actual cash counted in drawer now (SAR/IDR):",
+    "id": "Masukkan jumlah kas fisik yang dihitung di laci sekarang (SAR/IDR):"
+  },
+  "3. المرتجعات المسجلة اليوم": {
+    "en": "3. Returns Recorded Today",
+    "id": "3. Retur yang Dicatat Hari Ini"
+  },
+  "عدد المرتجعات اليوم:": {
+    "en": "Number of returns today:",
+    "id": "Jumlah retur hari ini:"
+  },
+  "صالح": {
+    "en": "good",
+    "id": "kondisi baik"
+  },
+  "تالف": {
+    "en": "damaged",
+    "id": "kondisi rusak"
+  },
+  "— تم التأكد من معالجتها وقيد رد النقدية إن وُجد.": {
+    "en": "— verified processing and cash refund entry if applicable.",
+    "id": "— verifikasi pemrosesan dan input pengembalian tunai jika berlaku."
+  },
+  "4. صرف المخزون والتصنيع": {
+    "en": "4. Stock Issues & Manufacturing",
+    "id": "4. Pengeluaran Stok & Produksi"
+  },
+  "أذون صرف تستر/عينات اليوم:": {
+    "en": "Tester/sample issues today:",
+    "id": "Pengeluaran tester/sampel hari ini:"
+  },
+  "دفعات تصنيع مكتملة اليوم:": {
+    "en": "Manufacturing batches completed today:",
+    "id": "Batch produksi selesai hari ini:"
+  },
+  "5. المديونية المستحقة والمتأخرة": {
+    "en": "5. Due & Overdue Receivables/Payables",
+    "id": "5. Piutang/Hutang Jatuh Tempo & Tertunggak"
+  },
+  "فواتير حل تاريخ استحقاقها اليوم:": {
+    "en": "Invoices due today:",
+    "id": "Faktur jatuh tempo hari ini:"
+  },
+  "فواتير متأخرة تجاوزت أجلها:": {
+    "en": "Invoices overdue past maturity:",
+    "id": "Faktur tertunggak lewat jatuh tempo:"
+  },
+  "6. سلامة التكلفة الشهرية والتنبيهات (COST_CHECK)": {
+    "en": "6. Monthly Cost Health & Alerts (COST_CHECK)",
+    "id": "6. Kesehatan Biaya Bulanan & Peringatan (COST_CHECK)"
+  },
+  "جميع الأصناف سليمة تماماً — لا توجد أي تنبيهات تكلفة (تنبيهات = 0).": {
+    "en": "All items in good standing — zero cost alerts (alerts = 0).",
+    "id": "Semua item dalam kondisi baik — nol peringatan biaya (alerts = 0)."
+  },
+  "تنبيهات تكلفة ومخزون سالب تحتاج مراجعة!": {
+    "en": "cost alerts and negative stock items require review!",
+    "id": "peringatan biaya dan item stok negatif memerlukan tinjauan!"
+  },
+  "كشف حساب تفصيلي:": {
+    "en": "Detailed Statement of Account:",
+    "id": "Rekening Koran Terperinci:"
+  },
+  "حركات متسلسلة زمنياً مع حساب الرصيد التراكمي المعتمد": {
+    "en": "Chronological transaction journal with approved cumulative balance calculation",
+    "id": "Jurnal transaksi kronologis dengan perhitungan saldo kumulatif terverifikasi"
+  },
+  "العودة لتقرير المديونية": {
+    "en": "Back to Debts Report",
+    "id": "Kembali ke Laporan Piutang & Hutang"
+  },
+  "طباعة كشف الحساب": {
+    "en": "Print Statement of Account",
+    "id": "Cetak Rekening Koran"
+  },
+  "من تاريخ": {
+    "en": "From Date",
+    "id": "Dari Tanggal"
+  },
+  "إلى تاريخ": {
+    "en": "To Date",
+    "id": "Sampai Tanggal"
+  },
+  "تحديث الكشف": {
+    "en": "Update Statement",
+    "id": "Perbarui Rekening Koran"
+  },
+  "ملخص الحساب للفترة المحددة": {
+    "en": "Account Summary for Selected Period",
+    "id": "Ringkasan Akun untuk Periode Terpilih"
+  },
+  "إجمالي الحركات المدينة (+)": {
+    "en": "Total Debit Movements (+)",
+    "id": "Total Mutasi Debet (+)"
+  },
+  "إجمالي الحركات الدائنة (-)": {
+    "en": "Total Credit Movements (-)",
+    "id": "Total Mutasi Kredit (-)"
+  },
+  "الرصيد النهائي المستحق": {
+    "en": "Final Balance Due",
+    "id": "Saldo Akhir Tagihan"
+  },
+  "رقم المستند / المرجع": {
+    "en": "Doc No. / Ref",
+    "id": "No. Dokumen / Ref"
+  },
+  "مدين (+)": {
+    "en": "Debit (+)",
+    "id": "Debet (+)"
+  },
+  "دائن (-)": {
+    "en": "Credit (-)",
+    "id": "Kredit (-)"
+  },
+  "الحساب خالص ومسدد بالكامل": {
+    "en": "Account is fully settled and cleared",
+    "id": "Akun telah lunas sepenuhnya"
+  },
+  "رصيد مدين (مستحق على العميل لصالح المحل)": {
+    "en": "Debit Balance (Due from customer to store)",
+    "id": "Saldo Debet (Tagihan pelanggan kepada toko)"
+  },
+  "رصيد دائن (دفعة مقدمة لصالح العميل)": {
+    "en": "Credit Balance (Advance payment from customer)",
+    "id": "Saldo Kredit (Uang muka dari pelanggan)"
+  },
+  "رصيد دائن (مستحق للمورد على المحل)": {
+    "en": "Credit Balance (Due to supplier from store)",
+    "id": "Saldo Kredit (Hutang toko kepada supplier)"
+  },
+  "رصيد مدين (دفعة مقدمة من المحل للمورد)": {
+    "en": "Debit Balance (Advance payment from store to supplier)",
+    "id": "Saldo Debet (Uang muka toko kepada supplier)"
+  },
+  "توقيع الطرف / العميل": {
+    "en": "Party / Customer Signature",
+    "id": "Tanda Tangan Pihak / Pelanggan"
+  },
+  "توقيع المحاسب المعتمد": {
+    "en": "Authorized Accountant Signature",
+    "id": "Tanda Tangan Akuntan Berwenang"
+  },
+  "محل قصر العود والعطور": {
+    "en": "Sidrat Al-Oud Perfumes & Oud Palace",
+    "id": "Istana Parfum & Gaharu Sidrat Al-Oud"
+  },
+  "كشف حساب طرف تجاري معتمد": {
+    "en": "Certified Commercial Statement of Account",
+    "id": "Rekening Koran Komersial Resmi"
+  },
+  "الفترة من:": {
+    "en": "Period From:",
+    "id": "Periode Dari:"
+  },
+  "إلى:": {
+    "en": "To:",
+    "id": "Sampai:"
+  },
+  "تاريخ الإصدار:": {
+    "en": "Issue Date:",
+    "id": "Tanggal Penerbitan:"
+  },
+  "وقت الطباعة:": {
+    "en": "Print Time:",
+    "id": "Waktu Cetak:"
+  },
+  "اسم الطرف:": {
+    "en": "Party Name:",
+    "id": "Nama Pihak:"
+  },
+  "كود الطرف:": {
+    "en": "Party Code:",
+    "id": "Kode Pihak:"
+  },
+  "نوع الحساب:": {
+    "en": "Account Type:",
+    "id": "Jenis Akun:"
+  },
+  "الهاتف والمدينة:": {
+    "en": "Phone & City:",
+    "id": "Telepon & Kota:"
+  },
+  "عميل تجزئة / جملة": {
+    "en": "Retail / Wholesale Client",
+    "id": "Klien Eceran / Grosir"
+  },
+  "مورد": {
+    "en": "Supplier",
+    "id": "Supplier"
+  },
+  "الإجماليات ورصيد الإقفال:": {
+    "en": "Totals & Closing Balance:",
+    "id": "Total & Saldo Akhir:"
+  },
+  "إعداد المحاسب": {
+    "en": "Prepared by Accountant",
+    "id": "Disiapkan oleh Akuntan"
+  },
+  "اعتماد الإدارة": {
+    "en": "Management Approval",
+    "id": "Persetujuan Manajemen"
+  },
+  "مصادقة الطرف الثاني": {
+    "en": "Second Party Confirmation",
+    "id": "Konfirmasi Pihak Kedua"
+  },
+  "التوقيع": {
+    "en": "Signature",
+    "id": "Tanda Tangan"
+  },
+  "الختم / التوقيع": {
+    "en": "Stamp / Signature",
+    "id": "Cap / Tanda Tangan"
+  },
+  "التوقيع / التاريخ": {
+    "en": "Signature / Date",
+    "id": "Tanda Tangan / Tanggal"
+  },
+  "فاتورة مبيعات / Sales Invoice": {
+    "en": "SALES INVOICE",
+    "id": "FAKTUR PENJUALAN"
+  },
+  "كشف حساب تفصيلي / Statement of Account": {
+    "en": "STATEMENT OF ACCOUNT",
+    "id": "REKENING KORAN"
+  },
+  "رقم الفاتورة:": {
+    "en": "Invoice No:",
+    "id": "No. Faktur:"
+  },
+  "التاريخ:": {
+    "en": "Date:",
+    "id": "Tanggal:"
+  },
+  "السيد / العميل:": {
+    "en": "Customer:",
+    "id": "Pelanggan:"
+  },
+  "الهاتف:": {
+    "en": "Phone:",
+    "id": "Telepon:"
+  },
+  "الصنف / البيان": {
+    "en": "Item Description",
+    "id": "Deskripsi Produk"
+  },
+  "المجموع الفرعي:": {
+    "en": "Subtotal:",
+    "id": "Subtotal:"
+  },
+  "الخصم:": {
+    "en": "Discount:",
+    "id": "Diskon:"
+  },
+  "الصافي المطلوب:": {
+    "en": "Net Total:",
+    "id": "Total Bersih:"
+  },
+  "المبلغ المدفوع:": {
+    "en": "Amount Paid:",
+    "id": "Jumlah Dibayar:"
+  },
+  "المتبقي (آجل):": {
+    "en": "Balance Due:",
+    "id": "Sisa Tagihan:"
+  },
+  "شكراً لتعاملكم مع مؤسسة سدرة العود — نسعد بخدمتكم دائماً": {
+    "en": "Thank you for shopping at Sidrat Al-Oud — We look forward to serving you again",
+    "id": "Terima kasih telah berbelanja di Sidrat Al-Oud — Kami menantikan kunjungan Anda kembali"
+  },
+  "توقيع البائع / المحاسب": {
+    "en": "Authorized Seller Signature",
+    "id": "Tanda Tangan Penjual"
+  },
+  "توقيع المستلم / العميل": {
+    "en": "Customer Signature",
+    "id": "Tanda Tangan Pelanggan"
+  },
+  "طباعة الآن (Print)": {
+    "en": "Print Now",
+    "id": "Cetak Sekarang"
+  },
+  "لغة الفاتورة المطبوعة:": {
+    "en": "Print Invoice Language:",
+    "id": "Bahasa Cetak Faktur:"
+  },
+  "إنشاء فاتورة بيع جديدة": {
+    "en": "Create a sales invoice",
+    "id": "Buat faktur penjualan"
+  },
+  "إدخال رأس الفاتورة والعميل، فحص المخزون المتاح لحظياً، وخيارات التحصيل الفوري": {
+    "en": "Enter invoice details, check stock, and record payment",
+    "id": "Isi faktur, periksa stok, dan catat pembayaran"
+  },
+  "بيانات رأس الفاتورة": {
+    "en": "Invoice details",
+    "id": "Rincian faktur"
+  },
+  "العميل*": {
+    "en": "Customer*",
+    "id": "Pelanggan*"
+  },
+  "رقم الفاتورة*": {
+    "en": "Invoice number*",
+    "id": "Nomor faktur*"
+  },
+  "مثال: S-1001": {
+    "en": "Example: S-1001",
+    "id": "Contoh: S-1001"
+  },
+  "تاريخ الفاتورة*": {
+    "en": "Invoice date*",
+    "id": "Tanggal faktur*"
+  },
+  "ملاحظات الفاتورة": {
+    "en": "Invoice notes",
+    "id": "Catatan faktur"
+  },
+  "أي ملاحظات أو تفاصيل خاصة بطلب العميل...": {
+    "en": "Customer order notes...",
+    "id": "Catatan pesanan pelanggan..."
+  },
+  "سطور الأصناف المباعة": {
+    "en": "Sold items",
+    "id": "Barang terjual"
+  },
+  "إضافة سطر صنف": {
+    "en": "Add item row",
+    "id": "Tambah baris barang"
+  },
+  "الصنف والمخزون المتاح*": {
+    "en": "Item and available stock*",
+    "id": "Barang dan stok tersedia*"
+  },
+  "الكمية*": {
+    "en": "Quantity*",
+    "id": "Jumlah*"
+  },
+  "سعر الوحدة (IDR)*": {
+    "en": "Unit price (IDR)*",
+    "id": "Harga satuan (IDR)*"
+  },
+  "خصم البند": {
+    "en": "Line discount",
+    "id": "Diskon baris"
+  },
+  "صافي البيع": {
+    "en": "Net sales",
+    "id": "Penjualan bersih"
+  },
+  "اختر الصنف المباع...": {
+    "en": "Select an item...",
+    "id": "Pilih barang..."
+  },
+  "المتاح حتى هذا التاريخ:": {
+    "en": "Available on this date:",
+    "id": "Tersedia pada tanggal ini:"
+  },
+  "(تجاوز للمخزون!)": {
+    "en": "(Insufficient stock!)",
+    "id": "(Stok tidak mencukupi!)"
+  },
+  "طريقة السداد والتحصيل الفوري": {
+    "en": "Payment and collection",
+    "id": "Pembayaran dan penerimaan"
+  },
+  "آجل (لم يُدفع الآن)": {
+    "en": "Credit (unpaid)",
+    "id": "Kredit (belum dibayar)"
+  },
+  "نقدي كامل (خزينة)": {
+    "en": "Full cash payment",
+    "id": "Pembayaran tunai penuh"
+  },
+  "تحويل كامل (بنك)": {
+    "en": "Full bank payment",
+    "id": "Transfer bank penuh"
+  },
+  "دفعة جزئية": {
+    "en": "Partial payment",
+    "id": "Pembayaran sebagian"
+  },
+  "المبلغ المحصل الآن (IDR)": {
+    "en": "Collected now (IDR)",
+    "id": "Diterima sekarang (IDR)"
+  },
+  "حساب التحصيل": {
+    "en": "Collection account",
+    "id": "Akun penerimaan"
+  },
+  "عدد السطور:": {
+    "en": "Rows:",
+    "id": "Baris:"
+  },
+  "| إجمالي الكميات المباعة:": {
+    "en": "| Total quantity sold:|",
+    "id": " Total jumlah terjual:"
+  },
+  "مجموع الخصم الممنوح:": {
+    "en": "Total discounts:",
+    "id": "Total diskon:"
+  },
+  "المحصل الآن:": {
+    "en": "Collected now:",
+    "id": "Diterima sekarang:"
+  },
+  "| المتبقي على العميل:": {
+    "en": "| Customer balance:|",
+    "id": " Sisa pelanggan:"
+  },
+  "صافي قيمة الفاتورة الإجمالية": {
+    "en": "Invoice net total",
+    "id": "Total bersih faktur"
+  },
+  "تسجيل فاتورة شراء جديدة": {
+    "en": "Create a purchase invoice",
+    "id": "Buat faktur pembelian"
+  },
+  "إدخال رأس الفاتورة وسطور الأصناف وحساب تكلفة الوصول والسداد الفوري": {
+    "en": "Enter purchase details, landed costs and payment",
+    "id": "Isi pembelian, biaya perolehan, dan pembayaran"
+  },
+  "المورد*": {
+    "en": "Supplier*",
+    "id": "Pemasok*"
+  },
+  "مثال: P-1001": {
+    "en": "Example: P-1001",
+    "id": "Contoh: P-1001"
+  },
+  "أي ملاحظات إضافية على أمر الشراء أو الشحنة...": {
+    "en": "Purchase or shipment notes...",
+    "id": "Catatan pembelian atau pengiriman..."
+  },
+  "سطور الأصناف المشتراة": {
+    "en": "Purchased items",
+    "id": "Barang dibeli"
+  },
+  "الصنف*": {
+    "en": "Item*",
+    "id": "Barang*"
+  },
+  "تكلفة الوحدة (IDR)*": {
+    "en": "Unit cost (IDR)*",
+    "id": "Biaya satuan (IDR)*"
+  },
+  "تكلفة الوصول": {
+    "en": "Landed cost",
+    "id": "Biaya perolehan"
+  },
+  "تكلفة البند": {
+    "en": "Line cost",
+    "id": "Biaya baris"
+  },
+  "هل دُفع مبلغ للمورد الآن؟ (سداد فوري)": {
+    "en": "Pay the supplier now?",
+    "id": "Bayar pemasok sekarang?"
+  },
+  "المبلغ المدفوع الآن (IDR)": {
+    "en": "Paid now (IDR)",
+    "id": "Dibayar sekarang (IDR)"
+  },
+  "حساب الدفع": {
+    "en": "Payment account",
+    "id": "Akun pembayaran"
+  },
+  "| إجمالي الكميات:": {
+    "en": "| Total quantity:|",
+    "id": " Total jumlah:"
+  },
+  "تكاليف الوصول المحملة:": {
+    "en": "Allocated landed costs:",
+    "id": "Biaya perolehan dialokasikan:"
+  },
+  "مجموع الخصم:": {
+    "en": "Total discounts:",
+    "id": "Total diskon:"
+  },
+  "صافي تكلفة الفاتورة الإجمالية": {
+    "en": "Invoice total cost",
+    "id": "Total biaya faktur"
+  },
+  "رجوع للمرتجعات": {
+    "en": "Back to returns",
+    "id": "Kembali ke retur"
+  },
+  "ربط إلزامي بالفاتورة الأصلية والتحقق الصارم من سقف الكمية التراكمي": {
+    "en": "Link the original invoice and validate return quantities",
+    "id": "Hubungkan faktur asli dan periksa jumlah retur"
+  },
+  "1. نوع المرتجع": {
+    "en": "1. Return type",
+    "id": "1. Jenis retur"
+  },
+  "مرتجع بيع (من عميل)": {
+    "en": "Sales return (from customer)",
+    "id": "Retur penjualan (dari pelanggan)"
+  },
+  "استرجاع بضاعة مباعة مسبقاً من عميل، مع تحديد الحالة (صالح/تالف) وخيار رد المبلغ نقداً.": {
+    "en": "Receive sold goods from a customer and optionally refund eligible credit.",
+    "id": "Terima barang pelanggan dan kembalikan dana sesuai saldo kredit."
+  },
+  "مرتجع شراء (إلى مورد)": {
+    "en": "Purchase return (to supplier)",
+    "id": "Retur pembelian (ke pemasok)"
+  },
+  "إعادة بضاعة تم شراؤها إلى المورد، مع حساب فروق المرتجع وإشعار دائن المورد.": {
+    "en": "Return purchased goods with the supplier credit note.",
+    "id": "Kembalikan barang dengan nota kredit pemasok."
+  },
+  "2. اختيار الطرف والفاتورة الأصلية": {
+    "en": "2. Party and original invoice",
+    "id": "2. Pihak dan faktur asli"
+  },
+  "+ إضافة سريعاً": {
+    "en": "+ Quick add",
+    "id": "+ Tambah cepat"
+  },
+  "| تاريخ:": {
+    "en": "| Date:|",
+    "id": " Tanggal:"
+  },
+  "| الإجمالي:": {
+    "en": "| Total:|",
+    "id": " Total:"
+  },
+  "ر.س": {
+    "en": "IDR",
+    "id": "IDR"
+  },
+  "3. اختر سطر الفاتورة المراد إرجاعه": {
+    "en": "3. Select the original invoice row",
+    "id": "3. Pilih baris faktur asli"
+  },
+  "الفاتورة:": {
+    "en": "Invoice:",
+    "id": "Faktur:"
+  },
+  "جاري تحميل سطور الفاتورة...": {
+    "en": "Loading invoice rows...",
+    "id": "Memuat baris faktur..."
+  },
+  "لا توجد سطور مؤهلة للإرجاع في هذه الفاتورة": {
+    "en": "No rows eligible for return",
+    "id": "Tidak ada baris yang dapat diretur"
+  },
+  "اختيار": {
+    "en": "Select",
+    "id": "Pilih"
+  },
+  "كود السطر": {
+    "en": "Line code",
+    "id": "Kode baris"
+  },
+  "الكمية الأصلية": {
+    "en": "Original quantity",
+    "id": "Jumlah asli"
+  },
+  "المرتجع سابقاً": {
+    "en": "Already returned",
+    "id": "Sudah diretur"
+  },
+  "المتبقي القابل للإرجاع": {
+    "en": "Remaining returnable quantity",
+    "id": "Sisa yang dapat diretur"
+  },
+  "صافي سعر الوحدة الأصلي": {
+    "en": "Original net unit price",
+    "id": "Harga satuan bersih asli"
+  },
+  "تم إرجاع كامل الكمية": {
+    "en": "Fully returned",
+    "id": "Sudah diretur seluruhnya"
+  },
+  "4. تفاصيل المرتجع والشروط": {
+    "en": "4. Return details and conditions",
+    "id": "4. Rincian dan kondisi retur"
+  },
+  "تاريخ المرتجع": {
+    "en": "Return date",
+    "id": "Tanggal retur"
+  },
+  "رقم مستند المرتجع / الإشعار": {
+    "en": "Return document / credit note",
+    "id": "Dokumen retur / nota kredit"
+  },
+  "مثال: RT-001": {
+    "en": "Example: RT-001",
+    "id": "Contoh: RT-001"
+  },
+  "(حد أقصى:": {
+    "en": "(Maximum:",
+    "id": "(Maksimum:"
+  },
+  "حالة البضاعة المرتجعة": {
+    "en": "Returned goods condition",
+    "id": "Kondisi barang retur"
+  },
+  "صالح (GOOD)": {
+    "en": "Good (GOOD)",
+    "id": "Baik (GOOD)"
+  },
+  "يعود للمخزون المتاح بسعر تكلفة شهر البيع الأصلي": {
+    "en": "Returns to stock at the original sale-month cost",
+    "id": "Kembali ke stok dengan biaya bulan penjualan asli"
+  },
+  "تالف (DAMAGED)": {
+    "en": "Damaged (DAMAGED)",
+    "id": "Rusak (DAMAGED)"
+  },
+  "لا يعود للمخزون، ويُحمل كمصروف تلف مرتجع في قائمة الدخل": {
+    "en": "Does not return to stock; recorded as return damage expense",
+    "id": "Tidak kembali ke stok; dicatat sebagai beban kerusakan retur"
+  },
+  "تسجيل رد المبلغ نقداً للعميل الآن (سداد فوري)": {
+    "en": "Refund available customer credit now",
+    "id": "Kembalikan saldo kredit pelanggan sekarang"
+  },
+  "يقوم بإنشاء حركة صرف نقدية تلقائية (CUSTOMER_REFUND) بقيمة المرتجع (": {
+    "en": "Creates a linked cash refund of (",
+    "id": "Membuat pengembalian dana terkait sebesar ("
+  },
+  "ر.س) داخل نفس العملية المحاسبية.": {
+    "en": "IDR) in the same transaction.",
+    "id": "IDR) dalam transaksi yang sama."
+  },
+  "الحساب المنصرف منه:": {
+    "en": "Payment from:",
+    "id": "Pembayaran dari:"
+  },
+  "قيمة إشعار دائن المورد الفعلي (اختياري)": {
+    "en": "Actual supplier credit note (optional)",
+    "id": "Nota kredit pemasok aktual (opsional)"
+  },
+  "إذا كان المورد أصدر إشعاراً بقيمة محددة تختلف عن صافي الشراء، أدخل القيمة هنا لحساب فروق المرتجع (PurchaseVariance) بدقة. إذا تُرِك فارغاً، يُحسب تلقائياً (": {
+    "en": "Enter the actual credit note if different; otherwise calculate from the purchase (",
+    "id": "Isi nota kredit aktual jika berbeda; jika kosong dihitung dari pembelian ("
+  },
+  "ر.س).": {
+    "en": "IDR).",
+    "id": "IDR)."
+  },
+  "سبب الإرجاع": {
+    "en": "Return reason",
+    "id": "Alasan retur"
+  },
+  "مثال: الصنف غير مطابق للمواصفات المطلوبة": {
+    "en": "Example: goods do not match the order",
+    "id": "Contoh: barang tidak sesuai pesanan"
+  },
+  "ملاحظات إضافية (اختياري)": {
+    "en": "Additional notes (optional)",
+    "id": "Catatan tambahan (opsional)"
+  },
+  "أي تفاصيل تود إثباتها في السجل...": {
+    "en": "Details to record...",
+    "id": "Rincian untuk dicatat..."
+  },
+  "معاينة الأثر المحاسبي والمخزني المباشر": {
+    "en": "Financial and stock preview",
+    "id": "Pratinjau keuangan dan stok"
+  },
+  "الصنف المحدد": {
+    "en": "Selected item",
+    "id": "Barang dipilih"
+  },
+  "إجمالي القيمة المستردة/الدائنة": {
+    "en": "Total returned / credited value",
+    "id": "Total nilai retur / kredit"
+  },
+  "الأثر المخزني:": {
+    "en": "Stock effect:",
+    "id": "Dampak stok:"
+  },
+  "+ إضافة": {
+    "en": "+ Add",
+    "id": "+ Tambah"
+  },
+  "إلى المخزون المتاح (صالح)": {
+    "en": "back to available stock (good)",
+    "id": "ke stok tersedia (baik)"
+  },
+  "0 مخزون (تالف لا يعود للمخزون، ويُثبت كمصروف تلف مرتجع)": {
+    "en": "0 stock (damaged; recorded as return damage expense)",
+    "id": "0 stok (rusak; dicatat sebagai beban kerusakan retur)"
+  },
+  "- خصم": {
+    "en": "- Deduct",
+    "id": "- Kurangi"
+  },
+  "من المخزون وإعادتها للمورد": {
+    "en": "from stock and return to supplier",
+    "id": "dari stok dan kembalikan ke pemasok"
+  },
+  "الأثر المالي:": {
+    "en": "Financial effect:",
+    "id": "Dampak keuangan:"
+  },
+  "صرف فوري (": {
+    "en": "Immediate payment (",
+    "id": "Pembayaran langsung ("
+  },
+  "ر.س) من": {
+    "en": "IDR) from",
+    "id": "IDR) dari"
+  },
+  "للعميل": {
+    "en": "for the customer",
+    "id": "untuk pelanggan"
+  },
+  "قيد رصيد دائن للعميل في حسابه لتسوية الفواتير أو المتبقي": {
+    "en": "Credit the customer account against invoices or remaining balance",
+    "id": "Kreditkan akun pelanggan untuk faktur atau sisa saldo"
+  },
+  "تخفيض مستحقات المورد بموجب إشعار الخصم": {
+    "en": "Reduce supplier payable by the credit note",
+    "id": "Kurangi utang pemasok sesuai nota kredit"
+  },
+  "رجوع للدفعات": {
+    "en": "Back to batches",
+    "id": "Kembali ke produksi"
+  },
+  "دفعة تصنيع وتركيب جديدة": {
+    "en": "New production batch",
+    "id": "Produksi baru"
+  },
+  "شاشة موحدة تجمع رأس الدفعة ومواد التصنيع الخام وتحديث تكلفة المنتج التام والمخزون لحظياً": {
+    "en": "Record finished output, raw materials, cost and stock movement",
+    "id": "Catat hasil produksi, bahan baku, biaya, dan pergerakan stok"
+  },
+  "1. بيانات رأس الدفعة والمنتج التام الناتج": {
+    "en": "1. Batch and finished output",
+    "id": "1. Produksi dan barang jadi"
+  },
+  "تاريخ إكمال الدفعة": {
+    "en": "Completion date",
+    "id": "Tanggal selesai"
+  },
+  "المنتج التام الناتج (FINISHED)": {
+    "en": "Finished output (FINISHED)",
+    "id": "Hasil barang jadi (FINISHED)"
+  },
+  ") | الوحدة:": {
+    "en": ") | Unit:",
+    "id": ") / Satuan:"
+  },
+  "الكمية الناتجة": {
+    "en": "Produced quantity",
+    "id": "Jumlah produksi"
+  },
+  "ملاحظات عن الدفعة (اختياري)": {
+    "en": "Batch notes (optional)",
+    "id": "Catatan produksi (opsional)"
+  },
+  "مثال: تركيب تركيبة خريفية خاصة برائحة المسك والعود": {
+    "en": "Example: a special oud and musk blend",
+    "id": "Contoh: campuran khusus gaharu dan musk"
+  },
+  "2. المواد الخام المستهلكة في الدفعة (RAW)": {
+    "en": "2. Consumed raw materials (RAW)",
+    "id": "2. Bahan baku terpakai (RAW)"
+  },
+  "يجب إضافة مادة خام واحدة على الأقل. يتم احتساب التكلفة بمتوسط التكلفة الشهري المرجح (RAVG).": {
+    "en": "At least one raw material is required. Cost uses the monthly weighted average.",
+    "id": "Minimal satu bahan baku. Biaya memakai rata-rata tertimbang bulanan."
+  },
+  "إضافة مادة خام أخرى": {
+    "en": "Add another raw material",
+    "id": "Tambah bahan baku"
+  },
+  "المادة الخام (دور RAW فقط)": {
+    "en": "Raw material (RAW only)",
+    "id": "Bahan baku (RAW saja)"
+  },
+  "المخزون المتاح": {
+    "en": "Available stock",
+    "id": "Stok tersedia"
+  },
+  "الكمية المستهلكة": {
+    "en": "Consumed quantity",
+    "id": "Jumlah terpakai"
+  },
+  "متوسط التكلفة (RAVG)": {
+    "en": "Average cost (RAVG)",
+    "id": "Biaya rata-rata (RAVG)"
+  },
+  "التكلفة المستهلكة": {
+    "en": "Consumed cost",
+    "id": "Biaya terpakai"
+  },
+  "اختر مادة خام...": {
+    "en": "Select raw material...",
+    "id": "Pilih bahan baku..."
+  },
+  "حذف المادة الخام": {
+    "en": "Remove raw material",
+    "id": "Hapus bahan baku"
+  },
+  "معاينة تكلفة الدفعة والمنتج التام لحظياً (حسب معادلات المواصفة 10)": {
+    "en": "Batch and finished-item cost preview",
+    "id": "Pratinjau biaya produksi dan barang jadi"
+  },
+  "المنتج التام الناتج": {
+    "en": "Finished output",
+    "id": "Hasil barang jadi"
+  },
+  "إجمالي تكلفة المكونات (Σ ConsumedCost)": {
+    "en": "Total material cost (Σ ConsumedCost)",
+    "id": "Total biaya bahan (Σ ConsumedCost)"
+  },
+  "تكلفة الوحدة الواحدة من المنتج التام": {
+    "en": "Finished-item unit cost",
+    "id": "Biaya satuan barang jadi"
+  },
+  "الأثر على مخزون المواد الخام:": {
+    "en": "Raw-material stock effect:",
+    "id": "Dampak stok bahan baku:"
+  },
+  "سحب فوري لكميات المواد الخام المحددة وتخفيض رصيدها الشهري (CQ)": {
+    "en": "Deduct the selected raw-material quantities from stock",
+    "id": "Kurangi jumlah bahan baku terpilih dari stok"
+  },
+  "الأثر على مخزون المنتج التام:": {
+    "en": "Finished-item stock effect:",
+    "id": "Dampak stok barang jadi:"
+  },
+  "إضافة +": {
+    "en": "Add +",
+    "id": "Tambah +"
+  },
+  "إلى وعاء مخزون المنتج التام (MQ) بقيمة إجمالية": {
+    "en": "to finished stock (MQ), with total value",
+    "id": "ke stok barang jadi (MQ), dengan nilai total"
+  },
+  "ر.س (MV)": {
+    "en": "IDR (MV)",
+    "id": "IDR (MV)"
+  },
+  "العودة للإعدادات": {
+    "en": "Back to settings",
+    "id": "Kembali ke pengaturan"
+  },
+  "النسخ الاحتياطي واستعادة وتصدير البيانات": {
+    "en": "Backup, restore and export",
+    "id": "Cadangan, pemulihan, dan ekspor"
+  },
+  "حفظ وتأمين بيانات النظام المحاسبي والمخزوني لمنع أي فقدان للمعلومات": {
+    "en": "Save and protect financial and inventory data",
+    "id": "Simpan dan lindungi data keuangan dan stok"
+  },
+  "استيراد من Excel": {
+    "en": "Import Excel",
+    "id": "Impor Excel"
+  },
+  "تنزيل نسخة احتياطية فورية (Manual Backup & Export)": {
+    "en": "Download backup and exports",
+    "id": "Unduh cadangan dan ekspor"
+  },
+  "اختر الصيغة المناسبة لتنزيل كامل قاعدة البيانات: بصيغة JSON شاملة لكافة الجداول، أو بصيغة ملف Excel (.xlsx) جاهز للفتح والمراجعة.": {
+    "en": "JSON is the full database backup. Excel is an export for review.",
+    "id": "JSON adalah cadangan basis data lengkap. Excel adalah ekspor untuk peninjauan."
+  },
+  "جاري تجهيز النسخة...": {
+    "en": "Preparing backup...",
+    "id": "Menyiapkan cadangan..."
+  },
+  "تنزيل نسخة كاملة (JSON)": {
+    "en": "Download full backup (JSON)",
+    "id": "Unduh cadangan lengkap (JSON)"
+  },
+  "جاري التصدير...": {
+    "en": "Exporting...",
+    "id": "Mengekspor..."
+  },
+  "تصدير إلى Excel (.xlsx)": {
+    "en": "Export Excel (.xlsx)",
+    "id": "Ekspor Excel (.xlsx)"
+  },
+  "يشمل كافة الجداول والمعاملات": {
+    "en": "Includes database records and transactions",
+    "id": "Mencakup data dan transaksi basis data"
+  },
+  "ملف محلي غير مشفر — احفظه في مكان خاص": {
+    "en": "Unencrypted local file — store privately",
+    "id": "Berkas lokal tanpa enkripsi — simpan secara privat"
+  },
+  "متاح للمشرف (Admin) فقط": {
+    "en": "Administrator only",
+    "id": "Khusus administrator"
+  },
+  "استعادة قاعدة البيانات من ملف احتياطي (Restore Backup)": {
+    "en": "Restore a database backup",
+    "id": "Pulihkan cadangan basis data"
+  },
+  "ارفع ملف النسخة الاحتياطية بصيغة JSON (": {
+    "en": "Upload the JSON database backup (",
+    "id": "Unggah cadangan basis data JSON ("
+  },
+  ") لاستعادة البيانات والأرصدة إلى النظام.": {
+    "en": ") to restore records and balances.",
+    "id": ") untuk memulihkan data dan saldo."
+  },
+  "جاري استعادة البيانات...": {
+    "en": "Restoring data...",
+    "id": "Memulihkan data..."
+  },
+  "اختيار ملف النسخة الاحتياطية لاستعادتها": {
+    "en": "Choose a backup to restore",
+    "id": "Pilih cadangan untuk dipulihkan"
+  },
+  "النسخ الاحتياطي التلقائي اليومي (Scheduled Backup)": {
+    "en": "Scheduled daily backup",
+    "id": "Cadangan harian terjadwal"
+  },
+  "وفقاً للمواصفة القياسية (": {
+    "en": "According to the operations guide (",
+    "id": "Menurut panduan operasional ("
+  },
+  ")، يمكن إعداد نسخة احتياطية يومية من قاعدة بيانات PostgreSQL في المجلد المربوط": {
+    "en": "), a daily PostgreSQL backup can be configured in the mounted directory",
+    "id": "), cadangan PostgreSQL harian dapat dikonfigurasi di direktori terpasang"
+  },
+  "بعد تفعيل الجدولة وفق دليل التشغيل. الجدولة غير مفعلة تلقائيًا من هذه الشاشة.": {
+    "en": "after enabling the schedule. This screen does not enable scheduling automatically.",
+    "id": "setelah jadwal diaktifkan. Layar ini tidak mengaktifkan penjadwalan otomatis."
+  },
+  "استيراد البيانات من Excel (oud_system.xlsx)": {
+    "en": "Import system data from Excel",
+    "id": "Impor data sistem dari Excel"
+  },
+  "ترحيل شامل وسريع لجميع الأوراق الـ 18 إلى قاعدة البيانات مع فحص مطابقة الأرصدة": {
+    "en": "Import system workbook data and reconcile balances",
+    "id": "Impor data buku kerja sistem dan cocokkan saldo"
+  },
+  "يدعم ملفات قالب النظام المحاسبي المعتمد (.xlsx) مثل": {
+    "en": "Supports the approved system workbook (.xlsx), such as",
+    "id": "Mendukung buku kerja sistem resmi (.xlsx), seperti"
+  },
+  "* سيتم استيراد كافة العمليات داخل معاملة واحدة آمنة (Atomic Transaction).": {
+    "en": "* Import applies all changes in one atomic transaction.",
+    "id": "* Impor menerapkan perubahan dalam satu transaksi atomik."
+  },
+  "جاري قراءة واستيراد الملف...": {
+    "en": "Reading and importing file...",
+    "id": "Membaca dan mengimpor berkas..."
+  },
+  "معاينة قبل الكتابة": {
+    "en": "Preview before applying",
+    "id": "Pratinjau sebelum menerapkan"
+  },
+  "الاستيراد يحدّث السجلات المطابقة ويعيد احتساب الأرصدة. راجع الفروقات ثم أكد التطبيق.": {
+    "en": "Import updates matching records and recalculates balances. Review the changes before confirming.",
+    "id": "Impor memperbarui data yang cocok dan menghitung ulang saldo. Tinjau perubahan sebelum konfirmasi."
+  },
+  "إحصائيات السجلات المستوردة:": {
+    "en": "Imported record counts:",
+    "id": "Jumlah data diimpor:"
+  },
+  "فئات الأصناف": {
+    "en": "Item categories",
+    "id": "Kategori barang"
+  },
+  "الوحدات": {
+    "en": "Units",
+    "id": "Satuan"
+  },
+  "الأطراف والأسماء": {
+    "en": "Parties and contacts",
+    "id": "Pihak dan kontak"
+  },
+  "الأصناف": {
+    "en": "Items",
+    "id": "Barang"
+  },
+  "سطور المشتريات": {
+    "en": "Purchase rows",
+    "id": "Baris pembelian"
+  },
+  "سطور المبيعات": {
+    "en": "Sales rows",
+    "id": "Baris penjualan"
+  },
+  "الحركات النقدية": {
+    "en": "Cash transactions",
+    "id": "Transaksi kas"
+  },
+  "سطور المرتجعات": {
+    "en": "Return rows",
+    "id": "Baris retur"
+  },
+  "صرف المخزون": {
+    "en": "Stock issues",
+    "id": "Pengeluaran stok"
+  },
+  "دفعات التصنيع": {
+    "en": "Production batches",
+    "id": "Produksi"
+  },
+  "زيارات السائقين": {
+    "en": "Driver visits",
+    "id": "Kunjungan pengemudi"
+  },
+  "الأصول الثابتة": {
+    "en": "Fixed assets",
+    "id": "Aset tetap"
+  },
+  "بطاقة فحص المطابقة التلقائية مع ورقة «الرئيسية والتقارير» في ملف Excel:": {
+    "en": "Automatic reconciliation with the workbook dashboard:",
+    "id": "Pencocokan otomatis dengan dasbor buku kerja:"
+  },
+  "مقارنة الخلايا المعتمدة في ورقة التقارير": {
+    "en": "Compare the report reference cells",
+    "id": "Bandingkan sel referensi laporan"
+  },
+  "البند المالي": {
+    "en": "Financial item",
+    "id": "Pos keuangan"
+  },
+  "الخلية في Excel": {
+    "en": "Excel cell",
+    "id": "Sel Excel"
+  },
+  "القيمة في Excel": {
+    "en": "Excel value",
+    "id": "Nilai Excel"
+  },
+  "المحسوب في النظام": {
+    "en": "System value",
+    "id": "Nilai sistem"
+  },
+  "الفرق": {
+    "en": "Difference",
+    "id": "Selisih"
+  },
+  "حالة المطابقة": {
+    "en": "Reconciliation status",
+    "id": "Status pencocokan"
+  },
+  "متطابق 100%": {
+    "en": "Fully matched",
+    "id": "Cocok sepenuhnya"
+  },
+  "يوجد فرق": {
+    "en": "Difference found",
+    "id": "Ada selisih"
+  },
+  "إدارة المستخدمين والصلاحيات (حسابات الريسبشن والموظفين)": {
+    "en": "Users and permissions",
+    "id": "Pengguna dan izin"
+  },
+  "إنشاء حسابات لموظفي الاستقبال (الريسبشن)، البائعين، والمحاسبين وتحديد الشاشات والصلاحيات المسموحة لكل حساب بدقة": {
+    "en": "Create staff accounts and assign their allowed operations and pages",
+    "id": "Buat akun staf dan tetapkan operasi serta halaman yang diizinkan"
+  },
+  "العودة إلى الإعدادات": {
+    "en": "Back to settings",
+    "id": "Kembali ke pengaturan"
+  },
+  "+ إلغاء التعديل وإضافة حساب جديد": {
+    "en": "+ Cancel editing and add an account",
+    "id": "+ Batalkan penyuntingan dan tambah akun"
+  },
+  "1. اختر قالب الوظيفة السريع (يمكنك بعدها تخصيص الصلاحيات بالأسفل):": {
+    "en": "1. Choose a role preset, then customize permissions:",
+    "id": "1. Pilih templat peran, lalu sesuaikan izin:"
+  },
+  "اسم الدخول (Username) *": {
+    "en": "Username *",
+    "id": "Nama pengguna *"
+  },
+  "مثال: reception1": {
+    "en": "Example: reception1",
+    "id": "Contoh: reception1"
+  },
+  "الاسم الظاهر للموظف *": {
+    "en": "Staff display name *",
+    "id": "Nama tampilan staf *"
+  },
+  "مثال: موظف الريسبشن - أحمد": {
+    "en": "Example: reception staff — Ahmad",
+    "id": "Contoh: staf resepsionis — Ahmad"
+  },
+  "2. تحديد الصلاحيات والشاشات المسموحة لهذا الحساب:": {
+    "en": "2. Allowed permissions and pages:",
+    "id": "2. Izin dan halaman yang diizinkan:"
+  },
+  "تم تفعيل": {
+    "en": "Enabled",
+    "id": "Diaktifkan"
+  },
+  "من أصل": {
+    "en": "out of",
+    "id": "dari"
+  },
+  "صلاحية": {
+    "en": "permissions",
+    "id": "izin"
+  },
+  "الحسابات المسجلة في النظام (": {
+    "en": "Registered accounts (",
+    "id": "Akun terdaftar ("
+  },
+  "جارٍ تحميل قائمة الحسابات...": {
+    "en": "Loading accounts...",
+    "id": "Memuat akun..."
+  },
+  "اسم الدخول": {
+    "en": "Username",
+    "id": "Nama pengguna"
+  },
+  "الاسم الظاهر": {
+    "en": "Display name",
+    "id": "Nama tampilan"
+  },
+  "الدور": {
+    "en": "Role",
+    "id": "Peran"
+  },
+  "الصلاحيات المفعّلة": {
+    "en": "Enabled permissions",
+    "id": "Izin diaktifkan"
+  },
+  "كافة الصلاحيات (": {
+    "en": "All permissions (",
+    "id": "Semua izin ("
+  },
+  "أخرى": {
+    "en": "more",
+    "id": "lainnya"
+  },
+  "تعديل الصلاحيات": {
+    "en": "Edit permissions",
+    "id": "Ubah izin"
+  },
+  "عملاء وهدايا السائقين (الريسبشن)": {
+    "en": "Driver customers and gifts",
+    "id": "Pelanggan dan hadiah pengemudi"
+  },
+  "تسجيل زيارات عملاء السائقين ومتابعة عداد الهدايا وتسويتها": {
+    "en": "Record driver visits and manage gift entitlements and settlements",
+    "id": "Catat kunjungan pengemudi dan kelola hak serta penyelesaian hadiah"
+  },
+  "الاستقبال (الريسبشن) والمبيعات": {
+    "en": "Reception and sales",
+    "id": "Resepsionis dan penjualan"
+  },
+  "الأسماء وبيانات الاتصال (العملاء والسائقون)": {
+    "en": "Contacts: customers and drivers",
+    "id": "Kontak: pelanggan dan pengemudi"
+  },
+  "إضافة وتعديل بيانات العملاء والسائقين والموردين": {
+    "en": "Create and edit customer, driver and supplier contact details",
+    "id": "Tambah dan ubah kontak pelanggan, pengemudi, serta pemasok"
+  },
+  "صرف المخزون (تستر / عينات)": {
+    "en": "Stock issues: testers and samples",
+    "id": "Pengeluaran stok: tester dan sampel"
+  },
+  "تسجيل صرف التستر والعينات للضيوف والعملاء في المعرض": {
+    "en": "Record testers and samples issued to visitors and customers",
+    "id": "Catat tester dan sampel untuk pengunjung serta pelanggan"
+  },
+  "المبيعات وفواتير العملاء": {
+    "en": "Sales and customer invoices",
+    "id": "Penjualan dan faktur pelanggan"
+  },
+  "إنشاء وعرض وطباعة فواتير البيع للعملاء": {
+    "en": "Create, view and print sales invoices",
+    "id": "Buat, lihat, dan cetak faktur penjualan"
+  },
+  "تحصيل العملاء ورد المبالغ": {
+    "en": "Customer collections and refunds",
+    "id": "Penerimaan dan pengembalian dana pelanggan"
+  },
+  "تسجيل سندات قبض العملاء أو رد مبالغ المرتجعات": {
+    "en": "Record customer receipts and eligible refunds",
+    "id": "Catat penerimaan pelanggan dan pengembalian dana yang memenuhi syarat"
+  },
+  "تسجيل مرتجعات المبيعات أو المشتريات": {
+    "en": "Record sales and purchase returns",
+    "id": "Catat retur penjualan dan pembelian"
+  },
+  "المخزون وكارت الصنف": {
+    "en": "Inventory and item movement",
+    "id": "Stok dan pergerakan barang"
+  },
+  "الاطلاع على أرصدة الأصناف الحالية وحركة كارت الصنف": {
+    "en": "View current item balances and movement history",
+    "id": "Lihat saldo barang dan riwayat pergerakan"
+  },
+  "المخزون والمشتريات والتصنيع": {
+    "en": "Inventory, purchasing and production",
+    "id": "Stok, pembelian, dan produksi"
+  },
+  "تعريف الأصناف": {
+    "en": "Item management",
+    "id": "Pengelolaan barang"
+  },
+  "إضافة وتعديل أصناف العود ودهن العود والعطور والخامات": {
+    "en": "Create and edit oud, oil, perfume and raw-material items",
+    "id": "Tambah dan ubah barang gaharu, minyak, parfum, serta bahan baku"
+  },
+  "المشتريات وفواتير الموردين": {
+    "en": "Purchases and supplier invoices",
+    "id": "Pembelian dan faktur pemasok"
+  },
+  "إدخال فواتير الشراء والاطلاع على تكاليف الموردين": {
+    "en": "Record purchase invoices and view supplier costs",
+    "id": "Catat faktur pembelian dan lihat biaya pemasok"
+  },
+  "التصنيع والتركيبات": {
+    "en": "Production and blending",
+    "id": "Produksi dan pencampuran"
+  },
+  "إنشاء دفعات التصنيع وتحويل الخامات إلى منتجات تامة": {
+    "en": "Create production batches converting materials to finished goods",
+    "id": "Buat produksi yang mengubah bahan baku menjadi barang jadi"
+  },
+  "الرئيسية والتقارير المالية": {
+    "en": "Dashboard and financial reports",
+    "id": "Dasbor dan laporan keuangan"
+  },
+  "الاطلاع على قائمة الدخل الـ 14 والربح التشغيلي والمقارنة الشهرية": {
+    "en": "View the income statement, operating profit and monthly comparisons",
+    "id": "Lihat laporan laba rugi, laba operasi, dan perbandingan bulanan"
+  },
+  "المحاسبة والتقارير والإدارة": {
+    "en": "Accounting, reporting and administration",
+    "id": "Akuntansi, pelaporan, dan administrasi"
+  },
+  "المديونية وكشوف الحساب": {
+    "en": "Debts and account statements",
+    "id": "Utang dan laporan akun"
+  },
+  "متابعة أعمار الديون وكشوف حسابات العملاء والموردين": {
+    "en": "Track debt ageing and customer and supplier statements",
+    "id": "Pantau umur piutang serta laporan pelanggan dan pemasok"
+  },
+  "الحسابات والمدفوعات الكاملة (مصروفات/موردين/شركاء)": {
+    "en": "Full cash management: expenses, suppliers and partners",
+    "id": "Pengelolaan kas penuh: beban, pemasok, dan mitra"
+  },
+  "إدارة كافة الحركات النقدية والبنكية والمصروفات وسداد الموردين": {
+    "en": "Manage cash, bank, expenses and supplier payments",
+    "id": "Kelola kas, bank, beban, dan pembayaran pemasok"
+  },
+  "الشركاء والأصول وحقوق الملكية": {
+    "en": "Partners, assets and equity",
+    "id": "Mitra, aset, dan ekuitas"
+  },
+  "الاطلاع على حصص الشركاء وتوزيع الأرباح والأصول الثابتة": {
+    "en": "View partner shares, profit distributions and fixed assets",
+    "id": "Lihat bagian mitra, pembagian laba, dan aset tetap"
+  },
+  "سياسة هدايا السائقين": {
+    "en": "Driver gift policies",
+    "id": "Kebijakan hadiah pengemudi"
+  },
+  "تعديل عدد الزيارات المطلوبة وقيمة هدية السائق": {
+    "en": "Set the visit threshold and driver gift value",
+    "id": "Tetapkan ambang kunjungan dan nilai hadiah pengemudi"
+  },
+  "إلغاء المستندات المعتمدة (VOID)": {
+    "en": "Void posted documents",
+    "id": "Batalkan dokumen yang dibukukan"
+  },
+  "صلاحية إلغاء الفواتير أو السندات مع تسجيل السبب في التدقيق": {
+    "en": "Void invoices and vouchers with an audited reason",
+    "id": "Batalkan faktur dan bukti transaksi dengan alasan tercatat"
+  },
+  "الإعدادات والمستخدمون وقفل الفترة": {
+    "en": "Settings, users and accounting lock",
+    "id": "Pengaturan, pengguna, dan kunci periode"
+  },
+  "إدارة إعدادات النظام، حسابات الموظفين، النسخ الاحتياطي، ومعالج التهيئة": {
+    "en": "Manage settings, staff accounts, backups and initial setup",
+    "id": "Kelola pengaturan, akun staf, cadangan, dan penyiapan awal"
+  },
+  "موظف ريسبشن (استقبال وزوار السائقين وعينات)": {
+    "en": "Reception staff: visits and samples",
+    "id": "Staf resepsionis: kunjungan dan sampel"
+  },
+  "كاشير / بائع معرض": {
+    "en": "Cashier / sales staff",
+    "id": "Kasir / staf penjualan"
+  },
+  "محاسب": {
+    "en": "Accountant",
+    "id": "Akuntan"
+  },
+  "مدير النظام (صلاحية كاملة)": {
+    "en": "Administrator: full access",
+    "id": "Administrator: akses penuh"
+  },
+  "حفظ الفاتورة": {
+    "en": "Save invoice",
+    "id": "Simpan faktur"
+  },
+  "إضافة عميل جديد سريع": {
+    "en": "Quick add customer",
+    "id": "Tambah pelanggan cepat"
+  },
+  "وحدة": {
+    "en": "Unit",
+    "id": "Satuan"
+  },
+  "إضافة مورد جديد": {
+    "en": "Add supplier",
+    "id": "Tambah pemasok"
+  },
+  "حفظ وترحيل المرتجع": {
+    "en": "Post return",
+    "id": "Bukukan retur"
+  },
+  "إضافة طرف جديد": {
+    "en": "Add party",
+    "id": "Tambah pihak"
+  },
+  "اختر الطرف أولاً لتظهر فواتيره": {
+    "en": "Choose a party to view invoices",
+    "id": "Pilih pihak untuk melihat faktur"
+  },
+  "جاري تحميل الفواتير...": {
+    "en": "Loading invoices...",
+    "id": "Memuat faktur..."
+  },
+  "لا توجد فواتير مرحلة لهذا الطرف": {
+    "en": "No posted invoices for this party",
+    "id": "Tidak ada faktur dibukukan untuk pihak ini"
+  },
+  "اختر الفاتورة الأصلية...": {
+    "en": "Select original invoice...",
+    "id": "Pilih faktur asli..."
+  },
+  "الخزينة": {
+    "en": "Cash",
+    "id": "Kas"
+  },
+  "البنك": {
+    "en": "Bank",
+    "id": "Bank"
+  },
+  "حفظ وترحيل الدفعة": {
+    "en": "Post batch",
+    "id": "Bukukan produksi"
+  },
+  "لا توجد أصناف بدور منتج تام (FINISHED)": {
+    "en": "No finished items available",
+    "id": "Tidak ada barang jadi tersedia"
+  },
+  "اختر المنتج التام...": {
+    "en": "Select finished item...",
+    "id": "Pilih barang jadi..."
+  },
+  "قطعة": {
+    "en": "Piece",
+    "id": "Buah"
+  },
+  "لم يُحدد بعد": {
+    "en": "Not selected",
+    "id": "Belum dipilih"
+  },
+  "اضغط لاختيار ملف Excel أو اسحبه إلى هنا": {
+    "en": "Choose an Excel file or drag it here",
+    "id": "Pilih berkas Excel atau seret ke sini"
+  },
+  "تأكيد تطبيق الاستيراد": {
+    "en": "Confirm import",
+    "id": "Konfirmasi impor"
+  },
+  "معاينة الملف والفروقات": {
+    "en": "Preview file and changes",
+    "id": "Pratinjau berkas dan perubahan"
+  },
+  "تم فحص جميع أرقام قائمة الدخل والمركز المالي وتطابقت حرفياً مع محرك الويب المحاسبي.": {
+    "en": "The selected financial checks match the system calculations.",
+    "id": "Pemeriksaan keuangan yang dipilih cocok dengan perhitungan sistem."
+  },
+  "تمت قراءة البيانات بنجاح، راجع جدول الفروقات أدناه للتأكد من بنود الأرصدة.": {
+    "en": "Data was read successfully; review the reconciliation differences below.",
+    "id": "Data berhasil dibaca; tinjau selisih pencocokan di bawah."
+  },
+  "إضافة حساب موظف جديد وتحديد صلاحياته": {
+    "en": "Add a staff account and assign permissions",
+    "id": "Tambah akun staf dan tetapkan izin"
+  },
+  "موظف ريسبشن (استقبال)": {
+    "en": "Reception staff",
+    "id": "Staf resepsionis"
+  },
+  "تسجيل زوار السائقين + العملاء + التستر والمبيعات": {
+    "en": "Driver visits, contacts, testers and sales",
+    "id": "Kunjungan pengemudi, kontak, tester, dan penjualan"
+  },
+  "المبيعات + التحصيل + المرتجعات + استعلام المخزون": {
+    "en": "Sales, collections, returns and stock lookup",
+    "id": "Penjualan, penerimaan, retur, dan pencarian stok"
+  },
+  "كافة العمليات والتقارير والمشتريات والتصنيع": {
+    "en": "Operations, reports, purchasing and production",
+    "id": "Operasi, laporan, pembelian, dan produksi"
+  },
+  "مدير النظام": {
+    "en": "Administrator",
+    "id": "Administrator"
+  },
+  "صلاحية كاملة شاملة الإعدادات والمستخدمين": {
+    "en": "Full access including settings and users",
+    "id": "Akses penuh termasuk pengaturan dan pengguna"
+  },
+  "كلمة مرور جديدة (اتركها فارغة للإبقاء على الحالية)": {
+    "en": "New password (leave blank to keep current)",
+    "id": "Kata sandi baru (kosongkan untuk mempertahankan)"
+  },
+  "كلمة المرور *": {
+    "en": "Password *",
+    "id": "Kata sandi *"
+  },
+  "•••••••• (اختياري)": {
+    "en": "•••••••• (optional)",
+    "id": "•••••••• (opsional)"
+  },
+  "أدخل كلمة المرور": {
+    "en": "Enter password",
+    "id": "Masukkan kata sandi"
+  },
+  "جارٍ الحفظ...": {
+    "en": "Saving...",
+    "id": "Menyimpan..."
+  },
+  "حفظ تعديلات الحساب والصلاحيات": {
+    "en": "Save account and permissions",
+    "id": "Simpan akun dan izin"
+  },
+  "إنشاء الحساب وتفعيل الصلاحيات": {
+    "en": "Create account and enable permissions",
+    "id": "Buat akun dan aktifkan izin"
+  },
+  "ريسبشن / كاشير": {
+    "en": "Reception / cashier",
+    "id": "Resepsionis / kasir"
+  },
+  "موقوف": {
+    "en": "Disabled",
+    "id": "Dinonaktifkan"
+  }
+}

@@ -1,0 +1,77 @@
+:root { --font-cairo: Cairo; }
+@media print {
+  html, body, .min-h-screen { min-height: 0 !important; }
+  body { background: white; }
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 36, 17, 13;
+  --background-start-rgb: 250, 246, 240;
+  --background-end-rgb: 244, 236, 225;
+  --oud-crimson: #8B1E24;
+  --oud-crimson-dark: #2B090C;
+  --oud-wood: #4A2511;
+  --dehn-amber: #B45309;
+  --dehn-gold: #D97706;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+    180deg,
+    rgb(var(--background-start-rgb)) 0%,
+    rgb(var(--background-end-rgb)) 100%
+  );
+  font-family: var(--font-cairo), 'Cairo', 'Tajawal', system-ui, -apple-system, sans-serif;
+  font-variant-numeric: tabular-nums;
+  min-height: 100vh;
+}
+
+/* Ensure all numbers, tables, and inputs align cleanly */
+.font-mono,
+input[type='number'],
+table td,
+table th {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom Oud & Dehn Al-Oud Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F4ECE1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #B07B4E;
+  border-radius: 9999px;
+  border: 2px solid #F4ECE1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8B1E24;
+}
+
+/* Custom Dark Scrollbar inside Sidebar */
+.sidebar-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: rgba(43, 9, 12, 0.4);
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(217, 119, 6, 0.45);
+  border-radius: 9999px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(217, 119, 6, 0.8);
+}

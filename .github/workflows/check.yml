@@ -1,0 +1,22 @@
+name: checks
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run test:integration
+      - run: npm run build
+        env:
+          DATABASE_URL: postgresql://build:unused@127.0.0.1:59999/oud_build_placeholder
+          SESSION_SECRET: ci-build-placeholder-never-used-for-a-running-server
+      - run: docker build -t oud-erp:ci .

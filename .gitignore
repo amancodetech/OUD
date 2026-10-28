@@ -1,0 +1,16 @@
+node_modules
+.next
+*.log
+tsconfig.tsbuildinfo
+.DS_Store
+.env
+.env.*
+!.env.example
+backups/
+.playwright-cli/
+
+# Private local business records and acceptance evidence
+reports/
+*.xlsx
+*.pptx
+scripts/seed-november-real-data.ts

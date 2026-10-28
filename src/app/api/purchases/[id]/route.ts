@@ -1,0 +1,19 @@
+import { withApiGuard } from '@/lib/api-guard';
+import { NextRequest, NextResponse } from 'next/server';
+import { getPurchaseInvoiceById } from '@/services/purchase.service';
+
+async function handleGET(req: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const asOfDate = searchParams.get('asOfDate') || undefined;
+    const invoice = await getPurchaseInvoiceById(params.id, asOfDate);
+    if (!invoice) {
+      return NextResponse.json({ error: 'فاتورة الشراء غير موجودة' }, { status: 404 });
+    }
+    return NextResponse.json(invoice);
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 400 });
+  }
+}
+
+export const GET = withApiGuard('GET', '/api/purchases/[id]', handleGET);
