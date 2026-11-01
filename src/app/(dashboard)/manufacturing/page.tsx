@@ -1,4 +1,7 @@
 'use client';
+import { useApiQuery } from '@/lib/use-api-query';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { apiFetch } from '@/lib/client-api';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -63,8 +66,6 @@ interface ProductionBatch {
 
 export default function ManufacturingPage() {
   const { t, locale, isRtl, tUnit, tCategory } = useI18n();
-  const [batches, setBatches] = useState<ProductionBatch[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedBatchId, setExpandedBatchId] = useState<string | null>(null);
 
@@ -75,24 +76,10 @@ export default function ManufacturingPage() {
   const [voiding, setVoiding] = useState(false);
   const [voidError, setVoidError] = useState('');
 
-  const fetchBatches = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch('/api/manufacturing');
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        setBatches(data);
-      }
-    } catch (e) {
-      console.error('Error fetching batches', e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchBatches();
-  }, []);
+  const query = useApiQuery<ProductionBatch[]>('/api/manufacturing');
+  const batches = query.data || [];
+  const loading = query.isLoading;
+  const fetchBatches = () => query.mutate();
 
   const handleVoidBatch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,7 +97,7 @@ export default function ManufacturingPage() {
 
     try {
       setVoiding(true);
-      const res = await fetch(`/api/manufacturing/${targetBatch.id}/void`, {
+      const res = await apiFetch(`/api/manufacturing/${targetBatch.id}/void`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: voidReason.trim() }),
@@ -151,8 +138,11 @@ export default function ManufacturingPage() {
 
   const dateLocale = locale === 'ar' ? 'ar-EG' : 'en-US';
 
+  if (query.error && !query.data) return <QueryStatus query={query} />;
+
   return (
     <div className="space-y-6">
+      <QueryStatus query={query} />
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-4">
         <div>

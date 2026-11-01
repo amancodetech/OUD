@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { parseEnv } from 'node:util';
 import { spawn } from 'node:child_process';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../src/lib/prisma-client.mjs';
 const [first, second] = process.argv.slice(2);
 const container = second || first;
 const values = second ? parseEnv(await readFile(first, 'utf8')) : process.env;

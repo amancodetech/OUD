@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 import { useUiText } from '@/i18n/interface-text';
 import { todayInStore } from '@/domain/period';
 import { toDecimal, roundMoney, zero, formatInvoiceNumber } from '@/domain/decimal';
@@ -80,9 +81,9 @@ export default function NewSalePage() {
   const loadDependencies = async () => {
     try {
       const [custRes, itmRes, salesCountRes] = await Promise.all([
-        fetch('/api/parties?type=CLIENT&lookup=true'),
-        fetch('/api/items'),
-        fetch('/api/sales?countOnly=true'),
+        apiFetch('/api/parties?type=CLIENT&lookup=true'),
+        apiFetch('/api/items?lookup=true'),
+        apiFetch('/api/sales?countOnly=true'),
       ]);
       const custData = await custRes.json();
       const itmData = await itmRes.json();
@@ -111,7 +112,7 @@ export default function NewSalePage() {
   const fetchItemStock = async (itemId: string, date: string, lineIndex: number) => {
     if (!itemId) return;
     try {
-      const res = await fetch(`/api/sales/stock-check?itemId=${itemId}&date=${date}`);
+      const res = await apiFetch(`/api/sales/stock-check?itemId=${itemId}&date=${date}`);
       const data = await res.json();
       if (res.ok) {
         setLines((prev) => {
@@ -231,7 +232,7 @@ export default function NewSalePage() {
         collectionAccount: effectivePaidNow > 0 ? effectiveAccount : null,
       };
 
-      const res = await fetch('/api/sales', {
+      const res = await apiFetch('/api/sales', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Idempotency-Key': operationKey },
         body: JSON.stringify(payload),

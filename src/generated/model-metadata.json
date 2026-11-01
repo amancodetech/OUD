@@ -1,0 +1,1945 @@
+[
+  {
+    "name": "User",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "version",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "username",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "displayName",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "passwordHash",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "sessionVersion",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "sessionGeneration",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "role",
+        "dbName": null,
+        "type": "UserRole",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "permissions",
+        "dbName": null,
+        "type": "Json",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "isActive",
+        "dbName": null,
+        "type": "Boolean",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "updatedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "AuditLog",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "userId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "action",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "entityType",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "entityCode",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "reason",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "beforeJson",
+        "dbName": null,
+        "type": "Json",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "afterJson",
+        "dbName": null,
+        "type": "Json",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "SystemSetting",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "version",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "storeName",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "currencyLabel",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "currencyCode",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "startYear",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingCash",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingBank",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingReviewed",
+        "dbName": null,
+        "type": "Boolean",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "approveOpeningAssets",
+        "dbName": null,
+        "type": "Boolean",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingLoans",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingRetainedEarnings",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "allowNegativeStock",
+        "dbName": null,
+        "type": "Boolean",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "lockedThroughDate",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "updatedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "ItemCategory",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "version",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "name",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "prefix",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "sortOrder",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "isActive",
+        "dbName": null,
+        "type": "Boolean",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "UnitOption",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "version",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "name",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "sortOrder",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "isActive",
+        "dbName": null,
+        "type": "Boolean",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "Item",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "version",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "code",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "name",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "nameId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "nameEn",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "categoryId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "unitId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "role",
+        "dbName": null,
+        "type": "ItemRole",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "reorderLevel",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingQty",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingValue",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "customCode",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "defaultSalePrice",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "isActive",
+        "dbName": null,
+        "type": "Boolean",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "updatedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "Party",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "version",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "code",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "name",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "nameId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "nameEn",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "type",
+        "dbName": null,
+        "type": "PartyType",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "phone",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "country",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "address",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "supplierCategory",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "supplierCategoryEn",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "carNumber",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "openingInvoice",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingPaid",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingBalance",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "profitShareRatio",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingCapital",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "carryoverReferrals",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "isDriverGiftEnabled",
+        "dbName": null,
+        "type": "Boolean",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "isActive",
+        "dbName": null,
+        "type": "Boolean",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "updatedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "FixedAsset",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "version",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "code",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "name",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "nameId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "nameEn",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "acquiredDate",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "submittedValue",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "notes",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "isActive",
+        "dbName": null,
+        "type": "Boolean",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "updatedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "GiftPolicy",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "version",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "effectiveDate",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "customersPerGift",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "giftValue",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "notes",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "PurchaseInvoice",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "invoiceNo",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "invoiceYear",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "invoiceKey",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "invoiceDate",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "dueDate",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "supplierId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "notes",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "status",
+        "dbName": null,
+        "type": "RecordStatus",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "voidReason",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "voidedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "updatedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "PurchaseLine",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "code",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "invoiceId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "itemId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "qty",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "unitCost",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "landedCost",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "discount",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "lineTotalCost",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "status",
+        "dbName": null,
+        "type": "RecordStatus",
+        "kind": "enum",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "SaleInvoice",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "invoiceNo",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "invoiceYear",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "invoiceKey",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "invoiceDate",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "dueDate",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "customerId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "notes",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "status",
+        "dbName": null,
+        "type": "RecordStatus",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "voidReason",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "voidedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "updatedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "SaleLine",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "code",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "invoiceId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "lineType",
+        "dbName": null,
+        "type": "SaleLineType",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "itemId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "qty",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "unitPrice",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "discount",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "netSaleAmount",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "driverId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "driverGiftSettlementValue",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "status",
+        "dbName": null,
+        "type": "RecordStatus",
+        "kind": "enum",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "CashTransaction",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "code",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "sourceReturnId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "txDate",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "type",
+        "dbName": null,
+        "type": "CashTransactionType",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "account",
+        "dbName": null,
+        "type": "CashAccountType",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "transferToAccount",
+        "dbName": null,
+        "type": "CashAccountType",
+        "kind": "enum",
+        "isRequired": false
+      },
+      {
+        "name": "amount",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "partyId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "invoiceKey",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "assetId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "description",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "status",
+        "dbName": null,
+        "type": "RecordStatus",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "voidReason",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "voidedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "updatedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "ReturnLine",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "code",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "returnDocNo",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "returnDate",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "type",
+        "dbName": null,
+        "type": "ReturnType",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "partyId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "invoiceKey",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "sourceSaleLineId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "sourcePurchaseLineId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "qty",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "saleReturnCondition",
+        "dbName": null,
+        "type": "SaleReturnCondition",
+        "kind": "enum",
+        "isRequired": false
+      },
+      {
+        "name": "supplierCreditNote",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "reason",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "notes",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "status",
+        "dbName": null,
+        "type": "RecordStatus",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "voidReason",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "voidedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "updatedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "StockIssue",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "code",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "issueDate",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "type",
+        "dbName": null,
+        "type": "StockIssueType",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "itemId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "qty",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "testerRef",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "reason",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "notes",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "status",
+        "dbName": null,
+        "type": "RecordStatus",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "voidReason",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "voidedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "updatedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "ProductionBatch",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "code",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "completionDate",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "finishedItemId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "producedQty",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "notes",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "status",
+        "dbName": null,
+        "type": "RecordStatus",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "voidReason",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "voidedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "updatedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "BatchMaterial",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "batchId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "rawItemId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "consumedQty",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "DriverReferral",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "code",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "visitDate",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "visitorUniqueKey",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "visitorName",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "driverId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "notes",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "status",
+        "dbName": null,
+        "type": "RecordStatus",
+        "kind": "enum",
+        "isRequired": true
+      },
+      {
+        "name": "voidReason",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "voidedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "DocumentCounter",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "name",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "value",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "LoginAttempt",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "key",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "count",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "expiresAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "DataRevision",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "generation",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "revision",
+        "dbName": null,
+        "type": "BigInt",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "transactionId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "OperationReceipt",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "userId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "hash",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "status",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "data",
+        "dbName": null,
+        "type": "Json",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      }
+    ]
+  },
+  {
+    "name": "BackgroundJob",
+    "dbName": null,
+    "fields": [
+      {
+        "name": "id",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "userId",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "sessionGeneration",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "sessionVersion",
+        "dbName": null,
+        "type": "Int",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "kind",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "hash",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "status",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "inputKey",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "resultKey",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
+        "name": "metadata",
+        "dbName": null,
+        "type": "Json",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "createdAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "completedAt",
+        "dbName": null,
+        "type": "DateTime",
+        "kind": "scalar",
+        "isRequired": false
+      }
+    ]
+  }
+]

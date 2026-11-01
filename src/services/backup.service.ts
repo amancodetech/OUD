@@ -1,3 +1,4 @@
+import { databaseModels } from '@/lib/model-metadata';
 import { randomUUID } from 'node:crypto';
 import { Prisma } from '@prisma/client';
 import { prisma, withLedgerTransaction } from '@/lib/db';
@@ -34,7 +35,7 @@ export function validateBackup(value: unknown): DatabaseBackup {
   for (const table of tables) {
     const rows = backup.data[table];
     if (!Array.isArray(rows) || rows.length > 100000) throw new Error(`جدول ناقص أو غير صالح: ${table}`);
-    const model = Prisma.dmmf.datamodel.models.find(model => model.name.toLowerCase() === table.toLowerCase())!;
+    const model = databaseModels.find(model => model.name.toLowerCase() === table.toLowerCase())!;
     const fields = new Map(model.fields.filter(field => field.kind !== 'object').map(field => [field.name, field]));
     const ids = new Set<string>();
     for (const row of rows) {
@@ -65,9 +66,11 @@ export async function restoreDatabase(input: unknown, reason: string) {
   if (!reason?.trim() || reason.trim().length < 5) throw new Error('سبب استعادة البيانات مطلوب');
   const backup = validateBackup(input);
   return withLedgerTransaction(async () => {
+    await prisma.operationReceipt.deleteMany();
+    await prisma.dataRevision.update({ where: { id: 1 }, data: { generation: randomUUID() } });
     for (const table of deletionOrder) await (prisma[table] as any).deleteMany();
     for (const table of tables) {
-      const model = Prisma.dmmf.datamodel.models.find(model => model.name.toLowerCase() === table.toLowerCase())!;
+      const model = databaseModels.find(model => model.name.toLowerCase() === table.toLowerCase())!;
       const dates = new Set(model.fields.filter(field => field.type === 'DateTime').map(field => field.name));
       const rows = backup.data[table].map(row => {
         const converted = Object.fromEntries(Object.entries(row).map(([key, value]) => [key, dates.has(key) && value !== null ? new Date(String(value)) : value]));

@@ -1,4 +1,8 @@
 'use client';
+import { useApiQuery } from '@/lib/use-api-query';
+import { queryKeys } from '@/lib/query-keys';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { apiFetch } from '@/lib/client-api';
 import { todayInStore } from '@/domain/period';
 
 import React, { useState, useEffect } from 'react';
@@ -47,9 +51,6 @@ interface CategoryOption {
 
 export default function InventoryReportPage() {
   const { t, locale, isRtl, tCategory, tUnit, tItemRole } = useI18n();
-  const [items, setItems] = useState<InventoryItem[]>([]);
-  const [categories, setCategories] = useState<CategoryOption[]>([]);
-  const [loading, setLoading] = useState(true);
 
   // Filters
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
@@ -57,32 +58,11 @@ export default function InventoryReportPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [asOfDate, setAsOfDate] = useState(todayInStore());
 
-  const loadInventory = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams();
-      if (selectedCategory !== 'ALL') params.set('categoryId', selectedCategory);
-      if (selectedStatus !== 'ALL') params.set('status', selectedStatus);
-      params.set('asOfDate', asOfDate);
-
-      const res = await fetch(`/api/inventory?${params.toString()}`);
-      const json = await res.json();
-      if (Array.isArray(json.items)) {
-        setItems(json.items);
-      }
-      if (Array.isArray(json.categories)) {
-        setCategories(json.categories);
-      }
-    } catch (e) {
-      console.error('Failed to load inventory', e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadInventory();
-  }, [selectedCategory, selectedStatus, asOfDate]);
+  const query = useApiQuery<{ items: InventoryItem[]; categories: CategoryOption[] }>(queryKeys.inventory(asOfDate, selectedCategory, selectedStatus));
+  const items = query.data?.items || [];
+  const categories = query.data?.categories || [];
+  const loading = query.isLoading;
+  const loadInventory = () => query.mutate();
 
   // Client-side text search
   const filteredItems = items.filter((item) => {
@@ -101,8 +81,11 @@ export default function InventoryReportPage() {
   // Calculate total EV
   const totalValue = filteredItems.reduce((sum, i) => sum + i.availableValue, 0);
 
+  if (query.error && !query.data) return <QueryStatus query={query} />;
+
   return (
     <div className="space-y-6">
+      <QueryStatus query={query} />
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-4">
         <div>

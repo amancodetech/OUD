@@ -36,6 +36,7 @@ try {
   await run(process.execPath, ['--import', 'tsx', 'prisma/seed.ts'], env);
   // Explicit environment, never .env discovery; tests also verify actual identity.
   await run(process.execPath, ['node_modules/vitest/vitest.mjs', 'run', ...process.argv.slice(2)], env);
+  if (process.env.OUD_WORKER_SMOKE === '1') await run(process.execPath, ['scripts/worker-smoke.mjs'], env);
   if (process.env.OUD_KEEP_TEST_DB === '1') {
     const path = `/tmp/${id}.env`;
     await writeFile(path, `DATABASE_URL=${url}\nTEST_DATABASE_URL=${url}\nSESSION_SECRET=${env.SESSION_SECRET}\n`, { mode: 0o600 });

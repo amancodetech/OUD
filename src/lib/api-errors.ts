@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const messages = {
+  VERSION_REQUIRED: ['أعد تحميل السجل قبل تعديله', 'Reload this record before editing', 'Muat ulang data sebelum mengedit'],
+  VERSION_CONFLICT: ['عُدّل السجل؛ أعد تحميله وراجع التغييرات قبل الحفظ', 'This record changed. Reload and review before saving', 'Data telah berubah. Muat ulang dan periksa sebelum menyimpan'],
   UNAUTHORIZED: ['يلزم تسجيل الدخول', 'Please sign in', 'Silakan masuk'],
   FORBIDDEN: ['ليس لديك صلاحية هذه العملية', 'You do not have permission for this operation', 'Anda tidak memiliki izin untuk operasi ini'],
   BAD_CREDENTIALS: ['اسم المستخدم أو كلمة المرور غير صحيحة', 'Incorrect username or password', 'Nama pengguna atau kata sandi salah'],

@@ -5,6 +5,8 @@ import { withLedgerTransaction } from './db';
 import { localizeApiError } from './api-errors';
 import crypto from 'node:crypto';
 import { prisma } from './db';
+import { workerRuntime } from './request-runtime.mjs';
+import { checkWriteVersion } from './write-precondition';
 
 class RejectedOperation extends Error {
   constructor(readonly response: Response) { super('Operation rejected'); }
@@ -17,6 +19,7 @@ export function apiPermissions(method: string, route: string): PermissionKey[] |
   if (route === '/api/auth/login') return 'public';
   if (route.startsWith('/api/auth/')) return 'session';
   if (route === '/api/settings/branding' && method === 'GET') return 'session';
+  if (route.startsWith('/api/jobs')) return 'admin';
   if (route.startsWith('/api/users') || route === '/api/backup' || route.startsWith('/api/settings')) return 'admin';
   if (route === '/api/notifications') return 'session';
   if (route.startsWith('/api/categories-units')) return method === 'GET' ? lookups : ['items_manage'];
@@ -78,10 +81,12 @@ function validateInput(value: unknown, depth = 0) {
 
 export function withApiGuard(method: Method, route: string, handler: (...args: any[]) => Promise<Response>) {
   return async (request: NextRequest, context: { params: Promise<any> }): Promise<Response> => {
+    const started = performance.now();
+    const requestId = crypto.randomUUID();
     const run = async (): Promise<Response> => {
     try {
       const policy = apiPermissions(method, route);
-      const user = policy === 'public' ? null : await getSession();
+      let user = policy === 'public' ? null : await getSession();
       if (policy !== 'public' && !user) return NextResponse.json({ ok: false, error: 'غير مصرح', code: 'UNAUTHORIZED' }, { status: 401 });
       if (request.url.length > 8192) return NextResponse.json({ error: 'INVALID_INPUT' }, { status: 400 });
       for (const [key, value] of request.nextUrl.searchParams) {
@@ -103,7 +108,8 @@ export function withApiGuard(method: Method, route: string, handler: (...args: a
         forwardedUrl.searchParams.set('type', 'SALE_RETURN');
       }
       let req = request;
-      let requestHash: string | undefined;
+      let requestHash = crypto.createHash('sha256').update(request.url).digest('hex');
+      let input: any;
       if (!['GET', 'HEAD'].includes(method)) {
         const origin = request.headers.get('origin');
         const expected = new URL(process.env.APP_URL || request.url).origin;
@@ -111,6 +117,21 @@ export function withApiGuard(method: Method, route: string, handler: (...args: a
         const contentType = request.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase();
         if (route === '/api/settings/import') {
           if (contentType !== 'multipart/form-data') return NextResponse.json({ error: 'INVALID_INPUT' }, { status: 415 });
+          const chunks: Uint8Array[] = [];
+          const reader = request.body?.getReader();
+          let size = 0;
+          if (reader) for (;;) {
+            const part = await reader.read(); if (part.done) break;
+            size += part.value.byteLength;
+            if (size > 11 * 1024 * 1024) { await reader.cancel(); return NextResponse.json({ error: 'FILE_TOO_LARGE' }, { status: 413 }); }
+            chunks.push(part.value);
+          }
+          const body = Buffer.concat(chunks);
+          req = new NextRequest(request.url, { method, headers: request.headers, body });
+          // Node imports are transactional but should use the file hash, not a multipart boundary.
+          const form = await req.clone().formData();
+          const file = form.get('file');
+          requestHash = crypto.createHash('sha256').update(file instanceof File ? Buffer.from(await file.arrayBuffer()) : '').update(String(form.get('mode'))).update(String(form.get('fileHash'))).digest('hex');
         } else if (request.body !== null || (method !== 'DELETE' && route !== '/api/auth/logout')) {
           if (contentType !== 'application/json') return NextResponse.json({ error: 'INVALID_INPUT' }, { status: 415 });
           const limit = route === '/api/backup' ? 32 * 1024 * 1024 : 2 * 1024 * 1024;
@@ -127,6 +148,7 @@ export function withApiGuard(method: Method, route: string, handler: (...args: a
           const body = Buffer.concat(chunks).toString('utf8');
           requestHash = crypto.createHash('sha256').update(request.url).update(body).digest('hex');
           const json = JSON.parse(body);
+          input = json;
           if (!json || typeof json !== 'object' || Array.isArray(json)) return NextResponse.json({ error: 'INVALID_INPUT' }, { status: 400 });
           // Backup records include timestamp fields in addition to calendar dates.
           if (route !== '/api/backup') validateInput(json);
@@ -147,8 +169,13 @@ export function withApiGuard(method: Method, route: string, handler: (...args: a
       // Resolve route params once for the handler and target authorization.
       const params = context ? await context.params : undefined;
       const invoke = () => handler(req, context ? { ...context, params } : undefined);
-      const mutates = method !== 'GET' && policy !== 'public' && !route.startsWith('/api/auth/') && route !== '/api/backup';
+      const mutates = method !== 'GET' && policy !== 'public' && !route.startsWith('/api/auth/') && !(route === '/api/backup' && workerRuntime()) && !(route === '/api/settings/import' && workerRuntime());
       const response = mutates ? await withLedgerTransaction(async () => {
+        const currentUser = await getSession();
+        if (!currentUser || JSON.stringify([currentUser.id, currentUser.role, currentUser.permissions]) !== JSON.stringify([user?.id, user?.role, user?.permissions])) {
+          throw new RejectedOperation(NextResponse.json({ code: 'SESSION_CHANGED', error: 'تغيرت الجلسة أو الصلاحيات؛ أعد تحميل الصفحة' }, { status: 401 }));
+        }
+        user = currentUser;
         // Check the stored target inside the same transaction as cancellation, including replays.
         if (user && route === '/api/cash/[id]/void') {
           const target = await prisma.cashTransaction.findUnique({ where: { id: params?.id }, select: { type: true } });
@@ -164,20 +191,22 @@ export function withApiGuard(method: Method, route: string, handler: (...args: a
         if (key && (!/^[A-Za-z0-9_-]{8,128}$/.test(key) || !requestHash)) throw new RejectedOperation(NextResponse.json({ error: 'مفتاح طلب غير صالح' }, { status: 400 }));
         const receiptKey = key ? crypto.createHash('sha256').update(`${user!.id}:${method}:${route}:${key}`).digest('hex') : undefined;
         if (receiptKey) {
-          const receipt = await prisma.auditLog.findFirst({ where: { entityType: 'RequestReceipt', entityCode: receiptKey } });
+          const receipt = await prisma.operationReceipt.findUnique({ where: { id: receiptKey } });
           if (receipt) {
-            const cached = receipt.afterJson as { hash: string; status: number; data: unknown };
+            const cached = receipt;
             if (cached.hash !== requestHash) throw new RejectedOperation(NextResponse.json({ error: 'مفتاح الطلب مستخدم لعملية مختلفة' }, { status: 409 }));
             return NextResponse.json(cached.data, { status: cached.status });
           }
         }
+        const conflict = await checkWriteVersion(route, method, params?.id, input, request.headers.get('if-match'));
+        if (conflict) throw new RejectedOperation(conflict);
         const result = await invoke();
         if (!result.ok) throw new RejectedOperation(result);
         if (receiptKey && result.headers.get('content-type')?.includes('application/json')) {
-          await prisma.auditLog.create({ data: { userId: user!.id, action: 'REQUEST_RECEIPT', entityType: 'RequestReceipt', entityCode: receiptKey, afterJson: { hash: requestHash!, status: result.status, data: await result.clone().json() } } });
+          await prisma.operationReceipt.create({ data: { id: receiptKey, userId: user!.id, hash: requestHash, status: result.status, data: await result.clone().json() } });
         }
         return result;
-      }, !route.startsWith('/api/users') && !route.startsWith('/api/categories-units')) : await invoke();
+      }, route !== '/api/backup' && !route.startsWith('/api/users') && !route.startsWith('/api/categories-units')) : await invoke();
       if (!user || !response.ok || !response.headers.get('content-type')?.includes('application/json')) return response;
       let data = await response.json();
       if (!has(user, 'inventory_view', 'purchases_manage', 'cash_full', 'dashboard_view')) {
@@ -204,9 +233,16 @@ export function withApiGuard(method: Method, route: string, handler: (...args: a
     } catch (error) {
       if (error instanceof RejectedOperation) return error.response;
       console.error('API request failed', route, error instanceof Error ? error.name : 'Error');
-      return NextResponse.json({ ok: false, error: 'تعذر تنفيذ الطلب', code: 'REQUEST_FAILED' }, { status: 400 });
+      const invalid = error instanceof SyntaxError || (error instanceof Error && error.message === 'INPUT_INVALID');
+      return NextResponse.json({ ok: false, error: 'تعذر تنفيذ الطلب', code: invalid ? 'INVALID_INPUT' : 'REQUEST_FAILED' }, { status: invalid ? 400 : 503 });
     }
     };
-    return localizeApiError(await run(), request);
+    const response = await localizeApiError(await run(), request);
+    response.headers.set('Cache-Control', 'private, no-store, max-age=0');
+    response.headers.set('CDN-Cache-Control', 'no-store');
+    response.headers.set('X-Request-Id', requestId);
+    response.headers.set('Server-Timing', `app;dur=${(performance.now() - started).toFixed(1)}`);
+    response.headers.append('Vary', 'Cookie');
+    return response;
   };
 }

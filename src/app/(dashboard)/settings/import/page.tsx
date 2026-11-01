@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 import { useUiText } from '@/i18n/interface-text';
 
 import React, { useState } from 'react';
@@ -60,7 +61,7 @@ export default function ExcelImportPage() {
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState<ImportResultData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [preview, setPreview] = useState<{ fileHash: string; changes: { field: string; before: string; after: string }[]; sheets: { name: string; records: number }[] } | null>(null);
+  const [preview, setPreview] = useState<{ databaseRevision: string; fileHash: string; changes: { field: string; before: string; after: string }[]; sheets: { name: string; records: number }[] } | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -86,9 +87,9 @@ export default function ExcelImportPage() {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('mode', preview ? 'apply' : 'preview');
-      if (preview) formData.append('fileHash', preview.fileHash);
+      if (preview) { formData.append('fileHash', preview.fileHash); formData.append('databaseRevision', preview.databaseRevision); }
 
-      const res = await fetch('/api/settings/import', {
+      const res = await apiFetch('/api/settings/import', {
         method: 'POST',
         body: formData,
       });

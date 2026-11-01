@@ -2,6 +2,7 @@ import { computeComponentCosting } from './component-costing';
 import { memoReadSnapshot } from '@/lib/snapshot-cache';
 import { reportBalanceSummary } from './report-balance-summary';
 import { costingPurchases, costingSales } from './costing-lines';
+import { readCostingProjection } from './costing-projection';
 import type { PurchaseLine, SaleLine } from '@prisma/client';
 import { prisma, withReadSnapshot, isReadSnapshot } from '@/lib/db';
 import { Decimal, zero, toDecimal } from '@/domain/decimal';
@@ -45,7 +46,9 @@ export async function loadAllLedgerData(partyIds?: string[], invoiceKeys?: strin
     dbCash,
     dbReferrals,
     dbCategories,
-  ] = await Promise.all([
+  ] = costingOnly && partyIds === undefined && invoiceKeys === undefined
+    ? await readCostingProjection()
+    : await Promise.all([
     prisma.systemSetting.findUnique({ where: { id: 1 } }),
     prisma.item.findMany({ include: { category: true, unit: true } }),
     prisma.party.findMany({ where: partyIds ? { id: { in: partyIds } } : undefined }),

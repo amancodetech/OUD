@@ -9,7 +9,7 @@ async function handleGET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const asOfDate = searchParams.get('asOfDate') || undefined;
     const session = await getSession();
-    if (session?.role !== 'ADMIN' && !session?.permissions?.some(key => ['items_manage', 'inventory_view', 'purchases_manage', 'cash_full', 'dashboard_view'].includes(key))) {
+    if (searchParams.get('lookup') === 'true' || (session?.role !== 'ADMIN' && !session?.permissions?.some(key => ['items_manage', 'inventory_view', 'purchases_manage', 'cash_full', 'dashboard_view'].includes(key)))) {
       return NextResponse.json({ ok: true, data: await itemLookup(asOfDate) });
     }
 

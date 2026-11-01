@@ -1,4 +1,7 @@
 'use client';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { useApiQuery } from '@/lib/use-api-query';
+import { apiFetch } from '@/lib/client-api';
 import { useParams } from 'next/navigation';
 import { todayInStore } from '@/domain/period';
 
@@ -23,8 +26,9 @@ import { MoneyInput } from '@/components/forms/MoneyInput';
 export default function PurchaseDetailPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
-  const [invoice, setInvoice] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const query = useApiQuery<any>(`/api/purchases/${params.id}`);
+  const invoice = query.data;
+  const loading = query.isLoading;
 
   // Payment modal state
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
@@ -40,26 +44,7 @@ export default function PurchaseDetailPage() {
   const [voiding, setVoiding] = useState(false);
   const [voidError, setVoidError] = useState('');
 
-  const loadInvoice = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/purchases/${params.id}`);
-      const data = await res.json();
-      if (res.ok) {
-        setInvoice(data);
-        setPayAmount(data.invoiceDebt > 0 ? data.invoiceDebt : 0);
-        setPayNotes(`سداد دفعة لفاتورة ${data.invoiceKey}`);
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadInvoice();
-  }, [params.id]);
+  const loadInvoice = () => query.mutate();
 
   const submitPayment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,7 +56,7 @@ export default function PurchaseDetailPage() {
     setSubmittingPay(true);
     setPayError('');
     try {
-      const res = await fetch('/api/cash', {
+      const res = await apiFetch('/api/cash', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -106,7 +91,7 @@ export default function PurchaseDetailPage() {
     setVoiding(true);
     setVoidError('');
     try {
-      const res = await fetch(`/api/purchases/${params.id}/void`, {
+      const res = await apiFetch(`/api/purchases/${params.id}/void`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: voidReason }),
@@ -123,6 +108,7 @@ export default function PurchaseDetailPage() {
     }
   };
 
+  if (query.error && !invoice) return <QueryStatus query={query} />;
   if (loading) {
     return (
       <div className="p-12 text-center text-slate-400 text-sm">
@@ -141,6 +127,7 @@ export default function PurchaseDetailPage() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
+      <QueryStatus query={query} />
       {/* Top Header */}
       <div className="flex items-center justify-between bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
         <div className="flex items-center gap-3">
@@ -177,7 +164,7 @@ export default function PurchaseDetailPage() {
             {invoice.invoiceDebt > 0 && (
               <button
                 type="button"
-                onClick={() => setPaymentModalOpen(true)}
+                onClick={() => { setPayAmount(invoice.invoiceDebt > 0 ? invoice.invoiceDebt : 0); setPayNotes(`سداد دفعة لفاتورة ${invoice.invoiceKey}`); setPaymentModalOpen(true); }}
                 className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm"
               >
                 <DollarSign className="w-4 h-4" />

@@ -1,11 +1,12 @@
 import type { PurchaseLine, SaleLine } from '@prisma/client';
 import { prisma } from '@/lib/db';
-type Purchase = PurchaseLine & { invoiceKey: string; invoiceNo: string; invoiceDate: Date; dueDate: Date | null; supplierId: string };
-type Sale = SaleLine & { invoiceKey: string; invoiceNo: string; invoiceDate: Date; dueDate: Date | null; customerId: string | null };
+import { Prisma } from '@prisma/client';
+export type CostingPurchase = PurchaseLine & { invoiceKey: string; invoiceNo: string; invoiceDate: Date; dueDate: Date | null; supplierId: string };
+export type CostingSale = SaleLine & { invoiceKey: string; invoiceNo: string; invoiceDate: Date; dueDate: Date | null; customerId: string | null };
 // Costing needs item/day quantities and amounts. Preserve every returned source
 // individually so same/prior-month return costing keeps its original semantics.
-export function costingPurchases() {
-  return prisma.$queryRaw<Purchase[]>`
+export function costingPurchasesQuery() {
+  return Prisma.sql`
     WITH posted AS NOT MATERIALIZED (
       SELECT l.*, i."invoiceDate" FROM "PurchaseLine" l JOIN "PurchaseInvoice" i ON i.id=l."invoiceId"
       WHERE l.status='POSTED' AND i.status='POSTED'
@@ -18,8 +19,8 @@ export function costingPurchases() {
     SELECT p.id,p.code,p."invoiceId",p."itemId",p.qty,p."unitCost",p."landedCost",p.discount,p."lineTotalCost",p.status::text,'','',p."invoiceDate",NULL::date,''
     FROM posted p WHERE EXISTS(SELECT 1 FROM referenced r WHERE r.id=p.id)`;
 }
-export function costingSales() {
-  return prisma.$queryRaw<Sale[]>`
+export function costingSalesQuery() {
+  return Prisma.sql`
     WITH posted AS NOT MATERIALIZED (
       SELECT l.*, i."invoiceDate" FROM "SaleLine" l JOIN "SaleInvoice" i ON i.id=l."invoiceId"
       WHERE l.status='POSTED' AND i.status='POSTED'
@@ -32,3 +33,6 @@ export function costingSales() {
     SELECT p.id,p.code,p."invoiceId",p."lineType"::text,p."itemId",p.qty,p."unitPrice",p.discount,p."netSaleAmount",p."driverId",p."driverGiftSettlementValue",p.status::text,'','',p."invoiceDate",NULL::date,NULL::text
     FROM posted p WHERE EXISTS(SELECT 1 FROM referenced r WHERE r.id=p.id)`;
 }
+
+export const costingPurchases = () => prisma.$queryRaw<CostingPurchase[]>(costingPurchasesQuery());
+export const costingSales = () => prisma.$queryRaw<CostingSale[]>(costingSalesQuery());

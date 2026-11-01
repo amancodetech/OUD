@@ -1,0 +1,18 @@
+services:
+  app:
+    image: oud-erp:supabase
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: oud_erp_supabase
+    restart: unless-stopped
+    # Linux host networking supports Supabase direct connections over IPv6.
+    network_mode: host
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 127.0.0.1
+      PORT: "3000"
+    mem_limit: 2g
+    cpus: 2

@@ -1,4 +1,7 @@
 'use client';
+import { useApiQuery } from '@/lib/use-api-query';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { apiFetch } from '@/lib/client-api';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -22,8 +25,6 @@ export default function PartnersAndAssetsPage() {
   const { t, locale, isRtl } = useI18n();
 
   const [activeTab, setActiveTab] = useState<'PARTNERS' | 'ASSETS' | 'EQUITY'>('ASSETS');
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
   const [toggling, setToggling] = useState(false);
 
   // Asset Modals State
@@ -53,30 +54,23 @@ export default function PartnersAndAssetsPage() {
   const [partnerFormError, setPartnerFormError] = useState<string | null>(null);
   const [partnerSubmitting, setPartnerSubmitting] = useState(false);
 
-  const fetchData = () => {
-    setLoading(true);
-    fetch('/api/partners-summary')
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.ok) setData(res.data);
-      })
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const query = useApiQuery<any>('/api/partners-summary');
+  const data = query.data?.data;
+  const loading = query.isLoading;
+  const fetchData = () => query.mutate();
 
   const handleToggleApproveAssets = async (approved: boolean) => {
     setToggling(true);
     try {
-      await fetch('/api/settings', {
+      const response = await apiFetch('/api/settings', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' , 'If-Match': JSON.stringify(String(data.settingsVersion)) },
         body: JSON.stringify({ approveOpeningAssets: approved }),
       });
+      if (!response.ok) throw new Error((await response.json()).error);
       fetchData();
-    } catch {
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : 'تعذر الحفظ');
     } finally {
       setToggling(false);
     }
@@ -120,9 +114,9 @@ export default function PartnersAndAssetsPage() {
     try {
       const url = isAddAssetOpen ? '/api/fixed-assets' : `/api/fixed-assets/${selectedAsset.id}`;
       const method = isAddAssetOpen ? 'POST' : 'PUT';
-      const res = await fetch(url, {
+      const res = await apiFetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' , 'If-Match': JSON.stringify(String(selectedAsset?.version)) },
         body: JSON.stringify({
           name: assetForm.name,
           nameEn: assetForm.nameEn.trim() || null,
@@ -150,7 +144,7 @@ export default function PartnersAndAssetsPage() {
     setAssetSubmitting(true);
     setAssetFormError(null);
     try {
-      const res = await fetch(`/api/fixed-assets/${selectedAsset.id}`, { method: 'DELETE' });
+      const res = await apiFetch(`/api/fixed-assets/${selectedAsset.id}`, { method: 'DELETE', headers: { 'If-Match': JSON.stringify(String(selectedAsset.version)) } });
       const json = await res.json();
       if (!res.ok || !json.ok) {
         throw new Error(json.error || (isRtl ? 'فشل حذف الأصل الثابت' : 'Failed to delete asset'));
@@ -188,9 +182,9 @@ export default function PartnersAndAssetsPage() {
 
     setPartnerSubmitting(true);
     try {
-      const res = await fetch(`/api/parties/${selectedPartner.partnerId}`, {
+      const res = await apiFetch(`/api/parties/${selectedPartner.partnerId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' , 'If-Match': JSON.stringify(String(selectedPartner.version)) },
         body: JSON.stringify({
           name: partnerForm.name,
           nameEn: partnerForm.nameEn.trim() || null,
@@ -217,8 +211,11 @@ export default function PartnersAndAssetsPage() {
   const approveOpening = data?.assetsData?.approveOpening || false;
   const eq = data?.openingEquitySummary || {};
 
+  if (query.error && !query.data) return <QueryStatus query={query} />;
+
   return (
     <div className="space-y-6">
+      <QueryStatus query={query} />
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div>

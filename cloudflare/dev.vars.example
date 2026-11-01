@@ -1,0 +1,5 @@
+# For isolated local development only. Copy to .dev.vars, which Git ignores.
+# Never use a real database for test:workers; it accepts only local oud_test_*.
+SESSION_SECRET=REPLACE_WITH_A_RANDOM_VALUE_AT_LEAST_32_CHARACTERS
+APP_URL=http://localhost:8787
+CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE=postgresql://test:replace@127.0.0.1:5432/oud_test_local

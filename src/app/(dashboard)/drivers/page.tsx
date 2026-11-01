@@ -1,4 +1,8 @@
 'use client';
+import { useApiQuery } from '@/lib/use-api-query';
+import { queryKeys } from '@/lib/query-keys';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { apiFetch } from '@/lib/client-api';
 import { todayInStore } from '@/domain/period';
 
 import React, { useState, useEffect } from 'react';
@@ -70,10 +74,6 @@ interface DriverReferral {
 export default function DriversPage() {
   const { t, locale, isRtl, tLocalizedName } = useI18n();
   const [activeTab, setActiveTab] = useState<'SUMMARY' | 'VISITS'>('SUMMARY');
-  const [summaries, setSummaries] = useState<DriverSummary[]>([]);
-  const [referrals, setReferrals] = useState<DriverReferral[]>([]);
-  const [drivers, setDrivers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
 
   // Quick Register Form State
   const [visitDate, setVisitDate] = useState(todayInStore());
@@ -105,33 +105,14 @@ export default function DriversPage() {
   // Search filter
   const [searchQuery, setSearchQuery] = useState('');
 
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      const [sumRes, refRes, drvRes] = await Promise.all([
-        fetch('/api/drivers/summary'),
-        fetch('/api/drivers/referrals'),
-        fetch('/api/parties?type=DRIVER'),
-      ]);
-
-      const sumData = await sumRes.json();
-      const refData = await refRes.json();
-      const drvData = await drvRes.json();
-
-      if (Array.isArray(sumData)) setSummaries(sumData);
-      if (Array.isArray(refData)) setReferrals(refData);
-      const dList = Array.isArray(drvData) ? drvData : drvData.data || [];
-      setDrivers(dList);
-    } catch (e) {
-      console.error('Failed to load driver data', e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadData();
-  }, []);
+  const query = useApiQuery<DriverSummary[]>(queryKeys.drivers);
+  const referralQuery = useApiQuery<DriverReferral[]>(queryKeys.driverReferrals);
+  const driverQuery = useApiQuery<any>(queryKeys.partiesLookup('DRIVER'));
+  const summaries = query.data || [];
+  const referrals = referralQuery.data || [];
+  const drivers: any[] = driverQuery.data?.data || [];
+  const loading = query.isLoading || referralQuery.isLoading || driverQuery.isLoading;
+  const loadData = () => Promise.all([query.mutate(), referralQuery.mutate(), driverQuery.mutate()]);
 
   const handleCreateVisit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -152,7 +133,7 @@ export default function DriversPage() {
 
     try {
       setSubmittingVisit(true);
-      const res = await fetch('/api/drivers/referrals', {
+      const res = await apiFetch('/api/drivers/referrals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -207,7 +188,7 @@ export default function DriversPage() {
 
     try {
       setPayingCash(true);
-      const res = await fetch('/api/cash', {
+      const res = await apiFetch('/api/cash', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -247,7 +228,7 @@ export default function DriversPage() {
 
     try {
       setVoiding(true);
-      const res = await fetch(`/api/drivers/referrals/${targetVisit.id}/void`, {
+      const res = await apiFetch(`/api/drivers/referrals/${targetVisit.id}/void`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: voidReason.trim() }),
@@ -292,8 +273,11 @@ export default function DriversPage() {
     );
   });
 
+  if (query.error && !query.data) return <QueryStatus query={query} />;
+
   return (
     <div className="space-y-6">
+      <QueryStatus query={query} />
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-4">
         <div>

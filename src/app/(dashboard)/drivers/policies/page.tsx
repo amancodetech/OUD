@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 import { todayInStore } from '@/domain/period';
 
 import React, { useState, useEffect } from 'react';
@@ -7,6 +8,7 @@ import { formatMoney } from '@/domain/decimal';
 import { Award, Plus, Lock, CheckCircle2, AlertCircle, X, Check, Pencil, Trash2, AlertTriangle } from 'lucide-react';
 
 interface PolicyRow {
+  version: number;
   id: string;
   effectiveDate: string;
   customersPerGift: number;
@@ -46,7 +48,7 @@ export default function GiftPoliciesPage() {
 
   const fetchPolicies = () => {
     setLoading(true);
-    fetch('/api/drivers/policies')
+    apiFetch('/api/drivers/policies')
       .then((res) => res.json())
       .then((res) => {
         if (res.ok) setPolicies(res.data);
@@ -64,7 +66,7 @@ export default function GiftPoliciesPage() {
     setFormSubmitting(true);
 
     try {
-      const res = await fetch('/api/drivers/policies', {
+      const res = await apiFetch('/api/drivers/policies', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -107,9 +109,9 @@ export default function GiftPoliciesPage() {
     setEditSubmitting(true);
 
     try {
-      const res = await fetch(`/api/drivers/policies/${editingPolicy.id}`, {
+      const res = await apiFetch(`/api/drivers/policies/${editingPolicy.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json'  , 'If-Match': JSON.stringify(String(editingPolicy.version)) },
         body: JSON.stringify({
           effectiveDate: editDate,
           customersPerGift: editThreshold,
@@ -144,8 +146,9 @@ export default function GiftPoliciesPage() {
     setDeleteSubmitting(true);
 
     try {
-      const res = await fetch(`/api/drivers/policies/${deletingPolicy.id}`, {
+      const res = await apiFetch(`/api/drivers/policies/${deletingPolicy.id}`, {
         method: 'DELETE',
+        headers: { 'If-Match': JSON.stringify(String(deletingPolicy.version)) },
       });
 
       const data = await res.json();

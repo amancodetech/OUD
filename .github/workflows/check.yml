@@ -1,8 +1,11 @@
 name: checks
 on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -10,13 +13,16 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
-      - run: npx prisma generate
+      - run: npm run db:generate
       - run: npm run typecheck
       - run: npm run lint
-      - run: npm test
-      - run: npm run test:integration
-      - run: npm run build
+      - run: npm run cf:build
+      - run: npm run cf:dry-run
         env:
-          DATABASE_URL: postgresql://build:unused@127.0.0.1:59999/oud_build_placeholder
-          SESSION_SECRET: ci-build-placeholder-never-used-for-a-running-server
+          WRANGLER_SEND_METRICS: 'false'
+      - run: npm run test:integration
+        env:
+          OUD_WORKER_SMOKE: '1'
+          WRANGLER_SEND_METRICS: 'false'
+      - run: npm audit --audit-level=high
       - run: docker build -t oud-erp:ci .

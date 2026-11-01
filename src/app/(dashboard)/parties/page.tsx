@@ -1,6 +1,10 @@
 'use client';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { useApiQuery } from '@/lib/use-api-query';
+import { queryKeys } from '@/lib/query-keys';
+import { apiFetch } from '@/lib/client-api';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { PartyType } from '@prisma/client';
 import { MoneyInput } from '@/components/forms/MoneyInput';
@@ -10,6 +14,7 @@ import { useI18n } from '@/i18n/LanguageContext';
 import { tLocalizedName } from '@/i18n/translate-domain';
 
 interface PartyRow {
+  version: number;
   id: string;
   code: string;
   name: string;
@@ -36,8 +41,10 @@ interface PartyRow {
 export default function PartiesPage() {
   const { t, locale, isRtl, tPartyType } = useI18n();
 
-  const [parties, setParties] = useState<PartyRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const partyQuery = useApiQuery<{ ok: boolean; data: PartyRow[] }>(queryKeys.parties);
+  const parties = partyQuery.data?.data || [];
+  const fetchParties = () => partyQuery.mutate();
+  const loading = partyQuery.isLoading;
   const [selectedType, setSelectedType] = useState<string>('ALL');
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -109,9 +116,9 @@ export default function PartiesPage() {
     setEditSubmitting(true);
 
     try {
-      const res = await fetch(`/api/parties/${editingParty.id}`, {
+      const res = await apiFetch(`/api/parties/${editingParty.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json'   , 'If-Match': JSON.stringify(String(editingParty.version)) },
         body: JSON.stringify({
           name: editName,
           nameEn: editNameEn.trim() || null,
@@ -160,8 +167,9 @@ export default function PartiesPage() {
     setDeleteSubmitting(true);
 
     try {
-      const res = await fetch(`/api/parties/${deletingParty.id}`, {
+      const res = await apiFetch(`/api/parties/${deletingParty.id}`, {
         method: 'DELETE',
+        headers: { 'If-Match': JSON.stringify(String(deletingParty.version)) },
       });
 
       const data = await res.json();
@@ -178,29 +186,15 @@ export default function PartiesPage() {
     }
   };
 
-  const fetchParties = () => {
-    setLoading(true);
-    fetch('/api/parties')
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.ok) setParties(res.data);
-      })
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(() => {
-    fetchParties();
-  }, []);
-
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError(null);
     setFormSubmitting(true);
 
     try {
-      const res = await fetch('/api/parties', {
+      const res = await apiFetch('/api/parties', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json'  },
         body: JSON.stringify({
           name: formName,
           nameEn: formNameEn.trim() || null,
@@ -277,8 +271,11 @@ export default function PartiesPage() {
     return cov;
   };
 
+  if (partyQuery.error && !partyQuery.data) return <QueryStatus query={partyQuery} />;
+
   return (
     <div className="space-y-6">
+      <QueryStatus query={partyQuery} />
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
         <div>

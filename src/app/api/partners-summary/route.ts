@@ -1,3 +1,4 @@
+import { prisma, withReadSnapshot } from '@/lib/db';
 import { todayInStore } from '@/domain/period';
 import { withApiGuard } from '@/lib/api-guard';
 import { NextRequest, NextResponse } from 'next/server';
@@ -10,19 +11,24 @@ async function handleGET(req: NextRequest) {
     const asOfDate = searchParams.get('asOfDate') || todayInStore();
     const startDate = `${asOfDate.slice(0, 4)}-01-01`;
 
-    const [reports, assetsData] = await Promise.all([
+    return await withReadSnapshot(async () => {
+    const [reports, assetsData, versions, settings] = await Promise.all([
       loadReportsEngine(startDate, asOfDate),
       getFixedAssetsWithAdditions(asOfDate),
+      prisma.party.findMany({ where: { type: 'PARTNER' }, select: { id: true, version: true } }),
+      prisma.systemSetting.findUniqueOrThrow({ where: { id: 1 }, select: { version: true } }),
     ]);
 
     return NextResponse.json({
       ok: true,
       data: {
-        partnersSummary: reports.partnersSummary,
+        settingsVersion: settings.version,
+        partnersSummary: reports.partnersSummary.map(p => ({ ...p, version: versions.find(v => v.id === p.partnerId)?.version })),
         openingEquitySummary: reports.openingEquitySummary,
         assetsData,
         asOfDate,
       },
+    });
     });
   } catch (err: unknown) {
     return NextResponse.json(

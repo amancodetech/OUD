@@ -1,4 +1,6 @@
 import React from 'react';
+import { RoleBasedPrefetcher } from '@/components/data/RoleBasedPrefetcher';
+import { SessionDataProvider } from '@/components/data/SessionDataProvider';
 import { ReportPeriodProvider } from '@/components/layout/ReportPeriodContext';
 import { todayInStore } from '@/domain/period';
 import { redirect } from 'next/navigation';
@@ -27,7 +29,9 @@ export default async function DashboardLayout({
   const setting = await getSystemSetting();
 
   return (
-    <SidebarProvider>
+    <SessionDataProvider key={session.cacheScope} scope={session.cacheScope!}>
+      <RoleBasedPrefetcher role={session.role} permissions={session.permissions} today={todayInStore()} startYear={setting.startYear} />
+      <SidebarProvider>
       <KeyboardShortcuts />
       <div className="flex min-h-screen bg-[#F9F6F2] text-[#241112] print:block print:min-h-0 print:bg-white">
         {/* Sidebar (Expanded w-64 or Collapsed Icon Bar w-20) */}
@@ -57,6 +61,6 @@ export default async function DashboardLayout({
           <main className="flex-1 p-4 sm:p-6 overflow-x-auto print:p-0 print:overflow-visible"><PageAccessGate permissions={session.permissions ?? []} currency={setting.currencyCode}><ReportPeriodProvider startYear={setting.startYear} today={todayInStore()}>{children}</ReportPeriodProvider></PageAccessGate></main>
         </div>
       </div>
-    </SidebarProvider>
+    </SidebarProvider></SessionDataProvider>
   );
 }

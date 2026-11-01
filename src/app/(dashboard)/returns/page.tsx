@@ -1,4 +1,7 @@
 'use client';
+import { useApiQuery } from '@/lib/use-api-query';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { apiFetch } from '@/lib/client-api';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -20,8 +23,6 @@ import { useI18n } from '@/i18n/LanguageContext';
 export default function ReturnsPage() {
   const { t, locale, isRtl, tUnit, tInvoiceKey, tLocalizedName } = useI18n();
 
-  const [returns, setReturns] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState<'ALL' | 'SALE_RETURN' | 'PURCHASE_RETURN'>('ALL');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -32,22 +33,10 @@ export default function ReturnsPage() {
   const [voiding, setVoiding] = useState(false);
   const [voidError, setVoidError] = useState('');
 
-  const loadData = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/returns');
-      const data = await res.json();
-      if (Array.isArray(data)) setReturns(data);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadData();
-  }, []);
+  const query = useApiQuery<any[]>('/api/returns');
+  const returns = query.data || [];
+  const loading = query.isLoading;
+  const loadData = () => query.mutate();
 
   const filteredReturns = returns.filter((r) => {
     if (r.status === 'VOID') return false;
@@ -90,7 +79,7 @@ export default function ReturnsPage() {
     setVoiding(true);
     setVoidError('');
     try {
-      const res = await fetch(`/api/returns/${returnToVoid.id}/void`, {
+      const res = await apiFetch(`/api/returns/${returnToVoid.id}/void`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: voidReason }),
@@ -109,8 +98,11 @@ export default function ReturnsPage() {
 
   const dateLocale = locale === 'ar' ? 'ar-EG' : 'en-US';
 
+  if (query.error && !query.data) return <QueryStatus query={query} />;
+
   return (
     <div className="space-y-6">
+      <QueryStatus query={query} />
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
         <div>

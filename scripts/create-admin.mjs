@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../src/lib/prisma-client.mjs';
 import bcrypt from 'bcryptjs';
 const url = process.env.SETUP_DATABASE_URL;
 const password = process.env.INITIAL_ADMIN_PASSWORD;

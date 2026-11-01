@@ -1,4 +1,5 @@
-import { PrismaClient, PartyType, ItemRole, RecordStatus, CashAccountType, CashTransactionType, ReturnType, SaleReturnCondition, StockIssueType, SaleLineType } from '@prisma/client';
+import {PartyType, ItemRole, RecordStatus, CashAccountType, CashTransactionType, ReturnType, SaleReturnCondition, StockIssueType, SaleLineType} from '@prisma/client';
+import { PrismaClient } from '../src/lib/prisma-client.mjs';
 import { assertTestDatabase } from '../src/lib/test-database';
 
 const prisma = new PrismaClient();

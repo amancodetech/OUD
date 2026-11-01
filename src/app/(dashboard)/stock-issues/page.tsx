@@ -1,4 +1,7 @@
 'use client';
+import { useApiQuery } from '@/lib/use-api-query';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { apiFetch } from '@/lib/client-api';
 import { todayInStore } from '@/domain/period';
 
 import React, { useState, useEffect } from 'react';
@@ -51,8 +54,6 @@ interface StockIssueItem {
 
 export default function StockIssuesPage() {
   const { t, locale, isRtl, tUnit, tLocalizedName } = useI18n();
-  const [issues, setIssues] = useState<StockIssueItem[]>([]);
-  const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -79,26 +80,15 @@ export default function StockIssuesPage() {
   const [voiding, setVoiding] = useState(false);
   const [voidError, setVoidError] = useState('');
 
-  const fetchIssues = async () => {
-    try {
-      setLoading(true);
-      const url = filterType !== 'ALL' ? `/api/stock-issues?type=${filterType}` : '/api/stock-issues';
-      const res = await fetch(url);
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        setIssues(data);
-      }
-    } catch (e) {
-      console.error('Error fetching stock issues', e);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const query = useApiQuery<StockIssueItem[]>(filterType !== 'ALL' ? `/api/stock-issues?type=${filterType}` : '/api/stock-issues');
+  const issues = query.data || [];
+  const loading = query.isLoading;
+  const fetchIssues = () => query.mutate();
 
   const fetchItems = async () => {
     try {
       setLoadingItems(true);
-      const res = await fetch('/api/items');
+      const res = await apiFetch('/api/items?lookup=true');
       const data = await res.json();
       const list = Array.isArray(data) ? data : data.data || [];
       setItems(list);
@@ -109,9 +99,7 @@ export default function StockIssuesPage() {
     }
   };
 
-  useEffect(() => {
-    fetchIssues();
-  }, [filterType]);
+
 
   useEffect(() => {
     fetchItems();
@@ -222,7 +210,7 @@ export default function StockIssuesPage() {
 
     try {
       setSubmitting(true);
-      const res = await fetch('/api/stock-issues', {
+      const res = await apiFetch('/api/stock-issues', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -268,7 +256,7 @@ export default function StockIssuesPage() {
 
     try {
       setVoiding(true);
-      const res = await fetch(`/api/stock-issues/${targetIssue.id}/void`, {
+      const res = await apiFetch(`/api/stock-issues/${targetIssue.id}/void`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: voidReason.trim() }),
@@ -304,8 +292,11 @@ export default function StockIssuesPage() {
 
   const dateLocale = locale === 'ar' ? 'ar-EG' : 'en-US';
 
+  if (query.error && !query.data) return <QueryStatus query={query} />;
+
   return (
     <div className="space-y-6">
+      <QueryStatus query={query} />
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-4">
         <div>

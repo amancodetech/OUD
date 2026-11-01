@@ -1,3 +1,4 @@
+import { assertWorkbookExpansion } from '@/lib/xlsx-limits';
 import * as xlsx from 'xlsx';
 import crypto from 'node:crypto';
 
@@ -14,6 +15,7 @@ const headers: Record<string, string[]> = {
 
 export function readValidatedWorkbook(buffer: Buffer) {
   if (buffer.length > 10 * 1024 * 1024 || buffer[0] !== 0x50 || buffer[1] !== 0x4b) throw new Error('يلزم ملف XLSX صالح لا يتجاوز 10MB');
+  assertWorkbookExpansion(buffer);
   const workbook = xlsx.read(buffer, { type: 'buffer', cellDates: true });
   for (const name of ['الرئيسية والتقارير', 'الإعدادات والتهيئة', 'سياسة الهدايا', 'الشركاء', ...Object.keys(headers)]) {
     if (!workbook.Sheets[name]) throw new Error(`ورقة مطلوبة مفقودة: ${name}`);

@@ -9,3 +9,13 @@ reports
 *.log
 *.tsbuildinfo
 .playwright-cli
+
+.open-next/
+.wrangler/
+.worker-dist/
+.dev.vars
+.dev.vars.*
+!cloudflare/dev.vars.example
+release/
+oud_system*.xlsx
+scripts/seed-november-real-data.ts

@@ -1,4 +1,5 @@
-import { PrismaClient, UserRole, PartyType } from '@prisma/client';
+import {UserRole, PartyType} from '@prisma/client';
+import { PrismaClient } from '../src/lib/prisma-client.mjs';
 import bcrypt from 'bcryptjs';
 import { assertTestDatabase, testDatabaseUrl } from '../src/lib/test-database';
 

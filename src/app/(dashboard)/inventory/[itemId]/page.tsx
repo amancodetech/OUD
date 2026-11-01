@@ -1,4 +1,6 @@
 'use client';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { useApiQuery } from '@/lib/use-api-query';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -106,43 +108,10 @@ export default function StockCardPage() {
   const itemId = params.itemId as string;
   const { t, locale, isRtl, tCategory, tUnit, tLocalizedName } = useI18n();
 
-  const [data, setData] = useState<StockCardData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    async function loadCard() {
-      try {
-        setLoading(true);
-        setError('');
-        const res = await fetch(`/api/inventory/${itemId}/card`);
-        const json = await res.json();
-        if (!res.ok) {
-          throw new Error(
-            json.error ||
-              (locale === 'id'
-                ? 'Gagal memuat kartu stok'
-                : locale === 'en'
-                ? 'Failed to load stock card'
-                : 'فشل تحميل كارت الصنف')
-          );
-        }
-        setData(json);
-      } catch (err: any) {
-        setError(
-          err.message ||
-            (locale === 'id'
-              ? 'Terjadi kesalahan'
-              : locale === 'en'
-              ? 'An error occurred'
-              : 'حدث خطأ غير متوقع')
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadCard();
-  }, [itemId, locale]);
+  const query = useApiQuery<StockCardData>(`/api/inventory/${itemId}/card`);
+  const data = query.data;
+  const loading = query.isLoading;
+  const error = query.error?.message || '';
 
   if (loading) {
     return (
@@ -159,7 +128,7 @@ export default function StockCardPage() {
     );
   }
 
-  if (error || !data) {
+  if ((!data && error) || !data) {
     return (
       <div className="p-6 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-2xl text-red-700 dark:text-red-300">
         <div className="flex items-center gap-2 font-bold mb-2">
@@ -202,6 +171,7 @@ export default function StockCardPage() {
 
   return (
     <div className="space-y-6">
+      <QueryStatus query={query} />
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-4">
         <div>

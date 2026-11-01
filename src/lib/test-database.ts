@@ -13,6 +13,6 @@ export function testDatabaseUrl(value = process.env.TEST_DATABASE_URL): string {
 
 export async function assertTestDatabase(client: PrismaClient): Promise<void> {
   const url = new URL(testDatabaseUrl());
-  const rows = await client.$queryRaw<Array<{ name: string }>>`SELECT current_database() AS name`;
+  const rows = await client.$queryRaw<Array<{ name: string }>>`SELECT current_database()::text AS name`;
   if (rows[0]?.name !== url.pathname.slice(1)) throw new Error('Actual test database identity mismatch');
 }

@@ -1,7 +1,11 @@
 'use client';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { useApiQuery } from '@/lib/use-api-query';
+import { queryKeys } from '@/lib/query-keys';
+import { apiFetch } from '@/lib/client-api';
 import { todayInStore } from '@/domain/period';
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   ShoppingCart,
@@ -23,15 +27,15 @@ import { useI18n } from '@/i18n/LanguageContext';
 export default function SalesPage() {
   const { t, locale, isRtl, tAging, tInvoiceKey, tUnit, tLocalizedName } = useI18n();
 
-  const [invoices, setInvoices] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+
+
   const [viewMode, setViewMode] = useState<'INVOICES' | 'LINES'>('INVOICES');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState('');
-  const [customers, setCustomers] = useState<any[]>([]);
+
   const [page, setPage] = useState(1);
-  const [loadError, setLoadError] = useState('');
-  const requestSequence = useRef(0);
+
+
   const text = (ar: string, en: string, id: string) => locale === 'ar' ? ar : locale === 'id' ? id : en;
 
 
@@ -51,34 +55,15 @@ export default function SalesPage() {
   const [voiding, setVoiding] = useState(false);
   const [voidError, setVoidError] = useState('');
 
-  const loadData = useCallback(async () => {
-    const sequence = ++requestSequence.current;
-    setLoading(true);
-    setLoadError('');
-    try {
-      const [invRes, custRes] = await Promise.all([
-        fetch('/api/sales?' + new URLSearchParams({ page: String(page), pageSize: '100', search: searchTerm, customerId: selectedCustomer })),
-        fetch('/api/parties?type=CLIENT&lookup=true'),
-      ]);
-      if (!invRes.ok || !custRes.ok) throw new Error('LOAD_FAILED');
-      const invData = await invRes.json();
-      const custData = await custRes.json();
-      const invList = Array.isArray(invData) ? invData : invData?.data || [];
-      const custList = Array.isArray(custData) ? custData : custData?.data || [];
-      if (sequence !== requestSequence.current) return;
-      setInvoices(invList);
-      setCustomers(custList);
-    } catch {
-      if (sequence === requestSequence.current) { setLoadError('LOAD_FAILED'); setInvoices([]); }
-    } finally {
-      if (sequence === requestSequence.current) setLoading(false);
-    }
-  }, [page, searchTerm, selectedCustomer]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => { void loadData(); }, 250);
-    return () => { clearTimeout(timer); requestSequence.current++; };
-  }, [loadData]);
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  useEffect(() => { const timer = setTimeout(() => setDebouncedSearch(searchTerm), 250); return () => clearTimeout(timer); }, [searchTerm]);
+  const invoiceQuery = useApiQuery<any>(queryKeys.sales({ page, search: debouncedSearch, customerId: selectedCustomer }));
+  const customerQuery = useApiQuery<any>(queryKeys.partiesLookup('CLIENT'));
+  const invoices: any[] = Array.isArray(invoiceQuery.data) ? invoiceQuery.data : invoiceQuery.data?.data || [];
+  const customers: any[] = Array.isArray(customerQuery.data) ? customerQuery.data : customerQuery.data?.data || [];
+  const loading = invoiceQuery.isLoading || customerQuery.isLoading || searchTerm !== debouncedSearch;
+  const loadError = invoiceQuery.error || customerQuery.error;
+  const loadData = () => Promise.all([invoiceQuery.mutate(), customerQuery.mutate()]);
 
   const filteredInvoices = invoices.filter((inv) => {
     if (inv.status === 'VOID') return false;
@@ -121,7 +106,7 @@ export default function SalesPage() {
     setSubmittingCollect(true);
     setCollectError('');
     try {
-      const res = await fetch('/api/cash', {
+      const res = await apiFetch('/api/cash', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -163,7 +148,7 @@ export default function SalesPage() {
     setVoiding(true);
     setVoidError('');
     try {
-      const res = await fetch(`/api/sales/${invoiceToVoid.id}/void`, {
+      const res = await apiFetch(`/api/sales/${invoiceToVoid.id}/void`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: voidReason }),
@@ -187,8 +172,11 @@ export default function SalesPage() {
     return 'bg-rose-100 text-rose-900 border-rose-300 font-bold';
   };
 
+  if (invoiceQuery.error && !invoiceQuery.data) return <QueryStatus query={invoiceQuery} />;
+
   return (
     <div className="space-y-6">
+      <QueryStatus query={invoiceQuery} />
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
         <div>

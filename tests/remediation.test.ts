@@ -41,7 +41,8 @@ describe('remediation acceptance on disposable PostgreSQL',()=>{
  });
  it('preserves the last active administrator',async()=>{
   await createSession({...admin});
-  const response=await updateUser(req('/api/users/'+admin.id,{role:'CASHIER'}),{params:Promise.resolve({id:admin.id})});
+  const editRequest=req('/api/users/'+admin.id,{role:'CASHIER'});editRequest.headers.set('if-match',JSON.stringify(String(admin.version)));
+  const response=await updateUser(editRequest,{params:Promise.resolve({id:admin.id})});
   expect(response.status).toBe(400);expect((await prisma.user.findUniqueOrThrow({where:{id:admin.id}})).role).toBe('ADMIN');
  });
  it('enforces custom permissions and allows permitted sales',async()=>{

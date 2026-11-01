@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
@@ -18,7 +19,7 @@ export function SetupStatusBanner() {
   const pathname = usePathname();
 
   const fetchStatus = useCallback(() => {
-    fetch('/api/settings?status=true')
+    apiFetch('/api/settings?status=true')
       .then((res) => res.json())
       .then((res) => {
         if (res.ok) setStatus(res.data);

@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -15,6 +16,7 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [version, setVersion] = useState<number | null>(null);
   const [storeName, setStoreName] = useState('محل العود والعطور');
   const [currencyCode, setCurrencyCode] = useState('IDR');
   const [currencyLabel, setCurrencyLabel] = useState('روبية (IDR)');
@@ -30,11 +32,12 @@ export default function SettingsPage() {
   const [unlockReason, setUnlockReason] = useState('');
 
   useEffect(() => {
-    fetch('/api/settings')
+    apiFetch('/api/settings')
       .then((res) => res.json())
       .then((res) => {
         if (res.ok && res.data) {
           const s = res.data;
+          setVersion(s.version);
           setStoreName(s.storeName || 'محل العود والعطور');
           setCurrencyCode(s.currencyCode || 'IDR');
           setCurrencyLabel(s.currencyLabel || 'روبية (IDR)');
@@ -61,9 +64,9 @@ export default function SettingsPage() {
     setSaved(false);
 
     try {
-      const res = await fetch('/api/settings', {
+      const res = await apiFetch('/api/settings', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'If-Match': JSON.stringify(String(version)) },
         body: JSON.stringify({
           storeName,
           currencyCode,
@@ -86,6 +89,7 @@ export default function SettingsPage() {
         throw new Error(data.error || t.common.errorOccurred);
       }
 
+      setVersion(data.data.version);
       setSaved(true);
       router.refresh();
       window.dispatchEvent(new Event('focus'));

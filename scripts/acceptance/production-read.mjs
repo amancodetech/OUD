@@ -2,7 +2,8 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { parseEnv } from 'node:util';
 import { createHash } from 'node:crypto';
-import { PrismaClient, Prisma } from '@prisma/client';
+import {Prisma} from '@prisma/client';
+import { PrismaClient } from '../../src/lib/prisma-client.mjs';
 import Decimal from 'decimal.js';
 import assert from 'node:assert/strict';
 const [envFile, output, privateOutput] = process.argv.slice(2);
@@ -12,7 +13,7 @@ const db = new PrismaClient({ datasources: { db: { url: env.DATABASE_URL } } });
 try {
   const snapshot = await db.$transaction(async tx => {
     await tx.$executeRaw`SET TRANSACTION READ ONLY`;
-    const identity = await tx.$queryRaw`SELECT current_database() AS name, current_setting('transaction_read_only') AS readonly`;
+    const identity = await tx.$queryRaw`SELECT current_database()::text AS name, current_setting('transaction_read_only') AS readonly`;
     assert.equal(identity[0].readonly, 'on');
     const data = {};
     for (const model of Prisma.dmmf.datamodel.models) {

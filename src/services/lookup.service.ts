@@ -16,7 +16,7 @@ export async function itemLookup(asOfDate = todayInStore()) {
 
 export function partyLookup(type?: PartyType) {
   return prisma.party.findMany({ where: { type, isActive: true }, orderBy: { code: 'asc' }, select: {
-    id: true, code: true, name: true, nameEn: true, nameId: true, type: true, phone: true, country: true,
+    id: true, version: true, code: true, name: true, nameEn: true, nameId: true, type: true, phone: true, country: true,
     address: true, supplierCategory: true, supplierCategoryEn: true, carNumber: true,
     isDriverGiftEnabled: true, isActive: true,
   } });

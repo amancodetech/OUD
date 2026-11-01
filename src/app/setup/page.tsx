@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -31,7 +32,7 @@ export default function SetupWizardPage() {
   const [giftValue, setGiftValue] = useState('100000');
 
   useEffect(() => {
-    fetch('/api/settings')
+    apiFetch('/api/settings')
       .then((res) => res.json())
       .then((res) => {
         if (res.ok && res.data) {
@@ -53,7 +54,7 @@ export default function SetupWizardPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/settings', {
+      const res = await apiFetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -81,7 +82,7 @@ export default function SetupWizardPage() {
     setError(null);
     try {
       // 1. Save settings and mark openingReviewed = true
-      const resSettings = await fetch('/api/settings', {
+      const resSettings = await apiFetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -97,7 +98,7 @@ export default function SetupWizardPage() {
       }
 
       // 2. Create gift policy
-      const resPolicy = await fetch('/api/drivers/policies', {
+      const resPolicy = await apiFetch('/api/drivers/policies', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

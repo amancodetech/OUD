@@ -2,10 +2,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import * as xlsx from 'xlsx';
 import { db, login, content, save, base } from './common.mjs';
+const { fixtureWorkbook } = await import('../../tests/fixtures/workbook.ts');
 const checks=[];
 let cookie;
 function workbook({invalid=false,changed=false,precision=false,sign=''}={}){
-  const wb=xlsx.read(fs.readFileSync('oud_system (7).xlsx'),{type:'buffer'});
+  const wb=xlsx.read(fixtureWorkbook(),{type:'buffer'});
   xlsx.utils.sheet_add_aoa(wb.Sheets['الأسماء وبيانات الاتصال'],[['AC-EX-S','Acceptance Excel supplier','مورد','','','','','',0,0]],{origin:'A7'});
   xlsx.utils.sheet_add_aoa(wb.Sheets['الأسماء وبيانات الاتصال'],[['AC-EX-C','Acceptance Excel client','عميل','','','','','',0,0]],{origin:'A8'});
   xlsx.utils.sheet_add_aoa(wb.Sheets['الأصناف'],[['AC-EX-I',changed?'Changed Excel item':'Acceptance Excel item','عود طبيعي','جرام','بضاعة',0,20,200]],{origin:'A6'});

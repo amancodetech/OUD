@@ -1,4 +1,6 @@
 'use client';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { useApiQuery } from '@/lib/use-api-query';
 import { useParams } from 'next/navigation';
 
 import React, { useState, useEffect, useContext } from 'react';
@@ -25,30 +27,13 @@ export default function SalePrintPage() {
   const returnCreditLabel = locale === 'ar' ? 'إشعارات المرتجع' : locale === 'id' ? 'Nota retur' : 'Return credits';
   const netInvoiceLabel = locale === 'ar' ? 'صافي الفاتورة بعد المرتجعات' : locale === 'id' ? 'Faktur bersih setelah retur' : 'Net invoice after returns';
   const refundLabel = locale === 'ar' ? 'المبالغ المعادة' : locale === 'id' ? 'Dana dikembalikan' : 'Refunds';
-  const [invoice, setInvoice] = useState<any>(null);
-  const [storeName, setStoreName] = useState<string>('');
-  const [loading, setLoading] = useState(true);
+  const query = useApiQuery<any>(`/api/sales/${params.id}`);
+  const brand = useApiQuery<any>('/api/settings/branding');
+  const invoice = query.data;
+  const storeName = brand.data?.data?.storeName || '';
+  const loading = query.isLoading || brand.isLoading;
   const [paperFormat, setPaperFormat] = useState<'THERMAL' | 'A4'>('THERMAL');
-
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const [res, sRes] = await Promise.all([
-          fetch(`/api/sales/${params.id}`),
-          fetch('/api/settings/branding'),
-        ]);
-        const data = await res.json();
-        const sData = await sRes.json();
-        if (res.ok) setInvoice(data);
-        if (sRes.ok && sData.data?.storeName) setStoreName(sData.data.storeName);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
-  }, [params.id]);
+  if ((query.error && !invoice) || (brand.error && !brand.data)) return <QueryStatus query={query.error ? query : brand} />;
 
   if (loading) {
     return (

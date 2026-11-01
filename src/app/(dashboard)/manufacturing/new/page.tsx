@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 import { useUiText } from '@/i18n/interface-text';
 import { todayInStore } from '@/domain/period';
 
@@ -65,7 +66,7 @@ export default function NewManufacturingBatchPage() {
     async function loadItems() {
       try {
         setLoadingItems(true);
-        const res = await fetch('/api/items');
+        const res = await apiFetch('/api/items?lookup=true');
         const data = await res.json();
         const list = Array.isArray(data) ? data : data.data || [];
         setItems(list);
@@ -172,7 +173,7 @@ export default function NewManufacturingBatchPage() {
 
     try {
       setSubmitting(true);
-      const res = await fetch('/api/manufacturing', {
+      const res = await apiFetch('/api/manufacturing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Idempotency-Key': operationKey },
         body: JSON.stringify({

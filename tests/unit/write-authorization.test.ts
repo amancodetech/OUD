@@ -5,6 +5,7 @@ import { join } from 'node:path';
 const state = vi.hoisted(() => ({ user: null as any, cashType: 'CUSTOMER_COLLECTION', returnType: 'SALE_RETURN' }));
 vi.mock('@/lib/auth', () => ({ getSession: async () => state.user }));
 vi.mock('@/lib/db', () => ({ withLedgerTransaction: async (fn: () => unknown) => fn(), prisma: {
+  ...Object.fromEntries(['item','party','fixedAsset','giftPolicy','systemSetting','itemCategory','unitOption','user'].map(key => [key, { findUnique: async () => ({ version: 0 }) }])),
   cashTransaction: { findUnique: async () => ({ type: state.cashType }) },
   returnLine: { findUnique: async () => ({ type: state.returnType }) },
 } }));
@@ -32,8 +33,9 @@ const permissions = ['dashboard_view','inventory_view','debts_view','sales_manag
 beforeEach(() => { state.cashType='CUSTOMER_COLLECTION'; state.returnType='SALE_RETURN'; });
 async function invoke(method: string, route: string, body: object = { type: 'CUSTOMER_COLLECTION' }) {
   const handler = vi.fn(async () => NextResponse.json({ ok: true }));
-  const headers = { 'Content-Type': route === '/api/settings/import' ? 'multipart/form-data; boundary=unit' : 'application/json' };
-  const req = new NextRequest('http://localhost'+route.replace('[id]','target'), { method, headers, body: JSON.stringify(body) });
+  const headers = { 'If-Match': '"0"', 'Content-Type': route === '/api/settings/import' ? 'multipart/form-data; boundary=unit' : 'application/json' };
+  const form = new FormData(); form.append('file', new File(['test'], 'test.xlsx'));
+  const req = new NextRequest('http://localhost'+route.replace('[id]','target'), { method, headers: route === '/api/settings/import' ? { 'If-Match': '"0"' } : headers, body: route === '/api/settings/import' ? form : JSON.stringify(body) });
   const response = await withApiGuard(method as any, route, handler)(req, { params: Promise.resolve({ id: 'target' }) });
   return { status: response.status, calls: handler.mock.calls.length };
 }

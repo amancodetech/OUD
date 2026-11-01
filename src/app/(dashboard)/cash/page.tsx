@@ -1,4 +1,9 @@
 'use client';
+import { useApiQuery } from '@/lib/use-api-query';
+import { queryKeys } from '@/lib/query-keys';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { usePermissions } from '@/components/layout/PageAccessGate';
+import { apiFetch } from '@/lib/client-api';
 import { todayInStore } from '@/domain/period';
 
 import React, { useState, useEffect } from 'react';
@@ -31,9 +36,6 @@ export default function CashPage() {
   const { t, locale, isRtl, tCashType, tPartyType, tInvoiceKey, tLocalizedName } = useI18n();
   const searchParams = useSearchParams();
 
-  const [transactions, setTransactions] = useState<any[]>([]);
-  const [summary, setSummary] = useState<any>({ cashBalance: 0, bankBalance: 0, cashAndBankTotal: 0 });
-  const [loading, setLoading] = useState(true);
   const [filterAccount, setFilterAccount] = useState<'ALL' | 'CASH' | 'BANK'>('ALL');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -51,12 +53,6 @@ export default function CashPage() {
   const [txDescription, setTxDescription] = useState('');
 
   // Options & Dropdown data
-  const [clients, setClients] = useState<any[]>([]);
-  const [suppliers, setSuppliers] = useState<any[]>([]);
-  const [drivers, setDrivers] = useState<any[]>([]);
-  const [partners, setPartners] = useState<any[]>([]);
-  const [funders, setFunders] = useState<any[]>([]);
-  const [assets, setAssets] = useState<any[]>([]);
   const [partyInvoices, setPartyInvoices] = useState<any[]>([]);
 
   const [submitting, setSubmitting] = useState(false);
@@ -84,55 +80,23 @@ export default function CashPage() {
   const [voiding, setVoiding] = useState(false);
   const [voidError, setVoidError] = useState('');
 
-  const loadData = async () => {
-    setLoading(true);
-    try {
-      const [txRes, sumRes, cliRes, supRes, drvRes, partRes, fundRes, assRes] = await Promise.all([
-        fetch('/api/cash'),
-        fetch('/api/cash?summary=true'),
-        fetch('/api/parties?type=CLIENT'),
-        fetch('/api/parties?type=SUPPLIER'),
-        fetch('/api/parties?type=DRIVER'),
-        fetch('/api/parties?type=PARTNER'),
-        fetch('/api/parties?type=FUNDER'),
-        fetch('/api/partners-summary'),
-      ]);
-
-      const [txData, sumData, cliData, supData, drvData, partData, fundData, assData] = await Promise.all([
-        txRes.json(),
-        sumRes.json(),
-        cliRes.json(),
-        supRes.json(),
-        drvRes.json(),
-        partRes.json(),
-        fundRes.json(),
-        assRes.json(),
-      ]);
-
-      const unwrap = (res: any) => (Array.isArray(res) ? res : Array.isArray(res?.data) ? res.data : []);
-      setTransactions(unwrap(txData));
-      if (sumData) setSummary(sumData?.data || sumData);
-      setClients(unwrap(cliData));
-      setSuppliers(unwrap(supData));
-      setDrivers(unwrap(drvData));
-      setPartners(unwrap(partData));
-      setFunders(unwrap(fundData));
-      const assetList =
-        assData?.data?.assetsData?.assets ||
-        assData?.assetsData?.assets ||
-        assData?.assets ||
-        [];
-      if (Array.isArray(assetList)) setAssets(assetList);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadData();
-  }, []);
+  const permissions = usePermissions();
+  const fullCash = permissions.includes('cash_full');
+  const query = useApiQuery<any>(queryKeys.cash);
+  const summaryQuery = useApiQuery<any>(fullCash ? queryKeys.cashSummary : null);
+  const partiesQuery = useApiQuery<any>(queryKeys.partiesLookup());
+  const assetsQuery = useApiQuery<any>(fullCash ? queryKeys.fixedAssets : null);
+  const transactions: any[] = Array.isArray(query.data) ? query.data : query.data?.data || [];
+  const summary = summaryQuery.data?.data || summaryQuery.data || {};
+  const parties: any[] = partiesQuery.data?.data || [];
+  const clients = parties.filter(p => p.type === 'CLIENT');
+  const suppliers = parties.filter(p => p.type === 'SUPPLIER');
+  const drivers = parties.filter(p => p.type === 'DRIVER');
+  const partners = parties.filter(p => p.type === 'PARTNER');
+  const funders = parties.filter(p => p.type === 'FUNDER');
+  const assets: any[] = assetsQuery.data?.data?.assets || [];
+  const loading = query.isLoading || partiesQuery.isLoading;
+  const loadData = () => Promise.all([query.mutate(), summaryQuery.mutate(), partiesQuery.mutate(), assetsQuery.mutate()]);
 
   // Fetch pending invoices when party changes in collection/refund/payment
   const handlePartyChange = async (partyId: string) => {
@@ -142,7 +106,7 @@ export default function CashPage() {
 
     if (!partyId) return;
     try {
-      const res = await fetch(`/api/cash/invoices?partyId=${partyId}&asOfDate=${txDate}`);
+      const res = await apiFetch(`/api/cash/invoices?partyId=${partyId}&asOfDate=${txDate}`);
       const data = await res.json();
       if (Array.isArray(data)) {
         setPartyInvoices(data);
@@ -205,7 +169,7 @@ export default function CashPage() {
         description: txDescription.trim() || null,
       };
 
-      const res = await fetch('/api/cash', {
+      const res = await apiFetch('/api/cash', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Idempotency-Key': operationKey },
         body: JSON.stringify(payload),
@@ -238,7 +202,7 @@ export default function CashPage() {
     setVoiding(true);
     setVoidError('');
     try {
-      const res = await fetch(`/api/cash/${txToVoid.id}/void`, {
+      const res = await apiFetch(`/api/cash/${txToVoid.id}/void`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: voidReason }),
@@ -287,8 +251,11 @@ export default function CashPage() {
 
   const dateLocale = locale === 'ar' ? 'ar-EG' : 'en-US';
 
+  if (query.error && !query.data) return <QueryStatus query={query} />;
+
   return (
     <div className="space-y-6">
+      <QueryStatus query={query} />
       {/* Top Header */}
       <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>

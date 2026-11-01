@@ -1,4 +1,8 @@
 'use client';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { useApiQuery } from '@/lib/use-api-query';
+import { queryKeys } from '@/lib/query-keys';
+import { apiFetch } from '@/lib/client-api';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -24,6 +28,7 @@ import { useI18n } from '@/i18n/LanguageContext';
 import { tLocalizedName } from '@/i18n/translate-domain';
 
 interface ItemRow {
+  version: number;
   id: string;
   code: string;
   displayCode?: string | null;
@@ -32,7 +37,7 @@ interface ItemRow {
   nameId?: string | null;
   nameEn?: string | null;
   role: ItemRole;
-  category: { id: string; name: string; prefix: string };
+  category: { id: string; version: number; name: string; prefix: string };
   unit: { id: string; name: string };
   reorderLevel: any;
   openingQty: any;
@@ -49,6 +54,7 @@ export default function ItemsPage() {
   const { t, locale, isRtl, tCategory, tUnit, tItemRole } = useI18n();
 
   interface CategoryOption {
+    version: number;
     id: string;
     name: string;
     prefix: string;
@@ -56,15 +62,18 @@ export default function ItemsPage() {
   }
 
   interface UnitOptionItem {
+    version: number;
     id: string;
     name: string;
     _count?: { items: number };
   }
 
-  const [items, setItems] = useState<ItemRow[]>([]);
+  const itemQuery = useApiQuery<{ ok: boolean; data: ItemRow[] }>(queryKeys.items);
+  const items = itemQuery.data?.data || [];
+  const fetchItems = () => itemQuery.mutate();
   const [categories, setCategories] = useState<CategoryOption[]>([]);
   const [units, setUnits] = useState<UnitOptionItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const loading = itemQuery.isLoading;
   const [roleFilter, setRoleFilter] = useState<string>('ALL');
   const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
   const [searchTerm, setSearchTerm] = useState('');
@@ -144,9 +153,9 @@ export default function ItemsPage() {
     setEditSubmitting(true);
 
     try {
-      const res = await fetch(`/api/items/${editingItem.id}`, {
+      const res = await apiFetch(`/api/items/${editingItem.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json'   , 'If-Match': JSON.stringify(String(editingItem.version)) },
         body: JSON.stringify({
           name: editName,
           nameEn: editNameEn.trim() || null,
@@ -184,8 +193,9 @@ export default function ItemsPage() {
     setDeleteSubmitting(true);
 
     try {
-      const res = await fetch(`/api/items/${deletingItem.id}`, {
+      const res = await apiFetch(`/api/items/${deletingItem.id}`, {
         method: 'DELETE',
+        headers: { 'If-Match': JSON.stringify(String(deletingItem.version)) },
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || t.common.errorOccurred);
@@ -200,19 +210,9 @@ export default function ItemsPage() {
     }
   };
 
-  const fetchItems = () => {
-    setLoading(true);
-    fetch('/api/items')
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.ok) setItems(res.data);
-      })
-      .finally(() => setLoading(false));
-  };
-
   const fetchCategoriesAndUnits = async () => {
     try {
-      const res = await fetch('/api/categories-units');
+      const res = await apiFetch('/api/categories-units');
       const data = await res.json();
       if (data.ok) {
         setCategories(data.categories);
@@ -230,7 +230,6 @@ export default function ItemsPage() {
   };
 
   useEffect(() => {
-    fetchItems();
     fetchCategoriesAndUnits();
   }, []);
 
@@ -242,8 +241,11 @@ export default function ItemsPage() {
     setCatSuccess(null);
   };
 
-  const handleStartEditCat = (cat: { id: string; name: string; prefix: string }) => {
+  const [catVersion, setCatVersion] = useState(0);
+  const [unitVersion, setUnitVersion] = useState(0);
+  const handleStartEditCat = (cat: { id: string; version: number; name: string; prefix: string }) => {
     setEditingCatId(cat.id);
+    setCatVersion(cat.version);
     setCatNameInput(cat.name);
     setCatPrefixInput(cat.prefix);
     setCatError(null);
@@ -257,9 +259,9 @@ export default function ItemsPage() {
     setCatSaving(true);
     try {
       const isEdit = Boolean(editingCatId);
-      const res = await fetch('/api/categories-units', {
+      const res = await apiFetch('/api/categories-units', {
         method: isEdit ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'If-Match': JSON.stringify(String(catVersion))  },
         body: JSON.stringify({
           type: 'CATEGORY',
           id: editingCatId,
@@ -292,7 +294,7 @@ export default function ItemsPage() {
     }
   };
 
-  const handleDeleteCategory = async (cat: { id: string; name: string; prefix: string; _count?: { items: number } }) => {
+  const handleDeleteCategory = async (cat: { id: string; version: number; name: string; prefix: string; _count?: { items: number } }) => {
     setCatError(null);
     setCatSuccess(null);
     if ((cat._count?.items ?? 0) > 0) {
@@ -303,9 +305,9 @@ export default function ItemsPage() {
 
     setCatDeletingId(cat.id);
     try {
-      const res = await fetch('/api/categories-units', {
+      const res = await apiFetch('/api/categories-units', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'If-Match': JSON.stringify(String(cat.version)) },
         body: JSON.stringify({
           type: 'CATEGORY',
           id: cat.id,
@@ -333,8 +335,9 @@ export default function ItemsPage() {
     setUnitSuccess(null);
   };
 
-  const handleStartEditUnit = (unit: { id: string; name: string }) => {
+  const handleStartEditUnit = (unit: { id: string; version: number; name: string }) => {
     setEditingUnitId(unit.id);
+    setUnitVersion(unit.version);
     setUnitNameInput(unit.name);
     setUnitError(null);
     setUnitSuccess(null);
@@ -347,9 +350,9 @@ export default function ItemsPage() {
     setUnitSaving(true);
     try {
       const isEdit = Boolean(editingUnitId);
-      const res = await fetch('/api/categories-units', {
+      const res = await apiFetch('/api/categories-units', {
         method: isEdit ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'If-Match': JSON.stringify(String(unitVersion)) },
         body: JSON.stringify({
           type: 'UNIT',
           id: editingUnitId,
@@ -379,7 +382,7 @@ export default function ItemsPage() {
     }
   };
 
-  const handleDeleteUnit = async (unit: { id: string; name: string; _count?: { items: number } }) => {
+  const handleDeleteUnit = async (unit: { id: string; version: number; name: string; _count?: { items: number } }) => {
     setUnitError(null);
     setUnitSuccess(null);
     if ((unit._count?.items ?? 0) > 0) {
@@ -390,9 +393,9 @@ export default function ItemsPage() {
 
     setUnitDeletingId(unit.id);
     try {
-      const res = await fetch('/api/categories-units', {
+      const res = await apiFetch('/api/categories-units', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'If-Match': JSON.stringify(String(unit.version)) },
         body: JSON.stringify({
           type: 'UNIT',
           id: unit.id,
@@ -419,7 +422,7 @@ export default function ItemsPage() {
     setFormSubmitting(true);
 
     try {
-      const res = await fetch('/api/items', {
+      const res = await apiFetch('/api/items', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -488,8 +491,11 @@ export default function ItemsPage() {
     ? `${editingCategory.prefix}-${numPart}`
     : (editingItem ? (editingItem.displayCode || editingItem.code) : '');
 
+  if (itemQuery.error && !itemQuery.data) return <QueryStatus query={itemQuery} />;
+
   return (
     <div className="space-y-6">
+      <QueryStatus query={itemQuery} />
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E6DDD3] pb-4">
         <div>

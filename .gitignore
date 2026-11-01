@@ -6,11 +6,16 @@ tsconfig.tsbuildinfo
 .env
 .env.*
 !.env.example
-backups/
-.playwright-cli/
+/backups/
+/.playwright-cli/
 
-# Private local business records and acceptance evidence
-reports/
-*.xlsx
-*.pptx
+/.open-next/
+/.wrangler/
+/.worker-dist/
+.dev.vars
+.dev.vars.*
+!cloudflare/dev.vars.example
+/reports/
+/release/
+oud_system*.xlsx
 scripts/seed-november-real-data.ts

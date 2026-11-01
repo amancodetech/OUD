@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  engineType = "client"
 }
 
 datasource db {
@@ -87,6 +88,7 @@ enum StockIssueType {
 // ==========================================
 
 model User {
+  version Int @default(0)
   id           String    @id @default(cuid())
   username     String    @unique
   displayName  String
@@ -118,6 +120,7 @@ model AuditLog {
 }
 
 model SystemSetting {
+  version Int @default(0)
   id                      Int       @id @default(1) // صف واحد دائماً (id = 1)
   storeName               String    @default("محل العود والعطور")
   currencyLabel           String    @default("روبية (IDR)")
@@ -139,6 +142,7 @@ model SystemSetting {
 // ==========================================
 
 model ItemCategory {
+  version Int @default(0)
   id        String  @id @default(cuid())
   name      String  @unique // عود طبيعي، دهن عود...
   prefix    String  // NA, EN, PE, OO, MX, PF, BA, BX, SB, WD, CF, RM
@@ -148,6 +152,7 @@ model ItemCategory {
 }
 
 model UnitOption {
+  version Int @default(0)
   id        String  @id @default(cuid())
   name      String  @unique // قطعة، جرام، كيلوجرام، ملليلتر، لتر، تولة...
   sortOrder Int     @default(0)
@@ -156,6 +161,7 @@ model UnitOption {
 }
 
 model Item {
+  version Int @default(0)
   id               String       @id @default(cuid())
   code             String       @unique // المعرف الثابت: P001, P002 ...
   name             String       @unique // اسم الصنف بالعربية
@@ -183,6 +189,7 @@ model Item {
 }
 
 model Party {
+  version Int @default(0)
   id                  String    @id @default(cuid())
   code                String    @unique // الكود الثابت: C001, SUP001, D001, PR001, F001
   name                String    // الاسم بالعربية
@@ -217,6 +224,7 @@ model Party {
 }
 
 model FixedAsset {
+  version Int @default(0)
   id             String            @id @default(cuid())
   code           String            @unique // معرف ثابت: FA001 .. FA014
   name           String            // اسم الأصل بالعربية
@@ -232,6 +240,7 @@ model FixedAsset {
 }
 
 model GiftPolicy {
+  version Int @default(0)
   id                 String   @id @default(cuid())
   effectiveDate      DateTime @unique @db.Date // تاريخ بدء التطبيق (فريد)
   customersPerGift   Int      // عدد العملاء لكل هدية (عدد صحيح >= 1، مثلاً 10)
@@ -473,4 +482,38 @@ model LoginAttempt {
   count Int @default(1)
   expiresAt DateTime
   @@index([expiresAt])
+}
+
+// Operational state is deliberately excluded from portable financial backups.
+model DataRevision {
+  id Int @id @default(1)
+  generation String @default(dbgenerated("(gen_random_uuid())::text"))
+  revision BigInt @default(0)
+  transactionId String @default("")
+}
+
+model OperationReceipt {
+  id String @id
+  userId String
+  hash String
+  status Int
+  data Json
+  createdAt DateTime @default(now())
+  @@index([userId, createdAt])
+}
+
+model BackgroundJob {
+  id String @id
+  userId String
+  sessionGeneration String
+  sessionVersion Int
+  kind String
+  hash String
+  status String @default("QUEUED")
+  inputKey String?
+  resultKey String?
+  metadata Json
+  createdAt DateTime @default(now())
+  completedAt DateTime?
+  @@index([userId, createdAt])
 }

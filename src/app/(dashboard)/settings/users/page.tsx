@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 import { useUiText } from '@/i18n/interface-text';
 
 import React, { useState, useEffect } from 'react';
@@ -22,6 +23,7 @@ import {
 } from '@/lib/permissions';
 
 interface UserRecord {
+  version: number;
   id: string;
   username: string;
   displayName: string;
@@ -41,6 +43,7 @@ export default function UsersManagementPage() {
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   // Form state (used for Create or Edit)
+  const [editVersion, setEditVersion] = useState(0);
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
   const [username, setUsername] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -57,7 +60,7 @@ export default function UsersManagementPage() {
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/users');
+      const res = await apiFetch('/api/users');
       const json = await res.json();
       if (!res.ok) {
         throw new Error(json.error || 'فشل جلب قائمة المستخدمين');
@@ -100,6 +103,7 @@ export default function UsersManagementPage() {
 
   const startEditUser = (u: UserRecord) => {
     setEditingUserId(u.id);
+    setEditVersion(u.version);
     setUsername(u.username);
     setDisplayName(u.displayName);
     setPassword('');
@@ -118,9 +122,9 @@ export default function UsersManagementPage() {
 
     try {
       if (editingUserId) {
-        const res = await fetch(`/api/users/${editingUserId}`, {
+        const res = await apiFetch(`/api/users/${editingUserId}`, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json' , 'If-Match': JSON.stringify(String(editVersion)) },
           body: JSON.stringify({
             displayName,
             role,
@@ -133,7 +137,7 @@ export default function UsersManagementPage() {
         if (!res.ok) throw new Error(json.error || 'فشل تحديث الحساب');
         setSuccessMsg(`تم تحديث حساب وصلاحيات «${displayName}» بنجاح.`);
       } else {
-        const res = await fetch('/api/users', {
+        const res = await apiFetch('/api/users', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -161,9 +165,9 @@ export default function UsersManagementPage() {
   const handleToggleActiveQuick = async (u: UserRecord) => {
     try {
       setError(null);
-      const res = await fetch(`/api/users/${u.id}`, {
+      const res = await apiFetch(`/api/users/${u.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' , 'If-Match': JSON.stringify(String(u.version)) },
         body: JSON.stringify({ isActive: !u.isActive }),
       });
       const json = await res.json();

@@ -1,9 +1,13 @@
 'use client';
+import { createContext, useContext } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { canAccessHref, PermissionKey } from '@/lib/permissions';
 import { useI18n } from '@/i18n/LanguageContext';
 import { StoreCurrencyContext } from '@/i18n/interface-text';
+
+const PermissionsContext = createContext<PermissionKey[]>([]);
+export const usePermissions = () => useContext(PermissionsContext);
 
 export function PageAccessGate({ permissions, currency, children }: { permissions: PermissionKey[]; currency: string; children: React.ReactNode }) {
   const path = usePathname();
@@ -15,5 +19,5 @@ export function PageAccessGate({ permissions, currency, children }: { permission
       {home && <Link className="mt-3 inline-block underline" href={home}>{locale === 'ar' ? 'الانتقال إلى صفحة مسموحة' : locale === 'id' ? 'Buka halaman yang diizinkan' : 'Open an allowed page'}</Link>}
     </div>;
   }
-  return <StoreCurrencyContext.Provider value={currency}>{children}</StoreCurrencyContext.Provider>;
+  return <PermissionsContext.Provider value={permissions}><StoreCurrencyContext.Provider value={currency}>{children}</StoreCurrencyContext.Provider></PermissionsContext.Provider>;
 }

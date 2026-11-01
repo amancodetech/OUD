@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 import { useUiText } from '@/i18n/interface-text';
 import { todayInStore } from '@/domain/period';
 
@@ -91,7 +92,7 @@ export default function NewReturnPage() {
       setInvoices([]);
       try {
         const pType = returnType === 'SALE_RETURN' ? 'CLIENT' : 'SUPPLIER';
-        const res = await fetch(`/api/parties?type=${pType}`);
+        const res = await apiFetch(`/api/parties?type=${pType}`);
         const json = await res.json();
         const list = Array.isArray(json) ? json : json.data || [];
         setParties(list);
@@ -121,12 +122,12 @@ export default function NewReturnPage() {
       setSourceLines([]);
       try {
         if (returnType === 'SALE_RETURN') {
-          const res = await fetch(`/api/returns/source-invoices?type=SALE_RETURN&partyId=${encodeURIComponent(partyId)}`);
+          const res = await apiFetch(`/api/returns/source-invoices?type=SALE_RETURN&partyId=${encodeURIComponent(partyId)}`);
           const json = await res.json();
           const list = Array.isArray(json) ? json : json.data || [];
           setInvoices(list);
         } else {
-          const res = await fetch(`/api/returns/source-invoices?type=PURCHASE_RETURN&partyId=${encodeURIComponent(partyId)}`);
+          const res = await apiFetch(`/api/returns/source-invoices?type=PURCHASE_RETURN&partyId=${encodeURIComponent(partyId)}`);
           const json = await res.json();
           const list = Array.isArray(json) ? json : json.data || [];
           setInvoices(list);
@@ -152,7 +153,7 @@ export default function NewReturnPage() {
       setLoadingLines(true);
       setSelectedLineId('');
       try {
-        const res = await fetch(
+        const res = await apiFetch(
           `/api/returns/source-lines?invoiceKey=${encodeURIComponent(
             selectedInvoiceKey
           )}&type=${returnType}&partyId=${encodeURIComponent(partyId)}`
@@ -250,7 +251,7 @@ export default function NewReturnPage() {
         }
       }
 
-      const res = await fetch('/api/returns', {
+      const res = await apiFetch('/api/returns', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Idempotency-Key': operationKey },
         body: JSON.stringify(payload),

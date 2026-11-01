@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 import { useUiText } from '@/i18n/interface-text';
 import { todayInStore } from '@/domain/period';
 import { toDecimal, roundMoney, zero, formatInvoiceNumber } from '@/domain/decimal';
@@ -80,8 +81,8 @@ export default function NewPurchasePage() {
   const loadDependencies = async () => {
     try {
       const [supRes, itmRes] = await Promise.all([
-        fetch('/api/parties?type=SUPPLIER'),
-        fetch('/api/items'),
+        apiFetch('/api/parties?type=SUPPLIER'),
+        apiFetch('/api/items?lookup=true'),
       ]);
       const supData = await supRes.json();
       const itmData = await itmRes.json();
@@ -184,7 +185,7 @@ export default function NewPurchasePage() {
         paymentAccount: payNow ? paymentAccount : null,
       };
 
-      const res = await fetch('/api/purchases', {
+      const res = await apiFetch('/api/purchases', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Idempotency-Key': operationKey },
         body: JSON.stringify(payload),

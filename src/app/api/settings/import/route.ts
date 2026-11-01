@@ -1,3 +1,4 @@
+import { prisma } from '@/lib/db';
 import { withApiGuard } from '@/lib/api-guard';
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth';
@@ -24,18 +25,26 @@ async function handlePOST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const preview = await previewExcelWorkbook(buffer);
+    const { workerRuntime } = await import('@/lib/request-runtime.mjs');
+    if (workerRuntime()) {
+      const { submitJob } = await import('@/services/background-jobs.service');
+      return submitJob(req, session.id, formData.get('mode') === 'apply' ? 'IMPORT_APPLY' : 'IMPORT_PREVIEW', { fileHash: String(formData.get('fileHash') || ''), databaseRevision: String(formData.get('databaseRevision') || '') }, buffer);
+    }
+    const state = await prisma.dataRevision.findUniqueOrThrow({ where: { id: 1 } });
+    const revision = `${state.generation}:${state.revision}`;
+    const preview = { ...await previewExcelWorkbook(buffer), databaseRevision: revision };
     if (formData.get('mode') !== 'apply') return NextResponse.json(preview);
+    if (formData.get('databaseRevision') !== revision) return NextResponse.json({ error: 'تغيرت البيانات؛ أعد المعاينة قبل الاستيراد', code: 'VERSION_CONFLICT' }, { status: 409 });
     if (formData.get('fileHash') !== preview.fileHash) return NextResponse.json({ error: 'تغير الملف؛ أعد المعاينة' }, { status: 409 });
 
     const result = await importExcelWorkbook(buffer, session.id);
 
     return NextResponse.json(result);
   } catch (err: any) {
-    console.error('Import error:', err);
+    console.error('Import failed', err instanceof Error ? err.name : 'Error');
     return NextResponse.json(
       { error: err.message || 'حدث خطأ أثناء استيراد ملف Excel' },
-      { status: 400 }
+      { status: 503 }
     );
   }
 }

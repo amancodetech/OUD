@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 import { todayInStore } from '@/domain/period';
 
 import React, { useState, useEffect } from 'react';
@@ -47,8 +48,8 @@ export default function DriverGiftDeliveryPage() {
     async function loadData() {
       try {
         const [drvRes, itmRes] = await Promise.all([
-          fetch('/api/parties?type=DRIVER'),
-          fetch('/api/items'),
+          apiFetch('/api/parties?type=DRIVER'),
+          apiFetch('/api/items?lookup=true'),
         ]);
         const drvData = await drvRes.json();
         const itmData = await itmRes.json();
@@ -70,7 +71,7 @@ export default function DriverGiftDeliveryPage() {
 
     if (newId) {
       try {
-        const res = await fetch(`/api/sales/stock-check?itemId=${newId}&date=${invoiceDate}`);
+        const res = await apiFetch(`/api/sales/stock-check?itemId=${newId}&date=${invoiceDate}`);
         const data = await res.json();
         if (res.ok) setAvailableStock(data.availableQty);
       } catch (e) {
@@ -100,7 +101,7 @@ export default function DriverGiftDeliveryPage() {
 
     setSaving(true);
     try {
-      const res = await fetch('/api/sales/driver-gift', {
+      const res = await apiFetch('/api/sales/driver-gift', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Idempotency-Key': operationKey },
         body: JSON.stringify({

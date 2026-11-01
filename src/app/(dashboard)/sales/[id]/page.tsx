@@ -1,4 +1,7 @@
 'use client';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { useApiQuery } from '@/lib/use-api-query';
+import { apiFetch } from '@/lib/client-api';
 import { useParams } from 'next/navigation';
 import { todayInStore } from '@/domain/period';
 
@@ -22,8 +25,9 @@ import { MoneyInput } from '@/components/forms/MoneyInput';
 export default function SaleDetailPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
-  const [invoice, setInvoice] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const query = useApiQuery<any>(`/api/sales/${params.id}`);
+  const invoice = query.data;
+  const loading = query.isLoading;
 
   // Collection modal state
   const [collectModalOpen, setCollectModalOpen] = useState(false);
@@ -39,26 +43,7 @@ export default function SaleDetailPage() {
   const [voiding, setVoiding] = useState(false);
   const [voidError, setVoidError] = useState('');
 
-  const loadInvoice = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/sales/${params.id}`);
-      const data = await res.json();
-      if (res.ok) {
-        setInvoice(data);
-        setCollectAmount(data.invoiceDebt > 0 ? data.invoiceDebt : 0);
-        setCollectNotes(`تحصيل دفعة من فاتورة ${data.invoiceKey}`);
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadInvoice();
-  }, [params.id]);
+  const loadInvoice = () => query.mutate();
 
   const submitCollection = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,7 +55,7 @@ export default function SaleDetailPage() {
     setSubmittingCollect(true);
     setCollectError('');
     try {
-      const res = await fetch('/api/cash', {
+      const res = await apiFetch('/api/cash', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -105,7 +90,7 @@ export default function SaleDetailPage() {
     setVoiding(true);
     setVoidError('');
     try {
-      const res = await fetch(`/api/sales/${params.id}/void`, {
+      const res = await apiFetch(`/api/sales/${params.id}/void`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: voidReason }),
@@ -122,6 +107,7 @@ export default function SaleDetailPage() {
     }
   };
 
+  if (query.error && !invoice) return <QueryStatus query={query} />;
   if (loading) {
     return (
       <div className="p-12 text-center text-slate-400 text-sm">
@@ -142,6 +128,7 @@ export default function SaleDetailPage() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
+      <QueryStatus query={query} />
       {/* Top Header */}
       <div className="flex items-center justify-between bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
         <div className="flex items-center gap-3">
@@ -192,7 +179,7 @@ export default function SaleDetailPage() {
               {!isDriverGift && invoice.invoiceDebt > 0 && (
                 <button
                   type="button"
-                  onClick={() => setCollectModalOpen(true)}
+                  onClick={() => { setCollectAmount(invoice.invoiceDebt > 0 ? invoice.invoiceDebt : 0); setCollectNotes(`تحصيل دفعة من فاتورة ${invoice.invoiceKey}`); setCollectModalOpen(true); }}
                   className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm"
                 >
                   <DollarSign className="w-4 h-4" />

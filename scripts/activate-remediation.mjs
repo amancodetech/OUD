@@ -12,7 +12,7 @@ if(keepSessionSecret&&(!settings.SESSION_SECRET||settings.SESSION_SECRET.length<
 const url=new URL(settings.DATABASE_URL);
 if(url.pathname!=='/oud_erp'||!['localhost','127.0.0.1'].includes(url.hostname))throw new Error('Unexpected activation target');
 process.env.DATABASE_URL=settings.DATABASE_URL;
-const {PrismaClient}=await import('@prisma/client');const bcrypt=(await import('bcryptjs')).default;
+const {PrismaClient}=await import('../src/lib/prisma-client.mjs');const bcrypt=(await import('bcryptjs')).default;
 const db=new PrismaClient({datasources:{db:{url:settings.DATABASE_URL}}});
 const core=['User','AuditLog','SystemSetting','ItemCategory','UnitOption','Item','Party','FixedAsset','GiftPolicy','PurchaseInvoice','PurchaseLine','SaleInvoice','SaleLine','CashTransaction','ReturnLine','StockIssue','ProductionBatch','BatchMaterial','DriverReferral'];
 async function run(command,args,env=process.env,accepted=[0]){return new Promise((resolve,reject)=>{const child=spawn(command,args,{env,stdio:['ignore','pipe','pipe']});let out='';child.stdout.on('data',v=>out+=v);child.stderr.on('data',v=>out+=v);child.on('error',reject);child.on('close',code=>accepted.includes(code)?resolve({code,out}):reject(new Error(`${command} failed (${code}); inspect activation log`)));});}
@@ -30,7 +30,7 @@ async function snapshot(){return db.$transaction(async tx=>{
 
 let folder;
 try{
- const actual=await db.$queryRaw`SELECT current_database() AS name`;if(actual[0].name!=='oud_erp')throw new Error('Actual database mismatch');
+ const actual=await db.$queryRaw`SELECT current_database()::text AS name`;if(actual[0].name!=='oud_erp')throw new Error('Actual database mismatch');
  const before=await snapshot();
  const administrators=await db.$queryRaw`SELECT id, username, "passwordHash", "updatedAt" FROM "User" WHERE role='ADMIN' AND "isActive"=true`;
  const weak=[];for(const u of administrators)if(await bcrypt.compare('admin123',u.passwordHash))weak.push(u);

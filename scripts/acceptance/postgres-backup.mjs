@@ -2,7 +2,8 @@ import { spawn } from 'node:child_process';
 import { createReadStream } from 'node:fs';
 import { mkdir, writeFile, readdir, stat, utimes, readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { PrismaClient, Prisma } from '@prisma/client';
+import {Prisma} from '@prisma/client';
+import { PrismaClient } from '../../src/lib/prisma-client.mjs';
 import assert from 'node:assert/strict';
 import { db, content, save, identity, login, request } from './common.mjs';
 const container = process.argv[2];
@@ -40,7 +41,7 @@ try {
   assert.equal(createHash('sha256').update(await readFile(dump)).digest('hex'),metadata.sha256);
   await run('docker',['exec',container,'psql','-U','postgres','-d','postgres','-c',`CREATE DATABASE "${restored}"`]);created=true;
   await run('docker',['exec','-i',container,'pg_restore','--single-transaction','--no-owner','--no-acl','-U','postgres','-d',restored],process.env,dump);
-  assert.equal((await copy.$queryRaw`SELECT current_database() AS name`)[0].name,restored);
+  assert.equal((await copy.$queryRaw`SELECT current_database()::text AS name`)[0].name,restored);
   const tableHashes={};
   for(const model of Prisma.dmmf.datamodel.models){const key=model.name[0].toLowerCase()+model.name.slice(1);const rows=JSON.parse(JSON.stringify(await copy[key].findMany())).sort((a,b)=>String(a.id??a.name??a.key).localeCompare(String(b.id??b.name??b.key)));assert.deepEqual(rows,before[key],key);tableHashes[key]={count:rows.length,sha256:createHash('sha256').update(JSON.stringify(rows)).digest('hex')};}
   const migrationRows=await db.$queryRawUnsafe('SELECT * FROM "_prisma_migrations" ORDER BY id');

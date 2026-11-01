@@ -1,4 +1,6 @@
 'use client';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { useApiQuery } from '@/lib/use-api-query';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -66,49 +68,21 @@ export default function PartyStatementPage() {
   const params = useParams();
   const partyId = params.id as string;
 
-  const [party, setParty] = useState<PartyInfo | null>(null);
-  const [statementLines, setStatementLines] = useState<StatementLine[]>([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [totalDebit, setTotalDebit] = useState(0);
-  const [totalCredit, setTotalCredit] = useState(0);
-  const [finalBalance, setFinalBalance] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchStatement = async (start?: string, end?: string) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const urlParams = new URLSearchParams();
-      if (start) urlParams.set('startDate', start);
-      if (end) urlParams.set('endDate', end);
-
-      const res = await fetch(`/api/parties/${partyId}/statement?${urlParams.toString()}`);
-      if (!res.ok) {
-        const errJson = await res.json();
-        throw new Error(errJson.error || 'تعذر تحميل كشف الحساب');
-      }
-      const data = await res.json();
-      setParty(data.party);
-      setStatementLines(data.statementLines);
-      setStartDate(data.startDate);
-      setEndDate(data.endDate);
-      setTotalDebit(data.totalDebit);
-      setTotalCredit(data.totalCredit);
-      setFinalBalance(data.finalBalance);
-    } catch (err: any) {
-      setError(err.message || 'حدث خطأ أثناء تحميل كشف الحساب');
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  const [applied, setApplied] = useState('');
+  const query = useApiQuery<{ party: PartyInfo; statementLines: StatementLine[]; startDate: string; endDate: string; totalDebit: number; totalCredit: number; finalBalance: number }>(partyId ? `/api/parties/${partyId}/statement?${applied}` : null);
+  const party = query.data?.party;
+  const statementLines = query.data?.statementLines || [];
+  const totalDebit = query.data?.totalDebit || 0;
+  const totalCredit = query.data?.totalCredit || 0;
+  const finalBalance = query.data?.finalBalance || 0;
+  const loading = query.isLoading;
+  const error = query.error?.message || null;
+  const fetchStatement = (start = '', end = '') => setApplied(new URLSearchParams({ ...(start ? { startDate: start } : {}), ...(end ? { endDate: end } : {}) }).toString());
   useEffect(() => {
-    if (partyId) {
-      fetchStatement();
-    }
-  }, [partyId]);
+    if (!applied && query.data) { setStartDate(query.data.startDate); setEndDate(query.data.endDate); }
+  }, [applied, query.data?.startDate, query.data?.endDate]);
 
   const handleFilterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -138,6 +112,7 @@ export default function PartyStatementPage() {
 
   return (
     <div className="space-y-6">
+      <QueryStatus query={query} />
       {/* Top Action Bar (Hidden when printing) */}
       <div className="print:hidden flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
         <div className="flex items-center gap-3">

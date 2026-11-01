@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 import { todayInStore } from '@/domain/period';
 
 import React, { useState, useEffect } from 'react';
@@ -77,7 +78,7 @@ export function DailyClosingChecklistModal({ isOpen, onClose }: DailyClosingChec
   const loadClosingData = async (dateStr: string) => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/reports/daily-closing?date=${dateStr}`);
+      const res = await apiFetch(`/api/reports/daily-closing?date=${dateStr}`);
       const json = await res.json();
       setData(json);
     } catch (e) {

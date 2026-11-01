@@ -1,5 +1,5 @@
 import { beforeAll, afterAll, it, expect } from 'vitest';
-import { prisma } from '@/lib/db';
+import { prisma, withReadSnapshot } from '@/lib/db';
 import { assertTestDatabase } from '@/lib/test-database';
 import { loadAllLedgerData, loadCostingEngine, loadDashboardReportsEngine, loadReportsEngine } from '@/services/ledger-loader';
 import { computeCostingEngine } from '@/domain/costing-engine';
@@ -23,6 +23,21 @@ afterAll(async()=>{
  await prisma.returnLine.deleteMany({where:{partyId:{in:[customer.id,supplier.id]}}});await prisma.cashTransaction.deleteMany({where:{partyId:customer.id}});
  await prisma.saleInvoice.deleteMany({where:{customerId:customer.id}});await prisma.purchaseInvoice.deleteMany({where:{supplierId:supplier.id}});
  await prisma.item.delete({where:{id:item.id}});await prisma.party.deleteMany({where:{id:{in:[customer.id,supplier.id]}}});
+});
+it('batched costing reads preserve exact decimals and UTC dates in a non-UTC process',async()=>{
+ const record=await prisma.item.create({data:{code:prefix+'JSON',name:prefix+'JSON',categoryId:item.categoryId,unitId:item.unitId,openingQty:'0.0001',openingValue:'900719925474.0993'}});
+ const previousTimezone=process.env.TZ;process.env.TZ='Asia/Makassar';
+ try {
+  await withReadSnapshot(async()=>{
+   const full=await loadAllLedgerData(),compact=await loadAllLedgerData(undefined,undefined,true);
+   expect(compact.items.find(i=>i.id===record.id)?.openingValue.toString()).toBe('900719925474.0993');
+   expect(compact.items.find(i=>i.id===record.id)?.openingQty.toString()).toBe('0.0001');
+   const normalize=(values:any[])=>values.map(row=>JSON.parse(JSON.stringify(row))).sort((a,b)=>String(a.id??a.name).localeCompare(String(b.id??b.name)));
+   for(const key of ['items','parties','assets','policies','returns','stockIssues','batches','cashTransactions','referrals','categories'] as const)expect(normalize(compact[key]),key).toEqual(normalize(full[key]));
+   expect(compact.systemSetting).toEqual(full.systemSetting);
+   for(const row of compact.sales)expect(row.invoiceDate).toMatch(/^2026-\d{2}-\d{2}$/);
+  });
+ }finally{if(previousTimezone===undefined)delete process.env.TZ;else process.env.TZ=previousTimezone;await prisma.item.delete({where:{id:record.id}});}
 });
 it.each(['2026-09-30','2026-10-02','2026-10-31','2026-11-30'])('summary projection matches the uncompressed reference at %s without netting debt and credit invoices',async end=>{
  const data=await loadAllLedgerData();const reference=computeBalancesEngine({...data,asOfDate:end});const summary=await reportBalanceSummary(data,end);

@@ -1,4 +1,8 @@
 'use client';
+import { useApiQuery } from '@/lib/use-api-query';
+import { queryKeys } from '@/lib/query-keys';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { apiFetch } from '@/lib/client-api';
 import { todayInStore } from '@/domain/period';
 
 import React, { useState, useEffect } from 'react';
@@ -69,11 +73,6 @@ interface InvoiceAgingItem {
 export default function DebtsReportPage() {
   const { t, locale, isRtl, tPartyType, tAging, tInvoiceKey } = useI18n();
 
-  const [partySummaries, setPartySummaries] = useState<PartySummary[]>([]);
-  const [invoiceItems, setInvoiceItems] = useState<InvoiceAgingItem[]>([]);
-  const [totalClientDebt, setTotalClientDebt] = useState(0);
-  const [totalSupplierDebt, setTotalSupplierDebt] = useState(0);
-  const [loading, setLoading] = useState(true);
 
   // Filters
   const [selectedType, setSelectedType] = useState<string>('ALL'); // ALL | CLIENT | SUPPLIER
@@ -82,34 +81,13 @@ export default function DebtsReportPage() {
   const [asOfDate, setAsOfDate] = useState(todayInStore());
   const [activeTab, setActiveTab] = useState<'PARTIES' | 'INVOICES'>('PARTIES');
 
-  const loadDebtsData = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams();
-      if (selectedType !== 'ALL') params.set('type', selectedType);
-      if (selectedStatus !== 'ALL') params.set('status', selectedStatus);
-      params.set('asOfDate', asOfDate);
-
-      const res = await fetch(`/api/debts?${params.toString()}`);
-      const json = await res.json();
-      if (json.partySummaries) {
-        setPartySummaries(json.partySummaries);
-      }
-      if (json.invoiceItems) {
-        setInvoiceItems(json.invoiceItems);
-      }
-      setTotalClientDebt(json.totalClientDebt || 0);
-      setTotalSupplierDebt(json.totalSupplierDebt || 0);
-    } catch (err) {
-      console.error('Failed to load debts report:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadDebtsData();
-  }, [selectedType, selectedStatus, asOfDate]);
+  const query = useApiQuery<{ partySummaries: PartySummary[]; invoiceItems: InvoiceAgingItem[]; totalClientDebt: number; totalSupplierDebt: number }>(queryKeys.debts(asOfDate, selectedType, selectedStatus));
+  const partySummaries = query.data?.partySummaries || [];
+  const invoiceItems = query.data?.invoiceItems || [];
+  const totalClientDebt = query.data?.totalClientDebt || 0;
+  const totalSupplierDebt = query.data?.totalSupplierDebt || 0;
+  const loading = query.isLoading;
+  const loadDebtsData = () => query.mutate();
 
   // Client-side text filter
   const filteredParties = partySummaries.filter((p) => {
@@ -158,8 +136,11 @@ export default function DebtsReportPage() {
     }
   };
 
+  if (query.error && !query.data) return <QueryStatus query={query} />;
+
   return (
     <div className="space-y-6">
+      <QueryStatus query={query} />
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

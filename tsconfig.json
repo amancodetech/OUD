@@ -37,6 +37,11 @@
     "vitest.config.mts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".open-next",
+    ".worker-dist",
+    "backups",
+    "reports",
+    "tests"
   ]
 }

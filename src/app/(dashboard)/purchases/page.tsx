@@ -1,4 +1,8 @@
 'use client';
+import { useApiQuery } from '@/lib/use-api-query';
+import { queryKeys } from '@/lib/query-keys';
+import { QueryStatus } from '@/components/data/QueryStatus';
+import { apiFetch } from '@/lib/client-api';
 import { todayInStore } from '@/domain/period';
 
 import React, { useState, useEffect } from 'react';
@@ -21,12 +25,9 @@ import { useI18n } from '@/i18n/LanguageContext';
 export default function PurchasesPage() {
   const { t, locale, isRtl, tAging, tInvoiceKey, tUnit, tLocalizedName } = useI18n();
 
-  const [invoices, setInvoices] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'INVOICES' | 'LINES'>('INVOICES');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSupplier, setSelectedSupplier] = useState('');
-  const [suppliers, setSuppliers] = useState<any[]>([]);
 
   // Payment modal state
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
@@ -44,29 +45,12 @@ export default function PurchasesPage() {
   const [voiding, setVoiding] = useState(false);
   const [voidError, setVoidError] = useState('');
 
-  const loadData = async () => {
-    setLoading(true);
-    try {
-      const [invRes, partRes] = await Promise.all([
-        fetch('/api/purchases'),
-        fetch('/api/parties?type=SUPPLIER'),
-      ]);
-      const invData = await invRes.json();
-      const partData = await partRes.json();
-      const invList = Array.isArray(invData) ? invData : invData?.data || [];
-      const supList = Array.isArray(partData) ? partData : partData?.data || [];
-      setInvoices(invList);
-      setSuppliers(supList);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadData();
-  }, []);
+  const query = useApiQuery<any>(queryKeys.purchases);
+  const supplierQuery = useApiQuery<any>(queryKeys.partiesLookup('SUPPLIER'));
+  const invoices: any[] = Array.isArray(query.data) ? query.data : query.data?.data || [];
+  const suppliers: any[] = supplierQuery.data?.data || [];
+  const loading = query.isLoading || supplierQuery.isLoading;
+  const loadData = () => Promise.all([query.mutate(), supplierQuery.mutate()]);
 
   const filteredInvoices = invoices.filter((inv) => {
     if (inv.status === 'VOID') return false;
@@ -109,7 +93,7 @@ export default function PurchasesPage() {
     setSubmittingPay(true);
     setPayError('');
     try {
-      const res = await fetch('/api/cash', {
+      const res = await apiFetch('/api/cash', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -151,7 +135,7 @@ export default function PurchasesPage() {
     setVoiding(true);
     setVoidError('');
     try {
-      const res = await fetch(`/api/purchases/${invoiceToVoid.id}/void`, {
+      const res = await apiFetch(`/api/purchases/${invoiceToVoid.id}/void`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: voidReason }),
@@ -175,8 +159,11 @@ export default function PurchasesPage() {
     return 'bg-amber-100 text-amber-900 border-amber-300 font-bold';
   };
 
+  if (query.error && !query.data) return <QueryStatus query={query} />;
+
   return (
     <div className="space-y-6">
+      <QueryStatus query={query} />
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
         <div>

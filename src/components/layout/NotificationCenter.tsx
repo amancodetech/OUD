@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
@@ -26,7 +27,7 @@ import type {
   NotificationSeverity,
 } from '@/services/notification.service';
 
-const STORAGE_KEY = 'oud_read_notification_ids';
+
 
 export function NotificationCenter() {
   const router = useRouter();
@@ -51,25 +52,10 @@ export function NotificationCenter() {
   const [selectedCategory, setSelectedCategory] = useState<NotificationCategory | 'ALL'>('ALL');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Load read notifications from localStorage
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          setReadIds(new Set(parsed));
-        }
-      }
-    } catch {
-      // ignore localStorage errors
-    }
-  }, []);
-
   const fetchNotifications = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/notifications');
+      const res = await apiFetch('/api/notifications');
       if (res.ok) {
         const json = await res.json();
         if (json.ok && json.data) {
@@ -126,7 +112,6 @@ export function NotificationCenter() {
       const next = new Set(prev);
       next.add(id);
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(next)));
       } catch {}
       return next;
     });
@@ -136,7 +121,6 @@ export function NotificationCenter() {
     const allIds = new Set([...Array.from(readIds), ...notifications.map((n) => n.id)]);
     setReadIds(allIds);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(allIds)));
     } catch {}
   };
 

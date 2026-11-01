@@ -1,21 +1,20 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import fs from 'fs';
-import path from 'path';
+import { fixtureWorkbook } from './fixtures/workbook';
 import * as xlsx from 'xlsx';
 import { prisma } from '../src/lib/db';
 import { importExcelWorkbook } from '../src/services/excel-import.service';
 import { exportDatabase } from '../src/services/backup.service';
 
 describe('Phase 7: Excel Migration, Export, and Verification', () => {
-  const excelFilePath = path.join(process.cwd(), 'oud_system (7).xlsx');
+  const template = fixtureWorkbook();
   let templateItemCodes: string[] = [];
 
   it('should find the standard Excel template file on disk', () => {
-    expect(fs.existsSync(excelFilePath)).toBe(true);
+    expect(template.length).toBeGreaterThan(0);
   });
 
   it('should successfully parse and import all sheets in correct order and run reconciliation', async () => {
-    const fileBuffer = fs.readFileSync(excelFilePath);
+    const fileBuffer = template;
     expect(fileBuffer.length).toBeGreaterThan(0);
 
     const result = await importExcelWorkbook(fileBuffer);
@@ -63,7 +62,7 @@ describe('Phase 7: Excel Migration, Export, and Verification', () => {
   });
 
   it('should import items and transactions from a filled Excel workbook buffer', async () => {
-    const fileBuffer = fs.readFileSync(excelFilePath);
+    const fileBuffer = template;
     const wb = xlsx.read(fileBuffer, { type: 'buffer' });
 
     // Populate sheet الأسماء وبيانات الاتصال with a supplier
@@ -102,7 +101,7 @@ describe('Phase 7: Excel Migration, Export, and Verification', () => {
     expect(importedItem?.name).toBe('صنف إكسل اختباري 88');
   });
   it.each(['purchase-unit','purchase-landed','purchase-discount','purchase-total','sale-price','sale-discount','sale-total'])('rejects %s atomically during Excel import', async kind => {
-    const wb=xlsx.read(fs.readFileSync(excelFilePath),{type:'buffer'});
+    const wb=xlsx.read(template,{type:'buffer'});
     xlsx.utils.sheet_add_aoa(wb.Sheets['الأسماء وبيانات الاتصال'],[['SUP001','مورد نوسانتارا','مورد'],['C088','عميل إكسل للدقة','عميل']],{origin:'A7'});
     xlsx.utils.sheet_add_aoa(wb.Sheets['الأصناف'],[['P088','صنف إكسل اختباري 88','عود طبيعي','جرام','بضاعة',0,20,200000]],{origin:'A6'});
     if(kind.startsWith('purchase'))xlsx.utils.sheet_add_aoa(wb.Sheets['المشتريات'],[['2026-03-01','P-SIGN','SUP001','P088',1,kind==='purchase-unit'?-1:1,kind==='purchase-landed'?-1:0,kind==='purchase-discount'?-1:kind==='purchase-total'?2:0,'2026-03-15','P-SIGN-L']],{origin:'A6'});

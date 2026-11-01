@@ -44,10 +44,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/scripts/create-admin.mjs ./scripts/create-admin.mjs
+COPY --from=builder /app/src/lib/prisma-client.mjs ./src/lib/prisma-client.mjs
 COPY --from=builder /app/scripts/server-entry.mjs ./scripts/server-entry.mjs
 COPY --from=builder /app/scripts/validate-runtime.mjs ./scripts/validate-runtime.mjs
 COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 # Make entrypoint script or chown
 RUN chown -R nextjs:nodejs /app

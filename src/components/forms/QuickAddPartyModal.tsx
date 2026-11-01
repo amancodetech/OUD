@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 
 import React, { useState } from 'react';
 import { PartyType } from '@prisma/client';
@@ -31,7 +32,7 @@ export function QuickAddPartyModal({
     setLoading(true);
 
     try {
-      const res = await fetch('/api/parties', {
+      const res = await apiFetch('/api/parties', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

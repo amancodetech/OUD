@@ -1,4 +1,6 @@
 'use client';
+import { useApiQuery } from '@/lib/use-api-query';
+import { apiFetch } from '@/lib/client-api';
 import { useUiText } from '@/i18n/interface-text';
 
 import React, { useState } from 'react';
@@ -20,6 +22,7 @@ import {
 
 export default function BackupSettingsPage() {
   const ui = useUiText();
+  const jobs = useApiQuery<{ jobs: { id: string; kind: string; status: string; createdAt: string }[] }>('/api/jobs', 5000);
 
   const [downloadingJson, setDownloadingJson] = useState(false);
   const [downloadingExcel, setDownloadingExcel] = useState(false);
@@ -34,7 +37,7 @@ export default function BackupSettingsPage() {
       setError(null);
       setStatusMessage(null);
 
-      const res = await fetch(`/api/backup?format=${format}`);
+      const res = await apiFetch(`/api/backup?format=${format}`);
       if (!res.ok) {
         const json = await res.json();
         throw new Error(json.error || 'فشل تنزيل النسخة');
@@ -89,7 +92,7 @@ export default function BackupSettingsPage() {
       const text = await file.text();
       const parsedJson = JSON.parse(text);
 
-      const res = await fetch('/api/backup', {
+      const res = await apiFetch('/api/backup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ backup: parsedJson, confirmReplace: true, reason: 'استعادة يدوية معتمدة من شاشة النسخ الاحتياطي' }),
@@ -111,6 +114,14 @@ export default function BackupSettingsPage() {
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
+      {!!jobs.data?.jobs.length && <section className="rounded-xl border bg-white p-4 text-sm">
+        <h2 className="font-bold">المهام الأخيرة — يمكنك مراجعتها بعد إعادة فتح الصفحة</h2>
+        <ul className="mt-2 space-y-2">{jobs.data.jobs.map(job => <li key={job.id}>
+          <span>{job.kind} — {job.status} — {new Date(job.createdAt).toLocaleString()}</span>
+          {job.status === 'SUCCEEDED' && <a className="mx-3 underline" href={`/api/jobs/${job.id}?download=true`}>تنزيل النتيجة</a>}
+        </li>)}</ul>
+      </section>}
+
       {/* Header */}
       <div className="flex items-center justify-between bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
         <div className="flex items-center gap-3">

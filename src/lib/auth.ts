@@ -21,12 +21,15 @@ export interface SessionUser {
   displayName: string;
   role: UserRole;
   permissions?: PermissionKey[];
+  cacheScope?: string;
+  cacheExpiresAt?: number;
 }
 
 interface SessionPayload extends SessionUser {
   exp: number;
   version: number;
   generation: string;
+  loginId?: string;
 }
 
 function signPayload(payload: SessionPayload): string {
@@ -75,6 +78,7 @@ export async function createSession(user: SessionUser) {
     exp: Date.now() + SESSION_DURATION_MS,
     version: current.sessionVersion,
     generation: current.sessionGeneration,
+    loginId: crypto.randomUUID(),
   };
   const token = signPayload(payload);
 
@@ -105,7 +109,18 @@ export async function getSession(): Promise<SessionUser | null> {
     displayName: current.displayName,
     role: current.role,
     permissions: resolveUserPermissions(current.role, current.permissions),
+    // Include this specific signed login, so logging in again cannot reopen the
+    // previous login's browser cache, even for the same user and permissions.
+    cacheScope: crypto.createHash('sha256').update(JSON.stringify([cookie.value, current.role, current.permissions])).digest('hex'),
+    cacheExpiresAt: payload.exp,
   };
+}
+
+// HKDF domain separation prevents the browser encryption key from being used as
+// the cookie signing key. Only call after getSession has verified current DB state.
+export function browserCacheKey(session: SessionUser): string {
+  if (!session.cacheScope) throw new Error('UNAUTHORIZED');
+  return Buffer.from(crypto.hkdfSync('sha256', sessionSecret(), session.cacheScope, 'oud/browser-cache/aes-gcm/v1', 32)).toString('base64');
 }
 
 export const getCurrentUser = getSession;

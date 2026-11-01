@@ -1,6 +1,9 @@
 'use client';
+import { useApiQuery } from '@/lib/use-api-query';
+import { queryKeys } from '@/lib/query-keys';
+import { QueryStatus } from '@/components/data/QueryStatus';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   TrendingUp,
@@ -83,37 +86,10 @@ export default function DashboardPage() {
   const { startDate, endDate } = period;
   const rangeError = period.error ? periodCopy[period.error] : '';
 
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const query = useApiQuery<DashboardData>(rangeError ? null : queryKeys.dashboard(startDate, endDate));
+  const { data, error: queryError, isLoading: loading } = query;
+  const error = queryError?.message || '';
   const [closingModalOpen, setClosingModalOpen] = useState(false);
-
-
-  useEffect(() => {
-    const controller = new AbortController();
-    async function loadDashboard() {
-      try {
-        setLoading(true);
-        setError('');
-        if (rangeError) throw new Error(rangeError);
-        const res = await fetch(
-          `/api/reports/dashboard?startDate=${startDate}&endDate=${endDate}`, { signal: controller.signal }
-        );
-        const json = await res.json();
-        if (!res.ok) {
-          throw new Error(json.error || 'فشل تحميل بيانات لوحة المؤشرات');
-        }
-        if (!controller.signal.aborted) setData(json);
-      } catch (err: unknown) {
-        if (controller.signal.aborted) return;
-        setError(err instanceof Error ? err.message : 'حدث خطأ أثناء تحميل التقارير');
-      } finally {
-        if (!controller.signal.aborted) setLoading(false);
-      }
-    }
-    loadDashboard();
-    return () => controller.abort();
-  }, [startDate, endDate, rangeError]);
 
   const header = (
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#E6DDD3] pb-4">
@@ -128,6 +104,7 @@ export default function DashboardPage() {
             {t.dashboard.selectedPeriod || 'الفترة المحاسبية المحددة:'}{' '}
             <span dir="ltr" data-testid="applied-report-range" className="inline-block font-mono font-bold text-[#241112]">{startDate} – {endDate}</span>
           </p>
+          {data && <QueryStatus query={query} />}
           <p className="mt-1.5 max-w-xl text-[11px] leading-5 text-[#6B5648]">{periodCopy.basis}</p>
         </div>
 
@@ -156,11 +133,12 @@ export default function DashboardPage() {
     );
   }
 
-  if (rangeError || error || !data) {
+  if (rangeError || (!data && error) || !data) {
     return (
       <div className="space-y-6">{header}<div role="alert" className="p-6 bg-white border border-[#E6DDD3] rounded-2xl text-[#6E1E24] text-sm">
         <p className="font-bold">{t.common.errorOccurred}:</p>
         <p>{rangeError || error}</p>
+        {!rangeError && queryError && <QueryStatus query={query} />}
       </div></div>
     );
   }

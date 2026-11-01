@@ -21,6 +21,7 @@ async function handleGET() {
       orderBy: { createdAt: 'asc' },
       select: {
         id: true,
+        version: true,
         username: true,
         displayName: true,
         role: true,
@@ -104,6 +105,7 @@ async function handlePOST(req: NextRequest) {
       },
       select: {
         id: true,
+        version: true,
         username: true,
         displayName: true,
         role: true,

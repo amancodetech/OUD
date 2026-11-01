@@ -1,4 +1,5 @@
 'use client';
+import { apiFetch } from '@/lib/client-api';
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -56,7 +57,7 @@ export function Sidebar({
   // Check setup completion status and storeName to keep sidebar dynamically unified
   useEffect(() => {
     const checkStatus = () => {
-      fetch('/api/settings?status=true')
+      apiFetch('/api/settings?status=true')
         .then((res) => res.json())
         .then((res) => {
           if (res.ok && res.data) {
@@ -65,7 +66,7 @@ export function Sidebar({
         })
         .catch(() => {});
 
-      fetch('/api/settings/branding')
+      apiFetch('/api/settings/branding')
         .then((res) => res.json())
         .then((res) => {
           if (res.ok && res.data?.storeName) {
@@ -157,8 +158,12 @@ export function Sidebar({
 
   const handleLogout = async () => {
     if (window.confirm(t.sidebar.logoutConfirm)) {
-      await fetch('/api/auth/logout', { method: 'POST' });
-      window.location.href = '/login';
+      try {
+        const response = await apiFetch('/api/auth/logout', { method: 'POST' });
+        if (response.ok) window.location.href = '/login';
+      } catch {
+        // The session provider hides local data and offers a logout retry.
+      }
     }
   };
 
@@ -182,7 +187,7 @@ export function Sidebar({
             compact ? 'flex-col gap-2.5 justify-center' : 'justify-between'
           }`}
         >
-          <Link href="/" className="flex items-center gap-2.5 min-w-0 group">
+          <Link href="/" prefetch={true} className="flex items-center gap-2.5 min-w-0 group">
             <div className="w-9 h-9 rounded-xl bg-[#6E1E24] shrink-0 flex items-center justify-center border border-[#9A6533]/50 shadow-xs">
               <Flame className="w-4 h-4 text-[#E6B88A]" />
             </div>
@@ -251,6 +256,7 @@ export function Sidebar({
                     <Link
                       key={item.href}
                       href={item.href}
+                      prefetch={true}
                       title={compact ? item.label : undefined}
                       className={`group relative flex items-center ${
                         compact ? 'justify-center px-2 py-2.5' : 'gap-2.5 px-3 py-2'

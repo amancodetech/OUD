@@ -1,5 +1,5 @@
 import {beforeAll,afterAll,it,expect} from 'vitest';
-import {PrismaClient} from '@prisma/client';
+import { PrismaClient } from '../src/lib/prisma-client.mjs';
 import {prisma,withLedgerTransaction,withReadSnapshot} from '@/lib/db';
 import {assertTestDatabase} from '@/lib/test-database';
 import {loadAllLedgerData,loadCostingEngine} from '@/services/ledger-loader';
