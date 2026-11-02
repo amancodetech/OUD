@@ -26,7 +26,7 @@ async function handlePOST(req: NextRequest) {
     const buffer = Buffer.from(bytes);
 
     const { workerRuntime } = await import('@/lib/request-runtime.mjs');
-    if (workerRuntime()) {
+    if (workerRuntime()?.bindings?.JOB_FILES && workerRuntime()?.bindings?.JOBS) {
       const { submitJob } = await import('@/services/background-jobs.service');
       return submitJob(req, session.id, formData.get('mode') === 'apply' ? 'IMPORT_APPLY' : 'IMPORT_PREVIEW', { fileHash: String(formData.get('fileHash') || ''), databaseRevision: String(formData.get('databaseRevision') || '') }, buffer);
     }

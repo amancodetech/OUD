@@ -112,7 +112,8 @@ export function withApiGuard(method: Method, route: string, handler: (...args: a
       let input: any;
       if (!['GET', 'HEAD'].includes(method)) {
         const origin = request.headers.get('origin');
-        const expected = new URL(process.env.APP_URL || request.url).origin;
+        const appUrl = process.env.APP_URL && !process.env.APP_URL.includes('.invalid') ? process.env.APP_URL : undefined;
+        const expected = new URL(appUrl || request.url).origin;
         if (origin && origin !== expected) return NextResponse.json({ error: 'FORBIDDEN' }, { status: 403 });
         const contentType = request.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase();
         if (route === '/api/settings/import') {
@@ -169,7 +170,8 @@ export function withApiGuard(method: Method, route: string, handler: (...args: a
       // Resolve route params once for the handler and target authorization.
       const params = context ? await context.params : undefined;
       const invoke = () => handler(req, context ? { ...context, params } : undefined);
-      const mutates = method !== 'GET' && policy !== 'public' && !route.startsWith('/api/auth/') && !(route === '/api/backup' && workerRuntime()) && !(route === '/api/settings/import' && workerRuntime());
+      const hasBackgroundJobs = Boolean(workerRuntime()?.bindings?.JOB_FILES && workerRuntime()?.bindings?.JOBS);
+      const mutates = method !== 'GET' && policy !== 'public' && !route.startsWith('/api/auth/') && !(route === '/api/backup' && hasBackgroundJobs) && !(route === '/api/settings/import' && hasBackgroundJobs);
       const response = mutates ? await withLedgerTransaction(async () => {
         const currentUser = await getSession();
         if (!currentUser || JSON.stringify([currentUser.id, currentUser.role, currentUser.permissions]) !== JSON.stringify([user?.id, user?.role, user?.permissions])) {

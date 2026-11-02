@@ -18,7 +18,7 @@ async function handleGET(req: NextRequest) {
     const format = searchParams.get('format') || 'json'; // json | excel
 
     const { workerRuntime } = await import('@/lib/request-runtime.mjs');
-    if (workerRuntime()) {
+    if (workerRuntime()?.bindings?.JOB_FILES && workerRuntime()?.bindings?.JOBS) {
       const { submitJob } = await import('@/services/background-jobs.service');
       return submitJob(req, session.id, 'EXPORT', { format });
     }
@@ -38,7 +38,7 @@ async function handlePOST(req: NextRequest) {
   const input = await req.json();
   if (input.confirmReplace !== true) return NextResponse.json({ error: 'تأكيد استبدال البيانات مطلوب' }, { status: 400 });
   const { workerRuntime } = await import('@/lib/request-runtime.mjs');
-  if (workerRuntime()) {
+  if (workerRuntime()?.bindings?.JOB_FILES && workerRuntime()?.bindings?.JOBS) {
     const session = await getSession();
     const { validateBackup } = await import('@/services/backup.service');
     validateBackup(input.backup);
