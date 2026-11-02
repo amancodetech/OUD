@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import application from '../.open-next/worker.js';
 export { DOQueueHandler, DOShardedTagCache } from '../.open-next/worker.js';
 import { executeJob, failJob, cleanupJobs } from '../src/services/background-jobs.service.ts';
@@ -21,11 +22,13 @@ export default {
       }
     }
   },
-  async scheduled(_event, env, ctx) { ctx.waitUntil(jobScope(env, cleanupJobs)); },
+  async scheduled(_event, env, ctx) { if (env.JOB_FILES) ctx.waitUntil(jobScope(env, cleanupJobs)); },
   async fetch(request, env, ctx) {
-    if (!env.HYPERDRIVE?.connectionString || !env.SESSION_SECRET || !env.APP_URL) {
+    if (!env.HYPERDRIVE?.connectionString) {
       return new Response('Service configuration unavailable', { status: 503 });
     }
+    const sessionSecret = env.SESSION_SECRET || crypto.createHash('sha256').update('oud-session-secret:' + env.HYPERDRIVE.connectionString).digest('hex');
+    process.env.SESSION_SECRET = sessionSecret;
     const scope = { connectionString: env.HYPERDRIVE.connectionString, bindings: env, memo: new Map() };
     let closed = false;
     const close = () => {

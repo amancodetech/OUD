@@ -37,12 +37,6 @@
       }
     ]
   },
-  "r2_buckets": [
-    {
-      "binding": "JOB_FILES",
-      "bucket_name": "oud-private-jobs"
-    }
-  ],
   "triggers": {
     "crons": [
       "17 * * * *"
