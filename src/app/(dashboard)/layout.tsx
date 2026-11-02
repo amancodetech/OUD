@@ -13,7 +13,7 @@ import { NotificationCenter } from '@/components/layout/NotificationCenter';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
 import { KeyboardShortcuts } from '@/components/layout/KeyboardShortcuts';
 import { HeaderShortcuts } from '@/components/layout/HeaderShortcuts';
-import { getSession } from '@/lib/auth';
+import { getSession, browserCacheKey } from '@/lib/auth';
 import { getSystemSetting } from '@/services/settings.service';
 import { PageAccessGate } from '@/components/layout/PageAccessGate';
 
@@ -29,7 +29,7 @@ export default async function DashboardLayout({
   const setting = await getSystemSetting();
 
   return (
-    <SessionDataProvider key={session.cacheScope} scope={session.cacheScope!}>
+    <SessionDataProvider key={session.cacheScope} scope={session.cacheScope!} initialKey={browserCacheKey(session)} initialExpiresAt={session.cacheExpiresAt}>
       <RoleBasedPrefetcher role={session.role} permissions={session.permissions} today={todayInStore()} startYear={setting.startYear} />
       <SidebarProvider>
       <KeyboardShortcuts />

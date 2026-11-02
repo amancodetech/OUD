@@ -61,20 +61,21 @@ function SessionMonitor({ scope, expiresAt, children }: { scope: string; expires
       checking = true;
       try {
         const res = await apiFetch('/api/auth/state');
-        if (!res.ok || stopped) { if (!stopped && res.status !== 401) setRefreshFailed(true); return; }
+        if (!res.ok || stopped) { if (!stopped && !navigator.onLine) setRefreshFailed(true); return; }
         const state = await res.json();
         if (state.scope !== scope || (generation !== undefined && state.generation !== generation)) { expire(); return; }
         const revision = `${state.generation}:${state.revision}`;
         if (last !== undefined && last !== revision) invalidateData();
         last = revision; generation = state.generation; setRefreshFailed(false);
-      } catch (error) { if (!stopped && (error as Error)?.name !== 'AbortError') setRefreshFailed(true); }
+      } catch (error) { if (!stopped && !navigator.onLine && (error as Error)?.name !== 'AbortError') setRefreshFailed(true); }
       finally { checking = false; }
     };
     const logout = () => expire();
     const lockEvent = () => lock();
     const committed = () => { channel?.postMessage({ scope, kind: 'changed' }); void check(); };
     const storageError = () => setStorageFailed(true);
-    const refreshError = () => setRefreshFailed(true);
+    const refreshError = () => { if (!navigator.onLine) setRefreshFailed(true); };
+    const refreshSuccess = () => setRefreshFailed(false);
     if (channel) channel.onmessage = event => {
       if (event.data?.scope !== scope) return;
       if (event.data.kind === 'logout') expire(false);
@@ -89,6 +90,7 @@ function SessionMonitor({ scope, expiresAt, children }: { scope: string; expires
     window.addEventListener('oud:committed', committed); window.addEventListener('oud:logout', logout);
     window.addEventListener('oud:cache-locked', lockEvent); window.addEventListener('oud:cache-warning', storageError);
     window.addEventListener('oud:read-refresh-failed', refreshError);
+    window.addEventListener('oud:read-refresh-succeeded', refreshSuccess);
     window.addEventListener('oud:session-expired', logout); window.addEventListener('oud:permissions-check', check);
     void check();
     return () => {
@@ -97,6 +99,7 @@ function SessionMonitor({ scope, expiresAt, children }: { scope: string; expires
       document.removeEventListener('visibilitychange', check);
       window.removeEventListener('oud:logout', logout); window.removeEventListener('oud:cache-locked', lockEvent);
       window.removeEventListener('oud:cache-warning', storageError); window.removeEventListener('oud:read-refresh-failed', refreshError);
+      window.removeEventListener('oud:read-refresh-succeeded', refreshSuccess);
       window.removeEventListener('oud:committed', committed); window.removeEventListener('oud:session-expired', logout); window.removeEventListener('oud:permissions-check', check);
     };
   }, [scope, expiresAt, cache, mutate]);
@@ -105,7 +108,7 @@ function SessionMonitor({ scope, expiresAt, children }: { scope: string; expires
   return <>{offline && <div role="status" className="bg-amber-100 p-2 text-center text-sm">{text.offline}</div>}{storageFailed && <div role="status" className="bg-amber-100 p-2 text-center text-sm">{text.storage}</div>}{refreshFailed && !offline && <div role="status" className="bg-amber-100 p-2 text-center text-sm">{text.refresh}</div>}{children}</>;
 }
 
-export function SessionDataProvider({ scope, children }: { scope: string; children: React.ReactNode }) {
+export function SessionDataProvider({ scope, initialKey, initialExpiresAt, children }: { scope: string; initialKey?: string; initialExpiresAt?: number; children: React.ReactNode }) {
   const [cache] = useState(() => new SessionCache());
   const [state, setState] = useState<{ ready?: number; error?: boolean }>({});
   const [attempt, setAttempt] = useState(0);
@@ -117,6 +120,14 @@ export function SessionDataProvider({ scope, children }: { scope: string; childr
     resetApiSession(scope);
     const bootstrap = async () => {
       try {
+        if (initialKey && initialExpiresAt && Number.isFinite(initialExpiresAt) && initialExpiresAt > Date.now()) {
+          await unlockApiSession(scope, initialKey, initialExpiresAt);
+          if (stopped) return;
+          for (const [key, value] of cachedQueryEntries()) cache.set(key, value);
+          bootstrapped.current = true;
+          setState({ ready: initialExpiresAt });
+          return;
+        }
         const response = await apiFetch('/api/auth/cache');
         if (response.status === 401) { await resetApiSession(); window.location.replace('/login'); return; }
         if (!response.ok) throw new Error('Session verification failed');
@@ -136,7 +147,7 @@ export function SessionDataProvider({ scope, children }: { scope: string; childr
     window.addEventListener('online', retry);
     void bootstrap();
     return () => { stopped = true; window.removeEventListener('online', retry); releaseApiSession(scope); cache.clear(); };
-  }, [scope, cache, attempt]);
+  }, [scope, initialKey, initialExpiresAt, cache, attempt]);
   if (!state.ready) return <div className="p-6 text-center" role="status">{state.error ? text.unavailable : text.checking}{state.error && <button className="mx-2 underline" onClick={() => { setState({}); setAttempt(value => value + 1); }}>{text.retry}</button>}</div>;
   return <SWRConfig value={{ provider: () => cache, dedupingInterval: 2000, revalidateOnFocus: true, revalidateOnReconnect: true, shouldRetryOnError: false, keepPreviousData: false }}><SessionMonitor scope={scope} expiresAt={state.ready}>{children}</SessionMonitor></SWRConfig>;
 }

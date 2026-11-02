@@ -1,5 +1,5 @@
 import {Prisma} from '@prisma/client';
-import { PrismaClient } from './prisma-client.mjs';
+import { PrismaClient, getWorkerPrismaClient } from './prisma-client.mjs';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { testDatabaseUrl } from './test-database';
 import { workerRuntime } from './request-runtime.mjs';
@@ -29,8 +29,7 @@ let nodeClient = globalForPrisma.prisma;
 function clientForRequest(): PrismaClient {
   const runtime = workerRuntime();
   if (runtime) {
-    runtime.client ??= new PrismaClient({ datasources: { db: { url: runtime.connectionString } }, log: ['error'] });
-    return runtime.client as PrismaClient;
+    return getWorkerPrismaClient() as PrismaClient;
   }
   nodeClient ??= new PrismaClient({ log: ['error'] });
   if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = nodeClient;

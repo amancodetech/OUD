@@ -39,14 +39,14 @@ export function RoleBasedPrefetcher({ role, permissions = noPermissions, today =
     let index = 0;
     const schedule = () => {
       if (cancelled || apiSessionScope() !== scope || !scope || index >= urls.length) return;
-      if (window.requestIdleCallback) idle = window.requestIdleCallback(() => { void next(); }, { timeout: 3000 });
-      else timer = setTimeout(() => { void next(); }, 1200);
+      if (window.requestIdleCallback) idle = window.requestIdleCallback(() => { void next(); }, { timeout: 5000 });
+      else timer = setTimeout(() => { void next(); }, 2500);
     };
     const next = async () => {
       if (cancelled || apiSessionScope() !== scope || !navigator.onLine) return;
-      try { await apiFetch(urls[index++], { signal: controller.signal }); }
+      try { await apiFetch(urls[index++], { signal: controller.signal, prefetch: true } as RequestInit); }
       catch { /* The query snapshot carries request failures for the page. */ }
-      if (!cancelled) timer = setTimeout(schedule, 400);
+      if (!cancelled) timer = setTimeout(schedule, 2000);
     };
     window.addEventListener('oud:cache-locked', cancel);
     window.addEventListener('oud:session-expired', cancel);

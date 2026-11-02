@@ -1,6 +1,7 @@
 import { notificationProjections } from './notification-projections';
 import { todayInStore } from '@/domain/period';
 import { getSetupStatus } from './settings.service';
+import { withReadSnapshot } from '@/lib/db';
 import { formatMoney } from '@/domain/decimal';
 import { getMonthIndex } from '@/domain/period';
 
@@ -42,9 +43,9 @@ export type SystemNotificationCounts = NotificationSummary['counts'];
 
 export async function getSystemNotifications(asOfDate?: string): Promise<NotificationSummary> {
   const todayStr = asOfDate || todayInStore();
-  const [{ data: ledgerData, costing, balances, driverResult, reports, limited }, setupStatus] = await Promise.all([
+  const [{ data: ledgerData, costing, balances, driverResult, reports, limited }, setupStatus] = await withReadSnapshot(() => Promise.all([
     notificationProjections(todayStr), getSetupStatus(),
-  ]);
+  ]));
   const startYear = ledgerData.systemSetting.startYear;
 
   const notifications: SystemNotification[] = [];

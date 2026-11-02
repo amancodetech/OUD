@@ -8,7 +8,7 @@ async function jobScope(env, work) {
   const scope = { connectionString: env.HYPERDRIVE.connectionString, bindings: env, memo: new Map() };
   return requestRuntime.run(scope, async () => {
     try { return await work(); }
-    finally { scope.memo.clear(); await scope.client?.$disconnect(); }
+    finally { scope.memo.clear(); await scope.pool?.end().catch(() => {}); await scope.client?.$disconnect(); }
   });
 }
 
@@ -35,6 +35,7 @@ export default {
       if (closed) return;
       closed = true;
       scope.memo.clear();
+      if (scope.pool) ctx.waitUntil(scope.pool.end().catch(() => {}));
       if (scope.client) ctx.waitUntil(scope.client.$disconnect());
     };
     return requestRuntime.run(scope, async () => {

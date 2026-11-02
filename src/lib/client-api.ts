@@ -122,8 +122,13 @@ function refreshRead(input: string, init: RequestInit): Promise<Response> {
         const response = await performApiFetch(input, { ...init, signal: controller.signal });
         if (captured === epoch && !response.ok) {
           const value = await response.clone().json().catch(() => ({}));
-          updateReadSnapshot(input, { error: new Error(value.error || 'تعذر تحميل البيانات') });
-          dispatch('oud:read-refresh-failed');
+          if (!(init as any).prefetch) {
+            updateReadSnapshot(input, { error: new Error(value.error || 'تعذر تحميل البيانات') });
+            dispatch('oud:read-refresh-failed');
+          }
+        } else if (captured === epoch && response.ok) {
+          updateReadSnapshot(input, { error: undefined });
+          dispatch('oud:read-refresh-succeeded');
         }
         return response;
       }
@@ -133,7 +138,7 @@ function refreshRead(input: string, init: RequestInit): Promise<Response> {
   const shared: SharedRead = { promise: work, controller, consumers: new Set() };
   refreshing.set(input, shared);
   void work.catch(error => {
-    if (captured === epoch && error?.name !== 'AbortError') {
+    if (captured === epoch && error?.name !== 'AbortError' && !(init as any).prefetch) {
       updateReadSnapshot(input, { error: error instanceof Error ? error : new Error('تعذر تحميل البيانات') });
       dispatch('oud:read-refresh-failed');
     }
@@ -197,10 +202,23 @@ async function performApiFetch(input: string, init: RequestInit = {}): Promise<R
   const write = mutation && !input.startsWith('/api/auth/') ? new Promise<void>(resolve => { finishWrite = resolve; }) : undefined;
   if (write) pendingWrites.set(write, finishWrite!);
   try {
-    let response = await fetch(input, { ...init, headers, cache: 'no-store', credentials: 'same-origin', signal: controller.signal });
-    // Read the complete response before resolving a financial command. A broken
-    // response stream is ambiguous and must retain the same operation key.
-    let bytes = await response.arrayBuffer();
+    let response!: Response;
+    let bytes!: ArrayBuffer;
+    const maxAttempts = mutation ? 1 : 3;
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        response = await fetch(input, { ...init, headers, cache: 'no-store', credentials: 'same-origin', signal: controller.signal });
+        bytes = await response.arrayBuffer();
+        if (attempt < maxAttempts && [502, 503, 504].includes(response.status) && !controller.signal.aborted) {
+          await new Promise(resolve => setTimeout(resolve, attempt * 400));
+          continue;
+        }
+        break;
+      } catch (err) {
+        if (attempt >= maxAttempts || controller.signal.aborted || (err instanceof Error && err.name === 'AbortError')) throw err;
+        await new Promise(resolve => setTimeout(resolve, attempt * 400));
+      }
+    }
     if (captured !== epoch || controller.signal.aborted) throw new DOMException('Session changed', 'AbortError');
     if (canCacheRead && pendingWrites.size) await settleWrites();
     if (captured !== epoch || controller.signal.aborted) throw new DOMException('Session changed', 'AbortError');
