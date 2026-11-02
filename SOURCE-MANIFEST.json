@@ -317,11 +317,11 @@
   },
   {
     "file": "src/app/api/users/[id]/route.ts",
-    "sha256": "5e079db50c7ee40ea273a71f7d5d2cf61494a63f77b30ba33e2980710316dc0e"
+    "sha256": "d2b2bdd096aca88c11753c30940bbf7ff10418d7570df24952d4894c6cd71c20"
   },
   {
     "file": "src/app/api/users/route.ts",
-    "sha256": "ea004be39a0c50ee3010d27ad4fff18e35f5307bf5624a343799c7220357e828"
+    "sha256": "59a0167c4f101137745ed87b4d9c5d3d0592e0d4ab259b068e43d7d7e4cc5731"
   },
   {
     "file": "src/app/cairo.css",
@@ -337,7 +337,7 @@
   },
   {
     "file": "src/app/login/page.tsx",
-    "sha256": "d29988a3f530bb3d6ce363f4038d82f5fe9037824ac8824d78321c91f2ba9317"
+    "sha256": "1690c66d5be1964eb522d9e678948275ec7ddea592ee3fe978847d35fd1af2bd"
   },
   {
     "file": "src/app/setup/page.tsx",
@@ -509,7 +509,7 @@
   },
   {
     "file": "src/lib/auth.ts",
-    "sha256": "65775da288b691769e0a6788a4b1240c5d0a9cdef17b370984dd6327afb4ec73"
+    "sha256": "6d77ce8cbb19150cd26cd2510bfc53fa6013371967c97099fe048ad2b7654b90"
   },
   {
     "file": "src/lib/client-api.ts",

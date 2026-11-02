@@ -1,6 +1,6 @@
 import { withApiGuard } from '@/lib/api-guard';
 import { NextRequest, NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
+import { hashPassword } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { logAudit } from '@/services/audit.service';
@@ -72,7 +72,7 @@ async function handlePATCH(
           { status: 400 }
         );
       }
-      updateData.passwordHash = await bcrypt.hash(pwd, 10);
+      updateData.passwordHash = await hashPassword(pwd);
     }
 
     const updated = await prisma.user.update({

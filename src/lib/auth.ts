@@ -130,16 +130,64 @@ export async function destroySession() {
   cookieStore.delete(SESSION_COOKIE_NAME);
 }
 
+export async function hashPassword(password: string): Promise<string> {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(password),
+    'PBKDF2',
+    false,
+    ['deriveBits']
+  );
+  const derived = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', salt, iterations: 10000, hash: 'SHA-256' },
+    key,
+    256
+  );
+  return `pbkdf2:sha256:10000:${Buffer.from(salt).toString('hex')}:${Buffer.from(derived).toString('hex')}`;
+}
+
+export async function verifyPassword(password: string, hash: string): Promise<boolean> {
+  if (hash.startsWith('pbkdf2:sha256:')) {
+    const parts = hash.split(':');
+    const iterations = parseInt(parts[2], 10);
+    const salt = Buffer.from(parts[3], 'hex');
+    const key = await crypto.subtle.importKey(
+      'raw',
+      new TextEncoder().encode(password),
+      'PBKDF2',
+      false,
+      ['deriveBits']
+    );
+    const derived = await crypto.subtle.deriveBits(
+      { name: 'PBKDF2', salt, iterations, hash: 'SHA-256' },
+      key,
+      256
+    );
+    const expected = Buffer.from(parts[4], 'hex');
+    const actual = Buffer.from(derived);
+    return actual.length === expected.length && crypto.timingSafeEqual(actual, expected);
+  }
+  return bcrypt.compare(password, hash);
+}
+
 export async function authenticateUser(
   username: string,
   password: string
 ): Promise<SessionUser | null> {
-  const user = await prisma.user.findUnique({
-    where: { username },
+  const normalized = username.trim();
+  const lower = normalized.toLowerCase();
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { username: normalized },
+        { username: lower },
+      ],
+    },
   });
   if (!user || !user.isActive) return null;
 
-  const matches = await bcrypt.compare(password, user.passwordHash);
+  const matches = await verifyPassword(password, user.passwordHash);
   if (!matches) return null;
 
   return {

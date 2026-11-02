@@ -1,6 +1,6 @@
 import { withApiGuard } from '@/lib/api-guard';
 import { NextRequest, NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
+import { hashPassword } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { logAudit } from '@/services/audit.service';
@@ -92,7 +92,7 @@ async function handlePOST(req: NextRequest) {
       );
     }
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await hashPassword(password);
 
     const created = await prisma.user.create({
       data: {

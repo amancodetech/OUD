@@ -26,9 +26,14 @@ export default function LoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
-      const data = await res.json();
+      let data: any = null;
+      try {
+        data = await res.json();
+      } catch {
+        // Fallback if response is not JSON
+      }
       if (!res.ok) {
-        throw new Error(data.error || t.auth.invalidCredentials);
+        throw new Error(data?.error || t.auth.invalidCredentials);
       }
       router.push('/');
       router.refresh();
