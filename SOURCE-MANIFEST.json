@@ -865,7 +865,7 @@
   },
   {
     "file": "scripts/check-cloudflare-config.mjs",
-    "sha256": "21144009f9f0702ec71dfb5debd666780614c26829b4e99d1355bc4f2fb08db2"
+    "sha256": "504c94799234a30eca94dd83565838f0f7f989f73aa45f8d61d611d74c5806b0"
   },
   {
     "file": "scripts/clean-test-data.ts",
@@ -921,7 +921,7 @@
   },
   {
     "file": "scripts/worker-smoke.mjs",
-    "sha256": "29edd9d25ee703bd0101ca0d657fe1861a8355d2120e98829dfa252c6c546dd7"
+    "sha256": "9d636dbdc772e91b1c4ea530e5a8b6955d6d7fff8b4605db71c03a7329257acb"
   },
   {
     "file": "tests/acceptance-boundaries.test.ts",
@@ -1097,7 +1097,7 @@
   },
   {
     "file": "wrangler.jsonc",
-    "sha256": "4e77a77284a3b66db5811ed144b1be80a9d9beaf9ae995ecf29142eabfb786de"
+    "sha256": "97dd5c85edf40549ca0da7d24b92fd9fba7826356e7304152c788e9b5fc17e2a"
   },
   {
     "file": "Dockerfile",

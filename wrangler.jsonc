@@ -2,6 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "oud",
   "main": "cloudflare/worker.mjs",
+  "minify": true,
   "compatibility_date": "2026-10-29",
   "compatibility_flags": [
     "nodejs_compat"
@@ -20,31 +21,6 @@
       "localConnectionString": "postgresql://postgres:postgres@127.0.0.1:5432/postgres"
     }
   ],
-  "queues": {
-    "producers": [
-      {
-        "binding": "JOBS",
-        "queue": "oud-jobs"
-      }
-    ],
-    "consumers": [
-      {
-        "queue": "oud-jobs",
-        "max_batch_size": 1,
-        "max_batch_timeout": 1,
-        "max_retries": 3,
-        "max_concurrency": 1
-      }
-    ]
-  },
-  "triggers": {
-    "crons": [
-      "17 * * * *"
-    ]
-  },
-  "limits": {
-    "cpu_ms": 300000
-  },
   "vars": {
     "APP_URL": "https://configure-your-domain.invalid"
   }

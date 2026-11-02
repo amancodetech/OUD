@@ -25,6 +25,10 @@ const config = JSON.parse(await readFile('wrangler.jsonc', 'utf8'));
 config.main = resolve(config.main); config.assets.directory = resolve(config.assets.directory);
 config.vars = { APP_URL: base, SESSION_SECRET: crypto.randomBytes(32).toString('hex') };
 config.hyperdrive[0].localConnectionString = url.href;
+config.queues = {
+  producers: [{ binding: 'JOBS', queue: 'oud-jobs' }],
+  consumers: [{ queue: 'oud-jobs', max_batch_size: 1, max_batch_timeout: 1, max_retries: 3, max_concurrency: 1 }],
+};
 config.r2_buckets = [{ binding: 'JOB_FILES', bucket_name: 'oud-private-jobs' }];
 config.observability = { enabled: false };
 config.triggers = {};
