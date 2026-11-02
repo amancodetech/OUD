@@ -13,5 +13,10 @@ export async function consumeLoginAttempt(username: string): Promise<boolean> {
       "count" = CASE WHEN "LoginAttempt"."expiresAt" < ${now} THEN 1 ELSE "LoginAttempt"."count" + 1 END,
       "expiresAt" = CASE WHEN "LoginAttempt"."expiresAt" < ${now} THEN ${expires} ELSE "LoginAttempt"."expiresAt" END
     RETURNING "count"`;
-  return result[0].count <= 10;
+  return result[0].count <= 100;
+}
+
+export async function clearLoginAttempt(username: string): Promise<void> {
+  const key = crypto.createHash('sha256').update(username.trim().toLowerCase()).digest('hex');
+  await prisma.$executeRaw`DELETE FROM "LoginAttempt" WHERE "key" = ${key}`;
 }

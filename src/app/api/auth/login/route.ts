@@ -1,7 +1,7 @@
 import { withApiGuard } from '@/lib/api-guard';
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticateUser, createSession } from '@/lib/auth';
-import { consumeLoginAttempt } from '@/lib/login-limit';
+import { consumeLoginAttempt, clearLoginAttempt } from '@/lib/login-limit';
 
 async function handlePOST(req: NextRequest) {
   try {
@@ -22,6 +22,7 @@ async function handlePOST(req: NextRequest) {
       );
     }
 
+    await clearLoginAttempt(username).catch(() => {});
     await createSession(user);
     return NextResponse.json({ ok: true, data: user });
   } catch (err: unknown) {
