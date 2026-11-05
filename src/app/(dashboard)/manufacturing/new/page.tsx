@@ -193,7 +193,10 @@ export default function NewManufacturingBatchPage() {
         throw new Error(resData.error || 'فشل حفظ دفعة التصنيع');
       }
 
+      // Revalidate manufacturing data immediately so it shows up on the website without delay
+      void apiFetch('/api/manufacturing', { cache: 'reload' });
       router.push('/manufacturing');
+      router.refresh();
     } catch (err: any) {
       setError(err.message || 'حدث خطأ غير متوقع أثناء حفظ الدفعة');
     } finally {

@@ -194,7 +194,10 @@ export default function NewPurchasePage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'فشل حفظ الفاتورة');
 
+      // Refresh data immediately so the new invoice appears on the website without delay
+      void apiFetch('/api/purchases', { cache: 'reload' });
       router.push('/purchases');
+      router.refresh();
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -255,6 +258,8 @@ export default function NewPurchasePage() {
                 options={suppliers.map((s) => ({
                   value: s.id,
                   label: `${s.code} | ${tLocalizedName(s, locale)}`,
+                  code: s.code,
+                  name: tLocalizedName(s, locale),
                   hint: s.phone ? `هاتف: ${s.phone}` : undefined,
                 }))}
                 value={supplierId}
@@ -314,7 +319,7 @@ export default function NewPurchasePage() {
         </div>
 
         {/* Lines Table Box */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
           <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
             <h2 className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
               <Layers className="w-4 h-4 text-amber-600" />
@@ -333,7 +338,7 @@ export default function NewPurchasePage() {
               <thead className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
                 <tr>
                   <th className="p-3 w-8 text-center">#</th>
-                  <th className="p-3 min-w-[200px]">{ui("الصنف*")}</th>
+                  <th className="p-3 min-w-[320px] lg:min-w-[360px]">{ui("الصنف*")}</th>
                   <th className="p-3 min-w-[130px]">{ui("الكمية*")}</th>
                   <th className="p-3 min-w-[140px]">{ui("تكلفة الوحدة (IDR)*")}</th>
                   <th className="p-3 min-w-[130px]">{ui("تكلفة الوصول")}</th>
@@ -355,6 +360,8 @@ export default function NewPurchasePage() {
                           options={items.map((i) => ({
                             value: i.id,
                             label: `${i.code} | ${tLocalizedName(i, locale)}`,
+                            code: i.code,
+                            name: tLocalizedName(i, locale),
                             hint: `${locale === 'en' ? 'Unit' : ui("الوحدة")}: ${tUnit(i.unit?.name)} — ${tItemRole(i.role)}`,
                           }))}
                           value={line.itemId}

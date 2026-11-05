@@ -262,7 +262,10 @@ export default function NewReturnPage() {
         throw new Error(resJson.error || 'فشل في حفظ المرتجع');
       }
 
+      // Revalidate returns data immediately so it shows up on the website without delay
+      void apiFetch('/api/returns', { cache: 'reload' });
       router.push('/returns');
+      router.refresh();
     } catch (err: any) {
       setError(err.message || 'حدث خطأ أثناء حفظ المرتجع');
     } finally {

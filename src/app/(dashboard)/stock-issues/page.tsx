@@ -645,8 +645,10 @@ export default function StockIssuesPage() {
                 <SearchableCombobox
                   options={items.map((i) => ({
                     value: i.id,
-                    label: i.name,
-                    subtitle: `كود: ${i.code} | ${i.availableStock || 0} ${tUnit(i.unit?.name)}`,
+                    label: `${i.code} | ${i.name}`,
+                    code: i.code,
+                    name: i.name,
+                    subtitle: `المخزون المتاح: ${i.availableStock || 0} ${tUnit(i.unit?.name)}`,
                   }))}
                   value={selectedItemId}
                   onChange={(v) => setSelectedItemId(v)}

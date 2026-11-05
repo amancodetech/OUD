@@ -117,7 +117,10 @@ export default function DriverGiftDeliveryPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'فشل تسجيل تسليم الهدية العينية');
 
+      // Revalidate sales data immediately so it shows up on the website without delay
+      void apiFetch('/api/sales', { cache: 'reload' });
       router.push('/sales');
+      router.refresh();
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -189,6 +192,8 @@ export default function DriverGiftDeliveryPage() {
             options={items.map((i) => ({
               value: i.id,
               label: `${i.code} | ${i.name}`,
+              code: i.code,
+              name: i.name,
               hint: `الوحدة: ${i.unit?.name}`,
             }))}
             value={itemId}
