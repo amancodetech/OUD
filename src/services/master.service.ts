@@ -83,11 +83,11 @@ export async function createParty(data: CreatePartyInput, userId?: string) {
       code,
       name: trimmedName,
       nameId: data.nameId ? data.nameId.trim() : null,
-      nameEn: data.nameEn ? data.nameEn.trim() : null,
+      nameEn: data.type === 'DRIVER' ? null : (data.nameEn ? data.nameEn.trim() : null),
       type: data.type,
       phone: data.phone ?? null,
-      country: data.country ?? null,
-      address: data.address ?? null,
+      country: data.type === 'DRIVER' ? null : (data.country ?? null),
+      address: data.type === 'DRIVER' ? null : (data.address ?? null),
       supplierCategory: (data.type === 'SUPPLIER' || data.type === 'CLIENT') ? data.supplierCategory ?? null : null,
       supplierCategoryEn:
         (data.type === 'SUPPLIER' || data.type === 'CLIENT') && data.supplierCategoryEn
@@ -180,11 +180,11 @@ export async function updateParty(id: string, data: UpdatePartyInput, userId?: s
     where: { id },
     data: {
       name: trimmedName,
-      nameId: data.nameId !== undefined ? (data.nameId ? data.nameId.trim() : null) : party.nameId,
-      nameEn: data.nameEn !== undefined ? (data.nameEn ? data.nameEn.trim() : null) : party.nameEn,
+      nameId: party.type === 'DRIVER' ? null : (data.nameId !== undefined ? (data.nameId ? data.nameId.trim() : null) : party.nameId),
+      nameEn: party.type === 'DRIVER' ? null : (data.nameEn !== undefined ? (data.nameEn ? data.nameEn.trim() : null) : party.nameEn),
       phone: data.phone !== undefined ? data.phone : party.phone,
-      country: data.country !== undefined ? data.country : party.country,
-      address: data.address !== undefined ? data.address : party.address,
+      country: party.type === 'DRIVER' ? null : (data.country !== undefined ? data.country : party.country),
+      address: party.type === 'DRIVER' ? null : (data.address !== undefined ? data.address : party.address),
       supplierCategory:
         (party.type === 'SUPPLIER' || party.type === 'CLIENT') && data.supplierCategory !== undefined
           ? data.supplierCategory

@@ -529,7 +529,7 @@ export default function DriversPage() {
                       <tr key={s.driverId} className="hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors">
                         <td className="p-3.5">
                           <div className="font-bold text-gray-900 dark:text-white">
-                            {(locale === 'en' || locale === 'id') && s.driverNameEn ? s.driverNameEn : s.driverName}
+                            {s.driverName}
                           </div>
                           <div className="text-xs text-gray-400 font-mono">{s.driverCode}</div>
                         </td>

@@ -121,10 +121,10 @@ export default function PartiesPage() {
         headers: { 'Content-Type': 'application/json'   , 'If-Match': JSON.stringify(String(editingParty.version)) },
         body: JSON.stringify({
           name: editName,
-          nameEn: editNameEn.trim() || null,
+          nameEn: editingParty.type === 'DRIVER' ? null : (editNameEn.trim() || null),
           phone: editPhone || null,
-          country: editCountry || null,
-          address: editAddress || null,
+          country: editingParty.type === 'DRIVER' ? null : (editCountry || null),
+          address: editingParty.type === 'DRIVER' ? null : (editAddress || null),
           supplierCategory:
             editingParty.type === 'SUPPLIER' || editingParty.type === 'CLIENT'
               ? editSupplierCategory || null
@@ -197,11 +197,11 @@ export default function PartiesPage() {
         headers: { 'Content-Type': 'application/json'  },
         body: JSON.stringify({
           name: formName,
-          nameEn: formNameEn.trim() || null,
+          nameEn: formType === 'DRIVER' ? null : (formNameEn.trim() || null),
           type: formType,
           phone: formPhone || null,
-          country: formCountry || null,
-          address: formAddress || null,
+          country: formType === 'DRIVER' ? null : (formCountry || null),
+          address: formType === 'DRIVER' ? null : (formAddress || null),
           supplierCategory:
             formType === 'SUPPLIER' || formType === 'CLIENT' ? formSupplierCategory || null : null,
           supplierCategoryEn:
@@ -397,7 +397,7 @@ export default function PartiesPage() {
                             {party.name}
                           </div>
                         )}
-                        {locale === 'ar' && party.nameEn && (
+                        {locale === 'ar' && party.nameEn && party.type !== 'DRIVER' && (
                           <div className="text-[10px] text-slate-400 font-normal font-sans" dir="ltr">
                             {party.nameEn}
                           </div>
@@ -438,8 +438,8 @@ export default function PartiesPage() {
                       </td>
                       <td className="py-3 px-4 text-slate-500 text-[11px]">
                         {party.phone && <div dir="ltr" className={isRtl ? 'text-right font-mono' : 'text-left font-mono'}>{party.phone}</div>}
-                        {party.address && <div>{party.address}</div>}
-                        {!party.phone && !party.address && '—'}
+                        {party.type !== 'DRIVER' && party.address && <div>{party.address}</div>}
+                        {!party.phone && (party.type === 'DRIVER' || !party.address) && '—'}
                       </td>
                       <td className={`py-3 px-4 font-mono ${isRtl ? 'text-left' : 'text-right'}`} dir="ltr">
                         {formatMoney(party.openingBalance)}
@@ -570,17 +570,19 @@ export default function PartiesPage() {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700">الاسم بالإنجليزية (English Name)</label>
-                  <input
-                    type="text"
-                    value={formNameEn}
-                    onChange={(e) => setFormNameEn(e.target.value)}
-                    placeholder="e.g. Al-Midyhaf Oud Co."
-                    className="mt-1 block w-full rounded-md border border-slate-300 py-2 px-3 text-sm focus:border-amber-500 focus:outline-none font-sans"
-                    dir="ltr"
-                  />
-                </div>
+                {formType !== 'DRIVER' && (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700">الاسم بالإنجليزية (English Name)</label>
+                    <input
+                      type="text"
+                      value={formNameEn}
+                      onChange={(e) => setFormNameEn(e.target.value)}
+                      placeholder="e.g. Al-Midyhaf Oud Co."
+                      className="mt-1 block w-full rounded-md border border-slate-300 py-2 px-3 text-sm focus:border-amber-500 focus:outline-none font-sans"
+                      dir="ltr"
+                    />
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700">{t.parties.phone}</label>
@@ -594,28 +596,32 @@ export default function PartiesPage() {
                   />
                 </div>
 
+                {formType !== 'DRIVER' && (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700">{t.parties.cityOrCountry}</label>
+                    <input
+                      type="text"
+                      value={formCountry}
+                      onChange={(e) => setFormCountry(e.target.value)}
+                      placeholder={locale === 'ar' ? 'إندونيسيا، السعودية...' : locale === 'id' ? 'Indonesia, Arab Saudi...' : 'Indonesia, Saudi Arabia...'}
+                      className="mt-1 block w-full rounded-md border border-slate-300 py-2 px-3 text-sm focus:border-amber-500 focus:outline-none"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {formType !== 'DRIVER' && (
                 <div>
-                  <label className="block text-xs font-bold text-slate-700">{t.parties.cityOrCountry}</label>
+                  <label className="block text-xs font-bold text-slate-700">{t.common.notes}</label>
                   <input
                     type="text"
-                    value={formCountry}
-                    onChange={(e) => setFormCountry(e.target.value)}
-                    placeholder={locale === 'ar' ? 'إندونيسيا، السعودية...' : locale === 'id' ? 'Indonesia, Arab Saudi...' : 'Indonesia, Saudi Arabia...'}
+                    value={formAddress}
+                    onChange={(e) => setFormAddress(e.target.value)}
+                    placeholder={locale === 'ar' ? 'المدينة، الحي...' : locale === 'id' ? 'Kota, Wilayah, Alamat...' : 'City, Area, Address...'}
                     className="mt-1 block w-full rounded-md border border-slate-300 py-2 px-3 text-sm focus:border-amber-500 focus:outline-none"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700">{t.common.notes}</label>
-                <input
-                  type="text"
-                  value={formAddress}
-                  onChange={(e) => setFormAddress(e.target.value)}
-                  placeholder={locale === 'ar' ? 'المدينة، الحي...' : locale === 'id' ? 'Kota, Wilayah, Alamat...' : 'City, Area, Address...'}
-                  className="mt-1 block w-full rounded-md border border-slate-300 py-2 px-3 text-sm focus:border-amber-500 focus:outline-none"
-                />
-              </div>
+              )}
 
               {/* Conditional: SUPPLIER or CLIENT */}
               {(formType === 'SUPPLIER' || formType === 'CLIENT') && (
@@ -815,19 +821,21 @@ export default function PartiesPage() {
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700">
-                    الاسم بالإنجليزية (English Name)
-                  </label>
-                  <input
-                    type="text"
-                    value={editNameEn}
-                    onChange={(e) => setEditNameEn(e.target.value)}
-                    placeholder="e.g. Al-Midyhaf Oud Co."
-                    className="mt-1 block w-full rounded-md border border-slate-300 py-2 px-3 text-sm focus:border-amber-500 focus:outline-none font-sans"
-                    dir="ltr"
-                  />
-                </div>
+                {editingParty.type !== 'DRIVER' && (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700">
+                      الاسم بالإنجليزية (English Name)
+                    </label>
+                    <input
+                      type="text"
+                      value={editNameEn}
+                      onChange={(e) => setEditNameEn(e.target.value)}
+                      placeholder="e.g. Al-Midyhaf Oud Co."
+                      className="mt-1 block w-full rounded-md border border-slate-300 py-2 px-3 text-sm focus:border-amber-500 focus:outline-none font-sans"
+                      dir="ltr"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -842,28 +850,32 @@ export default function PartiesPage() {
                   />
                 </div>
 
+                {editingParty.type !== 'DRIVER' && (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700">{t.parties.cityOrCountry}</label>
+                    <input
+                      type="text"
+                      value={editCountry}
+                      onChange={(e) => setEditCountry(e.target.value)}
+                      className="mt-1 block w-full rounded-md border border-slate-300 py-2 px-3 text-sm focus:border-amber-500 focus:outline-none"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {editingParty.type !== 'DRIVER' && (
                 <div>
-                  <label className="block text-xs font-bold text-slate-700">{t.parties.cityOrCountry}</label>
+                  <label className="block text-xs font-bold text-slate-700">
+                    {t.common.notes} / {locale === 'ar' ? 'العنوان' : locale === 'id' ? 'Alamat' : 'Address'}
+                  </label>
                   <input
                     type="text"
-                    value={editCountry}
-                    onChange={(e) => setEditCountry(e.target.value)}
+                    value={editAddress}
+                    onChange={(e) => setEditAddress(e.target.value)}
                     className="mt-1 block w-full rounded-md border border-slate-300 py-2 px-3 text-sm focus:border-amber-500 focus:outline-none"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700">
-                  {t.common.notes} / {locale === 'ar' ? 'العنوان' : locale === 'id' ? 'Alamat' : 'Address'}
-                </label>
-                <input
-                  type="text"
-                  value={editAddress}
-                  onChange={(e) => setEditAddress(e.target.value)}
-                  className="mt-1 block w-full rounded-md border border-slate-300 py-2 px-3 text-sm focus:border-amber-500 focus:outline-none"
-                />
-              </div>
+              )}
 
               {(editingParty.type === 'SUPPLIER' || editingParty.type === 'CLIENT') && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
