@@ -20,6 +20,7 @@ import {
   Trash2,
   X,
   CheckCircle2,
+  Store,
 } from 'lucide-react';
 import { MoneyInput } from '@/components/forms/MoneyInput';
 import { useI18n } from '@/i18n/LanguageContext';
@@ -226,8 +227,8 @@ export default function SalesPage() {
             href="/sales/new"
             className="flex items-center gap-2 px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-sm font-bold shadow-sm transition-all"
           >
-            <Plus className="w-4 h-4" />
-            {t.sales.newInvoice}
+            <Store className="w-4 h-4" />
+            <span>{isRtl ? 'نقطة بيع كاشير (POS)' : 'Cashier POS'}</span>
           </Link>
         </div>
       </div>

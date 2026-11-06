@@ -27,6 +27,7 @@ import {
   ChevronLeft,
   Flame,
   X,
+  Store,
 } from 'lucide-react';
 import { useSidebar } from './SidebarContext';
 import { PermissionKey, canAccessHref } from '@/lib/permissions';
@@ -103,6 +104,11 @@ export function Sidebar({
       title: t.sidebar.groupDailyOps,
       shortTitle: t.sidebar.sales,
       items: [
+        {
+          label: locale === 'ar' ? 'نقطة بيع كاشير (POS)' : locale === 'id' ? 'Kasir (POS)' : 'Cashier (POS)',
+          href: '/sales/new',
+          icon: Store,
+        },
         { label: t.sidebar.sales, href: '/sales', icon: ShoppingCart },
         { label: t.sidebar.cash, href: '/cash', icon: Wallet },
         { label: t.sidebar.purchases, href: '/purchases', icon: ShoppingBag },
