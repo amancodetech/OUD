@@ -454,6 +454,13 @@
         "isRequired": false
       },
       {
+        "name": "imageUrl",
+        "dbName": null,
+        "type": "String",
+        "kind": "scalar",
+        "isRequired": false
+      },
+      {
         "name": "defaultSalePrice",
         "dbName": null,
         "type": "Decimal",

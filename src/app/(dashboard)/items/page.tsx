@@ -26,6 +26,8 @@ import {
 } from 'lucide-react';
 import { useI18n } from '@/i18n/LanguageContext';
 import { tLocalizedName } from '@/i18n/translate-domain';
+import { ProductImage } from '@/components/common/ProductImage';
+import { ImageUploadInput } from '@/components/common/ImageUploadInput';
 
 interface ItemRow {
   version: number;
@@ -36,6 +38,7 @@ interface ItemRow {
   name: string;
   nameId?: string | null;
   nameEn?: string | null;
+  imageUrl?: string | null;
   role: ItemRole;
   category: { id: string; version: number; name: string; prefix: string };
   unit: { id: string; name: string };
@@ -109,6 +112,7 @@ export default function ItemsPage() {
   const [formOpeningValue, setFormOpeningValue] = useState('0');
   const [formCustomCode, setFormCustomCode] = useState('');
   const [formDefaultSalePrice, setFormDefaultSalePrice] = useState('0');
+  const [formImageUrl, setFormImageUrl] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [formSubmitting, setFormSubmitting] = useState(false);
 
@@ -123,6 +127,7 @@ export default function ItemsPage() {
   const [editReorderLevel, setEditReorderLevel] = useState('0');
   const [editCustomCode, setEditCustomCode] = useState('');
   const [editDefaultSalePrice, setEditDefaultSalePrice] = useState('0');
+  const [editImageUrl, setEditImageUrl] = useState<string | null>(null);
   const [editSubmitting, setEditSubmitting] = useState(false);
   const [editError, setEditError] = useState<string | null>(null);
 
@@ -142,6 +147,7 @@ export default function ItemsPage() {
     setEditReorderLevel(String(it.reorderLevel || 0));
     setEditCustomCode(it.customCode || '');
     setEditDefaultSalePrice(it.defaultSalePrice ? String(it.defaultSalePrice) : '0');
+    setEditImageUrl(it.imageUrl || null);
     setEditError(null);
     setIsEditModalOpen(true);
   };
@@ -165,6 +171,7 @@ export default function ItemsPage() {
           reorderLevel: editReorderLevel,
           customCode: editCustomCode || null,
           defaultSalePrice: parseFloat(editDefaultSalePrice) > 0 ? editDefaultSalePrice : null,
+          imageUrl: editImageUrl || null,
         }),
       });
 
@@ -436,6 +443,7 @@ export default function ItemsPage() {
           openingValue: formOpeningValue,
           customCode: formCustomCode || null,
           defaultSalePrice: parseFloat(formDefaultSalePrice) > 0 ? formDefaultSalePrice : null,
+          imageUrl: formImageUrl || null,
         }),
       });
 
@@ -461,6 +469,7 @@ export default function ItemsPage() {
     setFormOpeningValue('0');
     setFormCustomCode('');
     setFormDefaultSalePrice('0');
+    setFormImageUrl(null);
     setFormError(null);
   };
 
@@ -634,7 +643,18 @@ export default function ItemsPage() {
                 filteredItems.map((item) => (
                   <tr key={item.id} className="hover:bg-[#F9F6F2] transition-colors">
                     <td className="py-3 px-4 font-mono font-bold text-[#6E1E24]">
-                      {item.displayCode || item.code}
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-9 h-9 shrink-0 rounded-lg overflow-hidden border border-amber-900/10 shadow-2xs">
+                          <ProductImage
+                            src={item.imageUrl}
+                            alt={item.name}
+                            categoryPrefix={item.category.prefix}
+                            categoryName={item.category.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <span>{item.displayCode || item.code}</span>
+                      </div>
                     </td>
                     <td className="py-3 px-4">
                       <div className="font-bold text-[#241112]">
@@ -974,6 +994,16 @@ export default function ItemsPage() {
                     />
                   </div>
                 </div>
+              </div>
+
+              <div>
+                <ImageUploadInput
+                  value={formImageUrl}
+                  onChange={setFormImageUrl}
+                  categoryPrefix={selectedCatObj?.prefix}
+                  categoryName={selectedCatObj?.name}
+                  label="صورة المنتج"
+                />
               </div>
 
               <div className="flex justify-end gap-2 border-t border-[#E6DDD3] pt-4">
@@ -1650,6 +1680,16 @@ export default function ItemsPage() {
                 <div className="mt-1.5 max-w-xs">
                   <QtyInput value={editReorderLevel} onChange={setEditReorderLevel} />
                 </div>
+              </div>
+
+              <div>
+                <ImageUploadInput
+                  value={editImageUrl}
+                  onChange={setEditImageUrl}
+                  categoryPrefix={editingCategory?.prefix}
+                  categoryName={editingCategory?.name}
+                  label="صورة المنتج"
+                />
               </div>
 
               <div className="flex justify-end gap-2 border-t border-[#E6DDD3] pt-4">

@@ -126,12 +126,12 @@ export function SearchableCombobox({
     }
 
     const availableHeight = openUp ? spaceAbove - 16 : spaceBelow - 16;
-    const maxHeight = Math.max(140, Math.min(360, availableHeight));
+    const maxHeight = Math.max(140, Math.min(380, availableHeight));
 
     setMenuCoords({
       openUp,
-      top: openUp ? undefined : Math.min(rect.bottom + 4, Math.max(8, vHeight - maxHeight - 8)),
-      bottom: openUp ? Math.min(vHeight - rect.top + 4, Math.max(8, vHeight - 8)) : undefined,
+      top: openUp ? undefined : rect.bottom + 4,
+      bottom: openUp ? vHeight - rect.top + 4 : undefined,
       left,
       width: menuWidth,
       maxHeight,
@@ -222,7 +222,12 @@ export function SearchableCombobox({
         type="button"
         ref={buttonRef}
         disabled={disabled}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => {
+          if (!isOpen) {
+            updateCoords();
+          }
+          setIsOpen((prev) => !prev);
+        }}
         className={`flex w-full items-center justify-between gap-2 rounded-xl border bg-white py-2 px-3 text-right text-xs shadow-xs transition-all disabled:bg-slate-100 disabled:text-slate-400 ${
           isOpen
             ? 'border-amber-500 ring-2 ring-amber-500/20'

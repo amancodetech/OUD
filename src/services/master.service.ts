@@ -309,6 +309,7 @@ export interface CreateItemInput {
   openingQty?: number | string;
   openingValue?: number | string;
   customCode?: string | null;
+  imageUrl?: string | null;
   defaultSalePrice?: number | string | null;
 }
 
@@ -348,6 +349,7 @@ export async function createItem(data: CreateItemInput, userId?: string) {
       openingQty: opQty.toString(),
       openingValue: opVal.toString(),
       customCode: data.customCode ? data.customCode.trim() : null,
+      imageUrl: data.imageUrl ? data.imageUrl.trim() : null,
       defaultSalePrice: data.defaultSalePrice ? toStorageDecimal(data.defaultSalePrice).toString() : null,
     },
     include: {
@@ -378,6 +380,7 @@ export interface UpdateItemInput {
   role?: ItemRole;
   reorderLevel?: number | string;
   customCode?: string | null;
+  imageUrl?: string | null;
   defaultSalePrice?: number | string | null;
 }
 
@@ -416,6 +419,12 @@ export async function updateItem(id: string, data: UpdateItemInput, userId?: str
             ? data.customCode.trim()
             : null
           : item.customCode,
+      imageUrl:
+        data.imageUrl !== undefined
+          ? data.imageUrl
+            ? data.imageUrl.trim()
+            : null
+          : item.imageUrl,
       defaultSalePrice:
         data.defaultSalePrice !== undefined
           ? data.defaultSalePrice

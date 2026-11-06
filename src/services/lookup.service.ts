@@ -7,7 +7,7 @@ export async function itemLookup(asOfDate = todayInStore()) {
   const [items, quantities] = await Promise.all([
     prisma.item.findMany({ where: { isActive: true }, orderBy: { code: 'asc' }, select: {
       id: true, code: true, customCode: true, name: true, nameId: true, nameEn: true, role: true,
-      defaultSalePrice: true, categoryId: true, unitId: true, category: true, unit: true,
+      defaultSalePrice: true, categoryId: true, unitId: true, category: true, unit: true, imageUrl: true,
     } }), stockQuantitiesAt(asOfDate),
   ]);
   return items.map(item => ({ ...item, displayCode: item.customCode || `${item.category.prefix}-${item.code.replace(/^[A-Za-z_-]+/, '')}`,

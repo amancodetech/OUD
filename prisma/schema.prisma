@@ -176,6 +176,7 @@ model Item {
   openingQty       Decimal      @default(0) @db.Decimal(18, 4) // كمية أول المدة
   openingValue     Decimal      @default(0) @db.Decimal(18, 4) // قيمة أول المدة
   customCode       String?      // كود بديل اختياري
+  imageUrl         String?      // رابط أو بيانات صورة الصنف
   defaultSalePrice Decimal?     @db.Decimal(18, 4) // سعر بيع افتراضي اختياري لتسريع الإدخال في الويب
   isActive         Boolean      @default(true)
   createdAt        DateTime     @default(now())

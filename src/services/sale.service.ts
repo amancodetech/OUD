@@ -4,7 +4,7 @@ import { withLedgerTransaction } from '@/lib/db';
 import { prisma } from '@/lib/db';
 import { Decimal, toDecimal, zero, toStorageDecimal, roundMoney } from '@/domain/decimal';
 import { formatDate } from '@/domain/period';
-import { nextSaleLineCode, nextCashCode } from './code-generator';
+import { nextSaleLineCode, nextCashCode, nextPartyCode } from './code-generator';
 import { logAudit } from './audit.service';
 import { loadBalancesEngine, loadAllLedgerData } from './ledger-loader';
 import { RecordStatus, CashAccountType, CashTransactionType, SaleLineType } from '@prisma/client';
@@ -87,11 +87,28 @@ export async function createSaleInvoice(input: CreateSaleInvoiceInput, userId?: 
     }
   }
 
-  // 2. Customer validation
-  if (!customerId) {
-    throw new Error('العميل إلزامي في فاتورة البيع');
+  // 2. Customer validation (resolves default cash customer if omitted)
+  let effectiveCustomerId = customerId;
+  if (!effectiveCustomerId) {
+    let defaultCustomer = await prisma.party.findFirst({
+      where: { type: 'CLIENT', name: 'عميل نقدي', isActive: true },
+    });
+    if (!defaultCustomer) {
+      const code = await nextPartyCode('CLIENT');
+      defaultCustomer = await prisma.party.create({
+        data: {
+          code,
+          name: 'عميل نقدي',
+          nameEn: 'Cash Customer',
+          nameId: 'Pelanggan Tunai',
+          type: 'CLIENT',
+          isActive: true,
+        },
+      });
+    }
+    effectiveCustomerId = defaultCustomer.id;
   }
-  const customer = await prisma.party.findUnique({ where: { id: customerId } });
+  const customer = await prisma.party.findUnique({ where: { id: effectiveCustomerId } });
   if (!customer?.isActive || customer.type !== 'CLIENT') {
     throw new Error('الطرف المحدد غير موجود أو نوعه ليس عميلاً');
   }
@@ -112,7 +129,7 @@ export async function createSaleInvoice(input: CreateSaleInvoiceInput, userId?: 
   // 4. Duplicate invoiceKey check for same customer
   const existing = await prisma.saleInvoice.findFirst({
     where: {
-      customerId,
+      customerId: effectiveCustomerId,
       invoiceKey,
       status: 'POSTED',
     },
@@ -232,7 +249,7 @@ export async function createSaleInvoice(input: CreateSaleInvoiceInput, userId?: 
         invoiceKey,
         invoiceDate: new Date(invoiceDate),
         dueDate: dueDate ? new Date(dueDate) : null,
-        customerId,
+        customerId: effectiveCustomerId,
         notes: notes ?? null,
         isOpeningInvoice: !!isOpeningInvoice,
         openingTotalAmount: isOpeningInvoice ? openingTotalDec.toString() : '0',
@@ -271,7 +288,7 @@ export async function createSaleInvoice(input: CreateSaleInvoiceInput, userId?: 
           type: CashTransactionType.CUSTOMER_COLLECTION,
           account: collectionAccount,
           amount: collectionDec.toString(),
-          partyId: customerId,
+          partyId: effectiveCustomerId,
           invoiceKey,
           description: `تحصيل فوري عند إنشاء فاتورة البيع ${invoiceKey}`,
           status: 'POSTED',
