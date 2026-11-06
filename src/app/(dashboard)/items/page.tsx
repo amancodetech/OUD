@@ -146,7 +146,7 @@ export default function ItemsPage() {
     setEditRole(it.role);
     setEditReorderLevel(String(it.reorderLevel || 0));
     setEditCustomCode(it.customCode || '');
-    setEditDefaultSalePrice(it.defaultSalePrice ? String(it.defaultSalePrice) : '0');
+    setEditDefaultSalePrice(it.defaultSalePrice && Number(it.defaultSalePrice) > 0 ? String(it.defaultSalePrice) : '');
     setEditImageUrl(it.imageUrl || null);
     setEditError(null);
     setIsEditModalOpen(true);
@@ -159,6 +159,9 @@ export default function ItemsPage() {
     setEditSubmitting(true);
 
     try {
+      const cleanEditPrice = String(editDefaultSalePrice || '').replace(/,/g, '').trim();
+      const parsedEditPrice = parseFloat(cleanEditPrice);
+
       const res = await apiFetch(`/api/items/${editingItem.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json'   , 'If-Match': JSON.stringify(String(editingItem.version)) },
@@ -170,7 +173,7 @@ export default function ItemsPage() {
           role: editRole,
           reorderLevel: editReorderLevel,
           customCode: editCustomCode || null,
-          defaultSalePrice: parseFloat(editDefaultSalePrice) > 0 ? editDefaultSalePrice : null,
+          defaultSalePrice: parsedEditPrice > 0 ? cleanEditPrice : null,
           imageUrl: editImageUrl || null,
         }),
       });
@@ -429,6 +432,9 @@ export default function ItemsPage() {
     setFormSubmitting(true);
 
     try {
+      const cleanFormPrice = String(formDefaultSalePrice || '').replace(/,/g, '').trim();
+      const parsedFormPrice = parseFloat(cleanFormPrice);
+
       const res = await apiFetch('/api/items', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -442,7 +448,7 @@ export default function ItemsPage() {
           openingQty: formOpeningQty,
           openingValue: formOpeningValue,
           customCode: formCustomCode || null,
-          defaultSalePrice: parseFloat(formDefaultSalePrice) > 0 ? formDefaultSalePrice : null,
+          defaultSalePrice: parsedFormPrice > 0 ? cleanFormPrice : null,
           imageUrl: formImageUrl || null,
         }),
       });
@@ -468,7 +474,7 @@ export default function ItemsPage() {
     setFormOpeningQty('0');
     setFormOpeningValue('0');
     setFormCustomCode('');
-    setFormDefaultSalePrice('0');
+    setFormDefaultSalePrice('');
     setFormImageUrl(null);
     setFormError(null);
   };
@@ -620,6 +626,7 @@ export default function ItemsPage() {
                 <th className="py-3 px-4">{t.items.unit}</th>
                 <th className="py-3 px-4">{t.items.role}</th>
                 <th className={`py-3 px-4 ${isRtl ? 'text-left' : 'text-right'}`}>{t.inventory.currentStock}</th>
+                <th className={`py-3 px-4 text-amber-900 ${isRtl ? 'text-left' : 'text-right'}`}>{isRtl ? 'سعر البيع' : 'Sale Price'}</th>
                 <th className={`py-3 px-4 ${isRtl ? 'text-left' : 'text-right'}`}>{t.inventory.weightedAvgCost}</th>
                 <th className={`py-3 px-4 ${isRtl ? 'text-left' : 'text-right'}`}>{t.inventory.totalInventoryValue}</th>
                 <th className="py-3 px-4 text-center">{t.common.status}</th>
@@ -629,13 +636,13 @@ export default function ItemsPage() {
             <tbody className="divide-y divide-[#F2ECE4] text-[#241112]">
               {loading ? (
                 <tr>
-                  <td colSpan={10} className="py-8 text-center text-[#6B5648]">
+                  <td colSpan={11} className="py-8 text-center text-[#6B5648]">
                     {t.common.loading}
                   </td>
                 </tr>
               ) : filteredItems.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="py-8 text-center text-[#6B5648]">
+                  <td colSpan={11} className="py-8 text-center text-[#6B5648]">
                     {t.common.noData}
                   </td>
                 </tr>
@@ -692,6 +699,13 @@ export default function ItemsPage() {
                     </td>
                     <td className={`py-3 px-4 font-mono font-bold ${isRtl ? 'text-left' : 'text-right'}`} dir="ltr">
                       {formatQty(item.availableQty, tUnit(item.unit.name))}
+                    </td>
+                    <td className={`py-3 px-4 font-mono font-bold text-amber-800 ${isRtl ? 'text-left' : 'text-right'}`} dir="ltr">
+                      {item.defaultSalePrice && Number(item.defaultSalePrice) > 0 ? (
+                        <span>{formatMoney(item.defaultSalePrice)}</span>
+                      ) : (
+                        <span className="text-slate-300 font-normal text-[11px]">—</span>
+                      )}
                     </td>
                     <td className={`py-3 px-4 font-mono ${isRtl ? 'text-left' : 'text-right'}`} dir="ltr">
                       {formatMoney(item.monthlyAvgCost)}
@@ -983,17 +997,31 @@ export default function ItemsPage() {
                     اتركه فارغاً وسيقوم النظام بتوليد كود المنتج التلقائي فوراً ({selectedCatObj?.prefix ? `${selectedCatObj.prefix}-...` : 'تلقائي'}).
                   </p>
                 </div>
-                <div>
-                  <label className="block text-xs font-medium text-[#241112]">
-                    {t.items.defaultSalePrice}
+              </div>
+
+              {/* Selling Price Highlight Card */}
+              <div className="bg-amber-50/70 p-3.5 rounded-2xl border border-amber-300/80 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-bold text-amber-950 flex items-center gap-1.5">
+                    <Tag className="w-4 h-4 text-amber-700" />
+                    <span>{isRtl ? 'سعر البيع للعميل (Selling Price)*' : 'Selling Price to Customers*'}</span>
                   </label>
-                  <div className="mt-1">
-                    <MoneyInput
-                      value={formDefaultSalePrice}
-                      onChange={setFormDefaultSalePrice}
-                    />
-                  </div>
+                  <span className="text-[10px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
+                    {isRtl ? 'يظهر تلقائياً في الكاشير' : 'POS Default'}
+                  </span>
                 </div>
+                <div className="mt-1">
+                  <MoneyInput
+                    value={formDefaultSalePrice}
+                    onChange={setFormDefaultSalePrice}
+                    placeholder={isRtl ? 'أدخل سعر البيع بالروبية... مثال: 150000' : 'Enter sale price...'}
+                  />
+                </div>
+                <p className="text-[10px] text-amber-900/80">
+                  {isRtl
+                    ? 'هذا هو سعر بيع القطعة/الوحدة الذي سيُعتمد مباشرة عند البيع في نقطة بيع الكاشير (POS).'
+                    : 'This is the unit sale price automatically applied at POS checkout.'}
+                </p>
               </div>
 
               <div>
@@ -1662,15 +1690,31 @@ export default function ItemsPage() {
                     إذا كان للمنتج باركود مصنعي يمكنك كتابته هنا للبحث به لاحقاً.
                   </p>
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-[#241112]">
-                    {isRtl ? 'سعر البيع الافتراضي' : 'Default Sale Price'}
+              {/* Selling Price Highlight Card in Edit Modal */}
+              <div className="bg-amber-50/70 p-3.5 rounded-2xl border border-amber-300/80 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-bold text-amber-950 flex items-center gap-1.5">
+                    <Tag className="w-4 h-4 text-amber-700" />
+                    <span>{isRtl ? 'سعر البيع للعميل (Selling Price)*' : 'Selling Price to Customers*'}</span>
                   </label>
-                  <div className="mt-1.5">
-                    <MoneyInput value={editDefaultSalePrice} onChange={setEditDefaultSalePrice} />
-                  </div>
+                  <span className="text-[10px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
+                    {isRtl ? 'يظهر تلقائياً في الكاشير' : 'POS Default'}
+                  </span>
                 </div>
+                <div className="mt-1">
+                  <MoneyInput
+                    value={editDefaultSalePrice}
+                    onChange={setEditDefaultSalePrice}
+                    placeholder={isRtl ? 'أدخل سعر البيع بالروبية... مثال: 150000' : 'Enter sale price...'}
+                  />
+                </div>
+                <p className="text-[10px] text-amber-900/80">
+                  {isRtl
+                    ? 'هذا هو سعر بيع القطعة/الوحدة الذي سيُعتمد مباشرة عند البيع في نقطة بيع الكاشير (POS).'
+                    : 'This is the unit sale price automatically applied at POS checkout.'}
+                </p>
               </div>
 
               <div className="border-t border-[#E6DDD3] pt-3">
