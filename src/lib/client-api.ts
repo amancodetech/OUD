@@ -202,23 +202,8 @@ async function performApiFetch(input: string, init: RequestInit = {}): Promise<R
   const write = mutation && !input.startsWith('/api/auth/') ? new Promise<void>(resolve => { finishWrite = resolve; }) : undefined;
   if (write) pendingWrites.set(write, finishWrite!);
   try {
-    let response!: Response;
-    let bytes!: ArrayBuffer;
-    const maxAttempts = mutation ? 1 : 3;
-    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-      try {
-        response = await fetch(input, { ...init, headers, cache: 'no-store', credentials: 'same-origin', signal: controller.signal });
-        bytes = await response.arrayBuffer();
-        if (attempt < maxAttempts && [502, 503, 504].includes(response.status) && !controller.signal.aborted) {
-          await new Promise(resolve => setTimeout(resolve, attempt * 400));
-          continue;
-        }
-        break;
-      } catch (err) {
-        if (attempt >= maxAttempts || controller.signal.aborted || (err instanceof Error && err.name === 'AbortError')) throw err;
-        await new Promise(resolve => setTimeout(resolve, attempt * 400));
-      }
-    }
+    let response = await fetch(input, { ...init, headers, cache: 'no-store', credentials: 'same-origin', signal: controller.signal });
+    let bytes = await response.arrayBuffer();
     if (captured !== epoch || controller.signal.aborted) throw new DOMException('Session changed', 'AbortError');
     if (canCacheRead && pendingWrites.size) await settleWrites();
     if (captured !== epoch || controller.signal.aborted) throw new DOMException('Session changed', 'AbortError');

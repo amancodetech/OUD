@@ -25,7 +25,10 @@ export interface CreateSaleInvoiceInput {
   customerId?: string | null;
   dueDate?: string | null;
   notes?: string | null;
-  lines: SaleLineInput[];
+  lines?: SaleLineInput[];
+  isOpeningInvoice?: boolean;
+  openingTotalAmount?: number | string | Decimal | null;
+  openingPaidAmount?: number | string | Decimal | null;
   // Instant collection option
   paidNow?: number | string | Decimal | null;
   collectionAccount?: CashAccountType | null;
@@ -50,9 +53,21 @@ export async function getAvailableStockAtDate(itemId: string, targetDate: string
 export async function createSaleInvoice(input: CreateSaleInvoiceInput, userId?: string) {
   return withLedgerTransaction(async () => {
 
-  const { invoiceDate, invoiceNo, customerId, dueDate, notes, lines, paidNow, collectionAccount } = input;
+  const {
+    invoiceDate,
+    invoiceNo,
+    customerId,
+    dueDate,
+    notes,
+    lines,
+    isOpeningInvoice,
+    openingTotalAmount,
+    openingPaidAmount,
+    paidNow,
+    collectionAccount,
+  } = input;
 
-  if (!lines || lines.length === 0) {
+  if (!isOpeningInvoice && (!lines || lines.length === 0)) {
     throw new Error('يجب إضافة سطر صنف واحد على الأقل في فاتورة البيع');
   }
 
@@ -61,7 +76,7 @@ export async function createSaleInvoice(input: CreateSaleInvoiceInput, userId?: 
   const allowNegative = setting?.allowNegativeStock ?? false;
   if (setting) {
     const minDate = `${setting.startYear}-01-01`;
-    if (invoiceDate < minDate) {
+    if (!isOpeningInvoice && invoiceDate < minDate) {
       throw new Error(`تاريخ الفاتورة (${invoiceDate}) يسبق سنة بداية النظام (${setting.startYear})`);
     }
     if (setting.lockedThroughDate) {
@@ -119,65 +134,82 @@ export async function createSaleInvoice(input: CreateSaleInvoiceInput, userId?: 
   }> = [];
 
   let invoiceTotal = zero();
+  let openingTotalDec = zero();
+  let openingPaidDec = zero();
 
-  // Group line quantities by item to check aggregated stock demand
-  const itemDemands = new Map<string, Decimal>();
-  for (const line of lines) {
-    const qty = toStorageDecimal(line.qty);
-    itemDemands.set(line.itemId, (itemDemands.get(line.itemId) || zero()).plus(qty));
-  }
+  if (isOpeningInvoice) {
+    openingTotalDec = toStorageDecimal(openingTotalAmount ?? 0);
+    if (openingTotalDec.lte(0)) {
+      throw new Error('إجمالي قيمة الفاتورة يجب أن يكون أكبر من الصفر');
+    }
+    openingPaidDec = toStorageDecimal(openingPaidAmount ?? 0);
+    if (openingPaidDec.lt(0)) {
+      throw new Error('المبلغ المحصل مسبقاً لا يمكن أن يكون سالباً');
+    }
+    if (openingPaidDec.gt(openingTotalDec)) {
+      throw new Error('المبلغ المحصل مسبقاً لا يمكن أن يتجاوز إجمالي الفاتورة');
+    }
+    invoiceTotal = openingTotalDec;
+  } else {
+    // Group line quantities by item to check aggregated stock demand
+    const itemDemands = new Map<string, Decimal>();
+    for (const line of lines!) {
+      const qty = toStorageDecimal(line.qty);
+      itemDemands.set(line.itemId, (itemDemands.get(line.itemId) || zero()).plus(qty));
+    }
 
-  for (const [itemId, demand] of itemDemands.entries()) {
-    const available = await getAvailableStockAtDate(itemId, invoiceDate);
-    if (demand.gt(available)) {
-      if (!allowNegative) {
-        const itemObj = await prisma.item.findUnique({
-          where: { id: itemId },
-          select: { name: true, unit: { select: { name: true } } },
-        });
-        throw new Error(
-          `الكمية المباعة للصنف (${itemObj?.name}) تتجاوز المخزون المتاح حتى تاريخ ${invoiceDate} (المتاح: ${available.toString()} ${itemObj?.unit?.name ?? ''})`
-        );
+    for (const [itemId, demand] of itemDemands.entries()) {
+      const available = await getAvailableStockAtDate(itemId, invoiceDate);
+      if (demand.gt(available)) {
+        if (!allowNegative) {
+          const itemObj = await prisma.item.findUnique({
+            where: { id: itemId },
+            select: { name: true, unit: { select: { name: true } } },
+          });
+          throw new Error(
+            `الكمية المباعة للصنف (${itemObj?.name}) تتجاوز المخزون المتاح حتى تاريخ ${invoiceDate} (المتاح: ${available.toString()} ${itemObj?.unit?.name ?? ''})`
+          );
+        }
       }
     }
-  }
 
-  for (const line of lines) {
-    const qty = toStorageDecimal(line.qty);
-    const unitPrice = toStorageDecimal(line.unitPrice);
-    const discount = toStorageDecimal(line.discount ?? 0);
-    const lineType = line.lineType || SaleLineType.SALE;
-    if (lineType !== 'SALE') throw new Error('هدايا السائقين تُسجل عبر عملية تسليم الهدية المخصصة');
-    const activeItem = await prisma.item.findUnique({ where: { id: line.itemId }, select: { isActive: true } });
-    if (!activeItem?.isActive) throw new Error('الصنف غير نشط أو غير موجود');
+    for (const line of lines!) {
+      const qty = toStorageDecimal(line.qty);
+      const unitPrice = toStorageDecimal(line.unitPrice);
+      const discount = toStorageDecimal(line.discount ?? 0);
+      const lineType = line.lineType || SaleLineType.SALE;
+      if (lineType !== 'SALE') throw new Error('هدايا السائقين تُسجل عبر عملية تسليم الهدية المخصصة');
+      const activeItem = await prisma.item.findUnique({ where: { id: line.itemId }, select: { isActive: true } });
+      if (!activeItem?.isActive) throw new Error('الصنف غير نشط أو غير موجود');
 
-    if (qty.lte(0)) {
-      throw new Error('كمية الصنف يجب أن تكون أكبر من الصفر');
-    }
-    if (unitPrice.lt(0)) {
-      throw new Error('سعر الوحدة لا يمكن أن يكون سالباً');
-    }
-    if (discount.lt(0)) {
-      throw new Error('خصم البند لا يمكن أن يكون سالباً');
-    }
+      if (qty.lte(0)) {
+        throw new Error('كمية الصنف يجب أن تكون أكبر من الصفر');
+      }
+      if (unitPrice.lt(0)) {
+        throw new Error('سعر الوحدة لا يمكن أن يكون سالباً');
+      }
+      if (discount.lt(0)) {
+        throw new Error('خصم البند لا يمكن أن يكون سالباً');
+      }
 
-    const rawNetSaleAmount = qty.times(unitPrice).minus(discount);
-    if (rawNetSaleAmount.lt(0)) {
-      throw new Error('خصم البند أكبر من إجمالي سعر البند');
-    }
-    const netSaleAmount = toStorageDecimal(roundMoney(rawNetSaleAmount));
+      const rawNetSaleAmount = qty.times(unitPrice).minus(discount);
+      if (rawNetSaleAmount.lt(0)) {
+        throw new Error('خصم البند أكبر من إجمالي سعر البند');
+      }
+      const netSaleAmount = toStorageDecimal(roundMoney(rawNetSaleAmount));
 
-    invoiceTotal = invoiceTotal.plus(netSaleAmount);
-    processedLines.push({
-      itemId: line.itemId,
-      qty,
-      unitPrice,
-      discount,
-      netSaleAmount,
-      lineType,
-      driverId: null,
-      driverGiftSettlementValue: zero(),
-    });
+      invoiceTotal = invoiceTotal.plus(netSaleAmount);
+      processedLines.push({
+        itemId: line.itemId,
+        qty,
+        unitPrice,
+        discount,
+        netSaleAmount,
+        lineType,
+        driverId: null,
+        driverGiftSettlementValue: zero(),
+      });
+    }
   }
 
   // Instant collection check
@@ -185,6 +217,10 @@ export async function createSaleInvoice(input: CreateSaleInvoiceInput, userId?: 
   if (collectionDec.lt(0)) throw new Error('المبلغ المحصل لا يمكن أن يكون سالبًا');
   if (collectionDec.gt(0) && !collectionAccount) {
     throw new Error('يرجى تحديد حساب التحصيل (خزينة / بنك) لتسجيل المبلغ المحصل');
+  }
+  const remainingDebt = isOpeningInvoice ? openingTotalDec.minus(openingPaidDec) : invoiceTotal;
+  if (collectionDec.gt(remainingDebt)) {
+    throw new Error('المبلغ المحصل الآن يتجاوز المتبقي من الفاتورة');
   }
 
   // 6. Execute atomic transaction
@@ -198,6 +234,9 @@ export async function createSaleInvoice(input: CreateSaleInvoiceInput, userId?: 
         dueDate: dueDate ? new Date(dueDate) : null,
         customerId,
         notes: notes ?? null,
+        isOpeningInvoice: !!isOpeningInvoice,
+        openingTotalAmount: isOpeningInvoice ? openingTotalDec.toString() : '0',
+        openingPaidAmount: isOpeningInvoice ? openingPaidDec.toString() : '0',
         status: 'POSTED',
       },
     });
@@ -434,7 +473,9 @@ export async function getSaleInvoices(options?: {
   return invoices.map((inv) => {
     const key = `${inv.customerId}__${inv.invoiceKey}`;
     const bal = invoiceBalanceMap.get(key);
-    const invoiceTotal = inv.lines.reduce((acc, l) => acc.plus(toDecimal(l.netSaleAmount)), zero()).toNumber();
+    const invoiceTotal = inv.isOpeningInvoice
+      ? toDecimal(inv.openingTotalAmount).toNumber()
+      : inv.lines.reduce((acc, l) => acc.plus(toDecimal(l.netSaleAmount)), zero()).toNumber();
 
     return {
       ...inv,
@@ -501,7 +542,9 @@ export async function getSaleInvoiceById(id: string, asOfDate?: string) {
       : [],
   ]);
 
-  const invoiceTotal = invoice.lines.reduce((acc, l) => acc.plus(toDecimal(l.netSaleAmount)), zero()).toNumber();
+  const invoiceTotal = invoice.isOpeningInvoice
+    ? toDecimal(invoice.openingTotalAmount).toNumber()
+    : invoice.lines.reduce((acc, l) => acc.plus(toDecimal(l.netSaleAmount)), zero()).toNumber();
 
   return {
     ...invoice,

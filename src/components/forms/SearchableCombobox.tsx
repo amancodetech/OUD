@@ -101,7 +101,7 @@ export function SearchableCombobox({
     const spaceAbove = rect.top;
 
     // Flip upwards if below space is small and above space is larger
-    const openUp = spaceBelow < 250 && spaceAbove > spaceBelow;
+    const openUp = spaceBelow < 280 && spaceAbove > spaceBelow;
 
     // Minimum 360px width so code & name are fully readable and never squished
     const menuWidth = Math.min(vWidth - 24, Math.max(rect.width, 360));
@@ -125,14 +125,13 @@ export function SearchableCombobox({
       if (left < 12) left = 12;
     }
 
-    const maxHeight = openUp
-      ? Math.max(160, Math.min(320, spaceAbove - 24))
-      : Math.max(160, Math.min(320, spaceBelow - 24));
+    const availableHeight = openUp ? spaceAbove - 16 : spaceBelow - 16;
+    const maxHeight = Math.max(140, Math.min(360, availableHeight));
 
     setMenuCoords({
       openUp,
-      top: openUp ? undefined : rect.bottom + 4,
-      bottom: openUp ? vHeight - rect.top + 4 : undefined,
+      top: openUp ? undefined : Math.min(rect.bottom + 4, Math.max(8, vHeight - maxHeight - 8)),
+      bottom: openUp ? Math.min(vHeight - rect.top + 4, Math.max(8, vHeight - 8)) : undefined,
       left,
       width: menuWidth,
       maxHeight,

@@ -55,6 +55,7 @@ interface InvoiceAgingItem {
   supplierCategory?: string | null;
   supplierCategoryEn?: string | null;
   partyType: 'CLIENT' | 'SUPPLIER';
+  isOpeningInvoice?: boolean;
   invoiceKey: string;
   invoiceDate: string;
   dueDate: string;
@@ -502,7 +503,16 @@ export default function DebtsReportPage() {
                           )}
                         </div>
                       </td>
-                      <td className="py-2.5 px-3 font-mono font-medium text-gray-900">{tInvoiceKey(inv.invoiceKey)}</td>
+                      <td className="py-2.5 px-3 font-mono font-medium text-gray-900">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span>{tInvoiceKey(inv.invoiceKey)}</span>
+                          {inv.isOpeningInvoice && (
+                            <span className="inline-block px-1.5 py-0.5 rounded text-[10px] font-sans font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                              رصيد سابق
+                            </span>
+                          )}
+                        </div>
+                      </td>
                       <td className="py-2.5 px-3 text-gray-600">{inv.invoiceDate}</td>
                       <td className="py-2.5 px-3 text-gray-600">{inv.dueDate}</td>
                       <td className="py-2.5 px-3 font-mono">

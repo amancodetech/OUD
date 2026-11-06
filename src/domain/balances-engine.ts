@@ -14,6 +14,7 @@ import {
   ReportClass,
   CoverageStatus,
   CashAccountType,
+  OpeningInvoiceDomain,
 } from './types';
 
 export interface BalancesEngineInput {
@@ -24,6 +25,8 @@ export interface BalancesEngineInput {
   returns: ReturnLineDomain[];
   cashTransactions: CashTransactionDomain[];
   systemSetting: SystemSettingDomain;
+  openingPurchaseInvoices?: OpeningInvoiceDomain[];
+  openingSaleInvoices?: OpeningInvoiceDomain[];
 }
 
 /**
@@ -78,6 +81,21 @@ export function computeBalancesEngine(input: BalancesEngineInput) {
   const partyInvoiceKeys = new Map<string, Set<string>>();
   for (const p of parties) {
     partyInvoiceKeys.set(p.id, new Set<string>());
+  }
+
+  const postedOpeningPurchases = (input.openingPurchaseInvoices ?? []).filter((p) => p.status === 'POSTED');
+  const postedOpeningSales = (input.openingSaleInvoices ?? []).filter((s) => s.status === 'POSTED');
+
+  const openingSalesByKey = new Map<string, OpeningInvoiceDomain>();
+  for (const os of postedOpeningSales) {
+    openingSalesByKey.set(`${os.partyId}:::${os.invoiceKey}`, os);
+    partyInvoiceKeys.get(os.partyId)?.add(os.invoiceKey);
+  }
+
+  const openingPurchasesByKey = new Map<string, OpeningInvoiceDomain>();
+  for (const op of postedOpeningPurchases) {
+    openingPurchasesByKey.set(`${op.partyId}:::${op.invoiceKey}`, op);
+    partyInvoiceKeys.get(op.partyId)?.add(op.invoiceKey);
   }
 
   for (const s of postedSales) {
@@ -176,23 +194,46 @@ export function computeBalancesEngine(input: BalancesEngineInput) {
       let invoiceDate: string | null = null;
       let dueDate: string | null = null;
       let originalTotal = zero();
+      let isOpening = false;
+      let notes: string | null = null;
+      let openingPaid = zero();
 
       if (party.type === 'CLIENT') {
-        const lines = salesByCustomerAndKey.get(`${party.id}:::${key}`) ?? [];
-        if (lines.length > 0) {
-          invoiceDate = lines[0].invoiceDate;
-          dueDate = lines[0].dueDate ?? null;
-          for (const line of lines) {
-            originalTotal = originalTotal.plus(line.netSaleAmount);
+        const opening = openingSalesByKey.get(`${party.id}:::${key}`);
+        if (opening) {
+          isOpening = true;
+          invoiceDate = opening.invoiceDate;
+          dueDate = opening.dueDate ?? null;
+          originalTotal = opening.openingTotalAmount;
+          openingPaid = opening.openingPaidAmount;
+          notes = opening.notes;
+        } else {
+          const lines = salesByCustomerAndKey.get(`${party.id}:::${key}`) ?? [];
+          if (lines.length > 0) {
+            invoiceDate = lines[0].invoiceDate;
+            dueDate = lines[0].dueDate ?? null;
+            for (const line of lines) {
+              originalTotal = originalTotal.plus(line.netSaleAmount);
+            }
           }
         }
       } else {
-        const lines = purchasesBySupplierAndKey.get(`${party.id}:::${key}`) ?? [];
-        if (lines.length > 0) {
-          invoiceDate = lines[0].invoiceDate;
-          dueDate = lines[0].dueDate ?? null;
-          for (const line of lines) {
-            originalTotal = originalTotal.plus(line.lineTotalCost);
+        const opening = openingPurchasesByKey.get(`${party.id}:::${key}`);
+        if (opening) {
+          isOpening = true;
+          invoiceDate = opening.invoiceDate;
+          dueDate = opening.dueDate ?? null;
+          originalTotal = opening.openingTotalAmount;
+          openingPaid = opening.openingPaidAmount;
+          notes = opening.notes;
+        } else {
+          const lines = purchasesBySupplierAndKey.get(`${party.id}:::${key}`) ?? [];
+          if (lines.length > 0) {
+            invoiceDate = lines[0].invoiceDate;
+            dueDate = lines[0].dueDate ?? null;
+            for (const line of lines) {
+              originalTotal = originalTotal.plus(line.lineTotalCost);
+            }
           }
         }
       }
@@ -224,7 +265,7 @@ export function computeBalancesEngine(input: BalancesEngineInput) {
       }
 
       // SettlementAsOf and RefundAsOf
-      let settlementAsOf = zero();
+      let settlementAsOf = openingPaid;
       let refundAsOf = zero();
 
       for (const c of cashByInvoice.get(`${party.id}:::${key}`) ?? []) {
@@ -291,6 +332,8 @@ export function computeBalancesEngine(input: BalancesEngineInput) {
         invoiceCredit,
         daysOverdue,
         aging,
+        isOpeningInvoice: isOpening,
+        notes,
       });
     }
   }

@@ -58,6 +58,16 @@ export function invoiceBalancesQuery(asOfDate: string) {
       FROM "PurchaseLine" l JOIN "PurchaseInvoice" i ON i.id=l."invoiceId"
       WHERE l.status='POSTED' AND i.status='POSTED' GROUP BY i."supplierId",i."invoiceKey"
       UNION ALL
+      SELECT i."customerId" AS party, i."invoiceKey" AS key,
+        CASE WHEN i."invoiceDate" <= ${asOfDate}::date THEN (i."openingTotalAmount" - i."openingPaidAmount") ELSE 0 END AS amount
+      FROM "SaleInvoice" i
+      WHERE i.status='POSTED' AND i."isOpeningInvoice"=true AND i."customerId" IS NOT NULL
+      UNION ALL
+      SELECT i."supplierId" AS party, i."invoiceKey" AS key,
+        CASE WHEN i."invoiceDate" <= ${asOfDate}::date THEN (i."openingTotalAmount" - i."openingPaidAmount") ELSE 0 END AS amount
+      FROM "PurchaseInvoice" i
+      WHERE i.status='POSTED' AND i."isOpeningInvoice"=true
+      UNION ALL
       SELECT r."partyId",r."invoiceKey",-CASE
         WHEN p.type='CLIENT' AND r.type='SALE_RETURN' THEN r.qty*COALESCE(s."netSaleAmount"::numeric(70,40)/NULLIF(s.qty,0),0)
         WHEN p.type='SUPPLIER' AND r.type='PURCHASE_RETURN' THEN COALESCE(r."supplierCreditNote",r.qty*COALESCE(b."lineTotalCost"::numeric(70,40)/NULLIF(b.qty,0),0)) ELSE 0 END

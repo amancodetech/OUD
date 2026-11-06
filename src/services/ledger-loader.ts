@@ -19,6 +19,7 @@ import {
   CashTransactionDomain,
   DriverReferralDomain,
   SystemSettingDomain,
+  OpeningInvoiceDomain,
 } from '@/domain/types';
 import { computeCostingEngine } from '@/domain/costing-engine';
 import { computeBalancesEngine } from '@/domain/balances-engine';
@@ -46,8 +47,10 @@ export async function loadAllLedgerData(partyIds?: string[], invoiceKeys?: strin
     dbCash,
     dbReferrals,
     dbCategories,
+    dbOpeningPurchases,
+    dbOpeningSales,
   ] = costingOnly && partyIds === undefined && invoiceKeys === undefined
-    ? await readCostingProjection()
+    ? [...await readCostingProjection(), [], []]
     : await Promise.all([
     prisma.systemSetting.findUnique({ where: { id: 1 } }),
     prisma.item.findMany({ include: { category: true, unit: true } }),
@@ -76,6 +79,22 @@ export async function loadAllLedgerData(partyIds?: string[], invoiceKeys?: strin
     prisma.cashTransaction.findMany({ where: { status: 'POSTED', ...(partyIds ? { partyId: { in: partyIds } } : {}), ...(invoiceKeys ? { invoiceKey: { in: invoiceKeys } } : {}) } }),
     prisma.driverReferral.findMany({ where: { status: 'POSTED' } }),
     prisma.itemCategory.findMany(),
+    costingOnly ? Promise.resolve([]) : prisma.purchaseInvoice.findMany({
+      where: {
+        status: 'POSTED',
+        isOpeningInvoice: true,
+        ...(partyIds ? { supplierId: { in: partyIds } } : {}),
+        ...(invoiceKeys ? { invoiceKey: { in: invoiceKeys } } : {}),
+      },
+    }),
+    costingOnly ? Promise.resolve([]) : prisma.saleInvoice.findMany({
+      where: {
+        status: 'POSTED',
+        isOpeningInvoice: true,
+        ...(partyIds ? { customerId: { in: partyIds } } : {}),
+        ...(invoiceKeys ? { invoiceKey: { in: invoiceKeys } } : {}),
+      },
+    }),
   ]);
 
   const systemSetting: SystemSettingDomain = {
@@ -262,6 +281,32 @@ export async function loadAllLedgerData(partyIds?: string[], invoiceKeys?: strin
     prefix: c.prefix,
   }));
 
+  const openingPurchaseInvoices: OpeningInvoiceDomain[] = (dbOpeningPurchases ?? []).map((p: any) => ({
+    id: p.id,
+    invoiceKey: p.invoiceKey,
+    invoiceNo: p.invoiceNo,
+    invoiceDate: formatDate(p.invoiceDate),
+    dueDate: p.dueDate ? formatDate(p.dueDate) : null,
+    partyId: p.supplierId,
+    notes: p.notes,
+    openingTotalAmount: toDecimal(p.openingTotalAmount),
+    openingPaidAmount: toDecimal(p.openingPaidAmount),
+    status: p.status,
+  }));
+
+  const openingSaleInvoices: OpeningInvoiceDomain[] = (dbOpeningSales ?? []).map((s: any) => ({
+    id: s.id,
+    invoiceKey: s.invoiceKey,
+    invoiceNo: s.invoiceNo,
+    invoiceDate: formatDate(s.invoiceDate),
+    dueDate: s.dueDate ? formatDate(s.dueDate) : null,
+    partyId: s.customerId ?? '',
+    notes: s.notes,
+    openingTotalAmount: toDecimal(s.openingTotalAmount),
+    openingPaidAmount: toDecimal(s.openingPaidAmount),
+    status: s.status,
+  }));
+
   return {
     systemSetting,
     items,
@@ -276,6 +321,8 @@ export async function loadAllLedgerData(partyIds?: string[], invoiceKeys?: strin
     cashTransactions,
     referrals,
     categories,
+    openingPurchaseInvoices,
+    openingSaleInvoices,
   };
   });
 }
@@ -307,6 +354,8 @@ export async function loadBalancesEngine(asOfDate: string, preloadedData?: Ledge
     returns: data.returns,
     cashTransactions: data.cashTransactions,
     systemSetting: data.systemSetting,
+    openingPurchaseInvoices: data.openingPurchaseInvoices,
+    openingSaleInvoices: data.openingSaleInvoices,
   });
 }
 
@@ -339,6 +388,8 @@ export async function loadReportsEngine(startDate: string, endDate: string, prel
     batches: data.batches,
     cashTransactions: data.cashTransactions,
     systemSetting: data.systemSetting,
+    openingPurchaseInvoices: data.openingPurchaseInvoices,
+    openingSaleInvoices: data.openingSaleInvoices,
   });
 }
 

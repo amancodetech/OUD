@@ -17,6 +17,7 @@ import {
   PartnerEquityItem,
   OpeningEquitySummary,
   CostingResult,
+  OpeningInvoiceDomain,
 } from './types';
 import { computeCostingEngine } from './costing-engine';
 import { computeBalancesEngine } from './balances-engine';
@@ -37,6 +38,8 @@ export interface ReportsEngineInput {
   cashTransactions: CashTransactionDomain[];
   systemSetting: SystemSettingDomain;
   costingResult?: CostingResult;
+  openingPurchaseInvoices?: OpeningInvoiceDomain[];
+  openingSaleInvoices?: OpeningInvoiceDomain[];
   balanceSummary?: {
     cashBalance: Decimal; bankBalance: Decimal; cashAndBankTotal: Decimal;
     partySummaries: { partyType: string; partyDebtAsOf: Decimal; partyCreditAsOf: Decimal }[];
@@ -101,6 +104,8 @@ export function computeReportsEngine(input: ReportsEngineInput) {
     returns,
     cashTransactions,
     systemSetting,
+    openingPurchaseInvoices: input.openingPurchaseInvoices,
+    openingSaleInvoices: input.openingSaleInvoices,
   });
 
   const postedPurchases = purchases.filter((p) => p.status === 'POSTED');
@@ -287,6 +292,13 @@ export function computeReportsEngine(input: ReportsEngineInput) {
     } else if (p.type === 'PARTNER') {
       allocatedPartnerCapital = allocatedPartnerCapital.plus(p.openingCapital ?? zero());
     }
+  }
+
+  for (const inv of input.openingSaleInvoices ?? []) {
+    openingClientDebt = openingClientDebt.plus(inv.openingTotalAmount.minus(inv.openingPaidAmount));
+  }
+  for (const inv of input.openingPurchaseInvoices ?? []) {
+    openingSupplierDebt = openingSupplierDebt.plus(inv.openingTotalAmount.minus(inv.openingPaidAmount));
   }
 
   let approvedOpeningAssets = zero();

@@ -62,6 +62,11 @@ export default function NewSalePage() {
   const [customPaidAmount, setCustomPaidAmount] = useState<number>(0);
   const [customAccount, setCustomAccount] = useState<'CASH' | 'BANK'>('CASH');
 
+  // Opening Invoice State
+  const [isOpeningInvoice, setIsOpeningInvoice] = useState(false);
+  const [openingTotalAmount, setOpeningTotalAmount] = useState<number>(0);
+  const [openingPaidAmount, setOpeningPaidAmount] = useState<number>(0);
+
   // Lines
   const [lines, setLines] = useState<SaleLineRow[]>([
     {
@@ -172,21 +177,25 @@ export default function NewSalePage() {
   }, [invoiceDate]);
 
   // Grand Totals
-  const totalQty = lines.reduce((sum, l) => sum + (Number(l.qty) || 0), 0);
-  const totalDiscount = lines.reduce((sum, l) => sum + (Number(l.discount) || 0), 0);
-  const grandTotalSale = lines.reduce((sum, l) => {
-    const net = roundMoney(toDecimal(Number(l.qty) || 0).times(Number(l.unitPrice) || 0).minus(Number(l.discount) || 0));
-    return sum.plus(net.gt(0) ? net : 0);
-  }, zero()).toNumber();
+  const totalQty = isOpeningInvoice ? 0 : lines.reduce((sum, l) => sum + (Number(l.qty) || 0), 0);
+  const totalDiscount = isOpeningInvoice ? 0 : lines.reduce((sum, l) => sum + (Number(l.discount) || 0), 0);
+  const netOpeningDebt = Math.max(0, (Number(openingTotalAmount) || 0) - (Number(openingPaidAmount) || 0));
+  const grandTotalSale = isOpeningInvoice
+    ? Number(openingTotalAmount) || 0
+    : lines.reduce((sum, l) => {
+        const net = roundMoney(toDecimal(Number(l.qty) || 0).times(Number(l.unitPrice) || 0).minus(Number(l.discount) || 0));
+        return sum.plus(net.gt(0) ? net : 0);
+      }, zero()).toNumber();
 
   // Determine instant paid amount and account
   let effectivePaidNow = 0;
   let effectiveAccount: 'CASH' | 'BANK' | null = null;
+  const currentTotal = isOpeningInvoice ? netOpeningDebt : grandTotalSale;
   if (collectionType === 'CASH_FULL') {
-    effectivePaidNow = grandTotalSale;
+    effectivePaidNow = currentTotal;
     effectiveAccount = 'CASH';
   } else if (collectionType === 'BANK_FULL') {
-    effectivePaidNow = grandTotalSale;
+    effectivePaidNow = currentTotal;
     effectiveAccount = 'BANK';
   } else if (collectionType === 'PARTIAL') {
     effectivePaidNow = customPaidAmount;
@@ -205,13 +214,28 @@ export default function NewSalePage() {
       setError('يرجى إدخال رقم الفاتورة');
       return;
     }
-    if (lines.some((l) => !l.itemId)) {
-      setError('يرجى اختيار الصنف لجميع السطور');
-      return;
-    }
-    if (lines.some((l) => Number(l.qty) <= 0)) {
-      setError('كمية الصنف يجب أن تكون أكبر من الصفر');
-      return;
+    if (isOpeningInvoice) {
+      if ((Number(openingTotalAmount) || 0) <= 0) {
+        setError('يرجى إدخال إجمالي قيمة الفاتورة السابقة أكبر من الصفر');
+        return;
+      }
+      if ((Number(openingPaidAmount) || 0) < 0) {
+        setError('المبلغ المحصل مسبقاً لا يمكن أن يكون سالباً');
+        return;
+      }
+      if ((Number(openingPaidAmount) || 0) > (Number(openingTotalAmount) || 0)) {
+        setError('المبلغ المحصل مسبقاً لا يمكن أن يتجاوز إجمالي الفاتورة');
+        return;
+      }
+    } else {
+      if (lines.some((l) => !l.itemId)) {
+        setError('يرجى اختيار الصنف لجميع السطور');
+        return;
+      }
+      if (lines.some((l) => Number(l.qty) <= 0)) {
+        setError('كمية الصنف يجب أن تكون أكبر من الصفر');
+        return;
+      }
     }
 
     setSaving(true);
@@ -222,12 +246,17 @@ export default function NewSalePage() {
         customerId,
         dueDate: dueDate || null,
         notes: notes.trim() || null,
-        lines: lines.map((l) => ({
-          itemId: l.itemId,
-          qty: l.qty,
-          unitPrice: l.unitPrice,
-          discount: l.discount,
-        })),
+        isOpeningInvoice,
+        openingTotalAmount: isOpeningInvoice ? openingTotalAmount : 0,
+        openingPaidAmount: isOpeningInvoice ? openingPaidAmount : 0,
+        lines: isOpeningInvoice
+          ? []
+          : lines.map((l) => ({
+              itemId: l.itemId,
+              qty: l.qty,
+              unitPrice: l.unitPrice,
+              discount: l.discount,
+            })),
         paidNow: effectivePaidNow > 0 ? effectivePaidNow : 0,
         collectionAccount: effectivePaidNow > 0 ? effectiveAccount : null,
       };
@@ -282,6 +311,47 @@ export default function NewSalePage() {
           {saving ? ui("جاري الحفظ...") : ui("حفظ الفاتورة")}
         </button>
       </div>
+
+      {/* Invoice Mode Toggle */}
+      <div className="bg-white p-2 rounded-2xl border border-slate-200 shadow-xs flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setIsOpeningInvoice(false)}
+          className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+            !isOpeningInvoice
+              ? 'bg-amber-600 text-white shadow-xs'
+              : 'text-slate-600 hover:bg-slate-100'
+          }`}
+        >
+          <ShoppingCart className="w-4 h-4" />
+          <span>{ui("فاتورة بيع عادية (بضاعة ومخزون)")}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setIsOpeningInvoice(true)}
+          className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+            isOpeningInvoice
+              ? 'bg-amber-700 text-white shadow-xs'
+              : 'text-slate-600 hover:bg-slate-100'
+          }`}
+        >
+          <Layers className="w-4 h-4" />
+          <span>{ui("فاتورة سابقة / رصيد افتتاحي للعميل (بدون مخزون)")}</span>
+        </button>
+      </div>
+
+      {isOpeningInvoice && (
+        <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-2xl text-amber-900 text-xs flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <p className="font-bold">تسجيل فاتورة سابقة لإثبات مديونية على العميل (بدون التأثير على المخزون الحالي):</p>
+            <p className="text-amber-800 leading-relaxed">
+              هذا الخيار مخصص لإثبات الفواتير السابقة والديون المستحقة على العملاء قبل فتح المحل أو بدء النظام. يرتبط الدين برقم فاتورة رسمي وتاريخ محدد ليظهر في كشف الحساب وعمر الديون بدقة، دون خصم أي بضاعة من المخزون.
+            </p>
+          </div>
+        </div>
+      )}
 
       {error && (
         <div className="p-4 bg-rose-50 border border-rose-200 rounded-2xl text-rose-700 text-xs flex items-center gap-3 animate-in fade-in">
@@ -365,123 +435,173 @@ export default function NewSalePage() {
           </div>
         </div>
 
-        {/* Lines Table Box */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
-          <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-            <h2 className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-              <Layers className="w-4 h-4 text-amber-600" />
-              {ui("سطور الأصناف المباعة")}</h2>
-            <button
-              type="button"
-              onClick={addLine}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-800 hover:bg-amber-100 rounded-xl text-xs font-bold transition-all"
-            >
-              <Plus className="w-4 h-4" />
-              {ui("إضافة سطر صنف")}</button>
+        {/* Conditional Content: Opening Invoice Debt Card OR Lines Table */}
+        {isOpeningInvoice ? (
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
+            <h2 className="text-xs font-bold text-slate-800 border-b border-slate-100 pb-3 flex items-center gap-2">
+              <DollarSign className="w-4 h-4 text-amber-600" />
+              <span>{ui("بيانات قيمة الفاتورة السابقة ورصيد ذمة العميل")}</span>
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  {ui("إجمالي قيمة الفاتورة الأصلية (IDR)*")}
+                </label>
+                <MoneyInput
+                  value={openingTotalAmount}
+                  onChange={(v) => {
+                    const val = Number(v) || 0;
+                    setOpeningTotalAmount(val);
+                  }}
+                  placeholder="0"
+                />
+                <span className="text-[11px] text-slate-400 mt-1 block">إجمالي قيمة الفاتورة السابقة الصادرة للعميل</span>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  {ui("المحصل مسبقاً قبل فتح المحل (IDR)")}
+                </label>
+                <MoneyInput
+                  value={openingPaidAmount}
+                  onChange={(v) => {
+                    const val = Number(v) || 0;
+                    setOpeningPaidAmount(val);
+                  }}
+                  placeholder="0"
+                />
+                <span className="text-[11px] text-slate-400 mt-1 block">أي دفعات سددها العميل قبل بدء النظام</span>
+              </div>
+
+              <div className="bg-amber-50/70 border border-amber-200 rounded-xl p-4 flex flex-col justify-center">
+                <span className="text-xs text-amber-900 font-bold block mb-1">صافي رصيد الدين المتبقي على العميل:</span>
+                <span className="text-xl font-black font-mono text-amber-900" dir="ltr">
+                  {formatNumber(netOpeningDebt)} <span className="text-xs font-normal">IDR</span>
+                </span>
+                <span className="text-[11px] text-amber-700 mt-1">المبلغ المتبقي كدين رسمي في كشف حساب العميل</span>
+              </div>
+            </div>
           </div>
+        ) : (
+          /* Lines Table Box */
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
+            <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <h2 className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                <Layers className="w-4 h-4 text-amber-600" />
+                {ui("سطور الأصناف المباعة")}</h2>
+              <button
+                type="button"
+                onClick={addLine}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-800 hover:bg-amber-100 rounded-xl text-xs font-bold transition-all"
+              >
+                <Plus className="w-4 h-4" />
+                {ui("إضافة سطر صنف")}</button>
+            </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-right text-xs">
-              <thead className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
-                <tr>
-                  <th className="p-3 w-8 text-center">#</th>
-                  <th className="p-3 min-w-[320px] lg:min-w-[360px]">{ui("الصنف والمخزون المتاح*")}</th>
-                  <th className="p-3 min-w-[140px]">{ui("الكمية*")}</th>
-                  <th className="p-3 min-w-[140px]">{ui("سعر الوحدة (IDR)*")}</th>
-                  <th className="p-3 min-w-[120px]">{ui("خصم البند")}</th>
-                  <th className="p-3 min-w-[140px] text-left">{ui("صافي البيع")}</th>
-                  <th className="p-3 w-10"></th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {lines.map((line, idx) => {
-                  const netSale = roundMoney(toDecimal(Number(line.qty) || 0).times(Number(line.unitPrice) || 0).minus(Number(line.discount) || 0)).toNumber();
+            <div className="overflow-x-auto">
+              <table className="w-full text-right text-xs">
+                <thead className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                  <tr>
+                    <th className="p-3 w-8 text-center">#</th>
+                    <th className="p-3 min-w-[320px] lg:min-w-[360px]">{ui("الصنف والمخزون المتاح*")}</th>
+                    <th className="p-3 min-w-[140px]">{ui("الكمية*")}</th>
+                    <th className="p-3 min-w-[140px]">{ui("سعر الوحدة (IDR)*")}</th>
+                    <th className="p-3 min-w-[120px]">{ui("خصم البند")}</th>
+                    <th className="p-3 min-w-[140px] text-left">{ui("صافي البيع")}</th>
+                    <th className="p-3 w-10"></th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {lines.map((line, idx) => {
+                    const netSale = roundMoney(toDecimal(Number(line.qty) || 0).times(Number(line.unitPrice) || 0).minus(Number(line.discount) || 0)).toNumber();
 
-                  const isExceedingStock =
-                    line.availableStock !== null && Number(line.qty) > line.availableStock;
+                    const isExceedingStock =
+                      line.availableStock !== null && Number(line.qty) > line.availableStock;
 
-                  return (
-                    <tr key={line.id} className="hover:bg-slate-50/50 transition-colors">
-                      <td className="p-3 text-center text-slate-400 font-bold">{idx + 1}</td>
+                    return (
+                      <tr key={line.id} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="p-3 text-center text-slate-400 font-bold">{idx + 1}</td>
 
-                      <td className="p-2 space-y-1">
-                        <SearchableCombobox
-                          options={items.map((i) => ({
-                            value: i.id,
-                            label: `${i.code} | ${tLocalizedName(i, locale)}`,
-                            code: i.code,
-                            name: tLocalizedName(i, locale),
-                            hint: `${locale === 'en' ? 'Unit' : ui("الوحدة")}: ${tUnit(i.unit?.name)}`,
-                          }))}
-                          value={line.itemId}
-                          onChange={(val) => updateLine(idx, 'itemId', val)}
-                          placeholder={ui("اختر الصنف المباع...")}
-                        />
-                        {line.availableStock !== null && (
-                          <div className="flex items-center gap-1 text-[11px]">
-                            <Package className="w-3 h-3 text-slate-400" />
-                            <span className="text-slate-500">{ui("المتاح حتى هذا التاريخ:")}</span>
-                            <span
-                              className={`font-mono font-bold ${
-                                isExceedingStock ? 'text-rose-600' : 'text-emerald-700'
-                              }`}
-                            >
-                              {formatNumber(line.availableStock)} {line.unitName}
-                            </span>
-                            {isExceedingStock && (
-                              <span className="text-[10px] text-rose-500 font-bold">
-                                {ui("(تجاوز للمخزون!)")}</span>
-                            )}
-                          </div>
-                        )}
-                      </td>
+                        <td className="p-2 space-y-1">
+                          <SearchableCombobox
+                            options={items.map((i) => ({
+                              value: i.id,
+                              label: `${i.code} | ${tLocalizedName(i, locale)}`,
+                              code: i.code,
+                              name: tLocalizedName(i, locale),
+                              hint: `${locale === 'en' ? 'Unit' : ui("الوحدة")}: ${tUnit(i.unit?.name)}`,
+                            }))}
+                            value={line.itemId}
+                            onChange={(val) => updateLine(idx, 'itemId', val)}
+                            placeholder={ui("اختر الصنف المباع...")}
+                          />
+                          {line.availableStock !== null && (
+                            <div className="flex items-center gap-1 text-[11px]">
+                              <Package className="w-3 h-3 text-slate-400" />
+                              <span className="text-slate-500">{ui("المتاح حتى هذا التاريخ:")}</span>
+                              <span
+                                className={`font-mono font-bold ${
+                                  isExceedingStock ? 'text-rose-600' : 'text-emerald-700'
+                                }`}
+                              >
+                                {formatNumber(line.availableStock)} {line.unitName}
+                              </span>
+                              {isExceedingStock && (
+                                <span className="text-[10px] text-rose-500 font-bold">
+                                  {ui("(تجاوز للمخزون!)")}</span>
+                              )}
+                            </div>
+                          )}
+                        </td>
 
-                      <td className="p-2">
-                        <QtyInput
-                          value={line.qty}
-                          onChange={(v) => updateLine(idx, 'qty', Number(v) || 0)}
-                          unitName={line.unitName || ui("وحدة")}
-                          min={0.0001}
-                        />
-                      </td>
+                        <td className="p-2">
+                          <QtyInput
+                            value={line.qty}
+                            onChange={(v) => updateLine(idx, 'qty', Number(v) || 0)}
+                            unitName={line.unitName || ui("وحدة")}
+                            min={0.0001}
+                          />
+                        </td>
 
-                      <td className="p-2">
-                        <MoneyInput
-                          value={line.unitPrice}
-                          onChange={(v) => updateLine(idx, 'unitPrice', Number(v) || 0)}
-                          placeholder="0"
-                        />
-                      </td>
+                        <td className="p-2">
+                          <MoneyInput
+                            value={line.unitPrice}
+                            onChange={(v) => updateLine(idx, 'unitPrice', Number(v) || 0)}
+                            placeholder="0"
+                          />
+                        </td>
 
-                      <td className="p-2">
-                        <MoneyInput
-                          value={line.discount}
-                          onChange={(v) => updateLine(idx, 'discount', Number(v) || 0)}
-                          placeholder="0"
-                        />
-                      </td>
+                        <td className="p-2">
+                          <MoneyInput
+                            value={line.discount}
+                            onChange={(v) => updateLine(idx, 'discount', Number(v) || 0)}
+                            placeholder="0"
+                          />
+                        </td>
 
-                      <td className="p-3 font-bold text-slate-900 text-left font-mono" dir="ltr">
-                        {netSale > 0 ? formatNumber(netSale) : '0'}
-                      </td>
+                        <td className="p-3 font-bold text-slate-900 text-left font-mono" dir="ltr">
+                          {netSale > 0 ? formatNumber(netSale) : '0'}
+                        </td>
 
-                      <td className="p-2 text-center">
-                        <button
-                          type="button"
-                          onClick={() => removeLine(idx)}
-                          disabled={lines.length <= 1}
-                          className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg transition-colors disabled:opacity-30"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                        <td className="p-2 text-center">
+                          <button
+                            type="button"
+                            onClick={() => removeLine(idx)}
+                            disabled={lines.length <= 1}
+                            className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg transition-colors disabled:opacity-30"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Instant Collection Section (Frictionless Entry) */}
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
@@ -527,7 +647,7 @@ export default function NewSalePage() {
               type="button"
               onClick={() => {
                 setCollectionType('PARTIAL');
-                if (customPaidAmount === 0) setCustomPaidAmount(Math.round(grandTotalSale / 2));
+                if (customPaidAmount === 0) setCustomPaidAmount(Math.round(currentTotal / 2));
               }}
               className={`p-3 rounded-xl border text-xs font-bold text-center transition-all ${
                 collectionType === 'PARTIAL'
@@ -582,23 +702,39 @@ export default function NewSalePage() {
         {/* Invoice Summary Box */}
         <div className="bg-slate-900 text-slate-100 p-6 rounded-2xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="space-y-1 text-xs">
-            <p className="text-slate-400">
-              {ui("عدد السطور:")}<strong className="text-white">{lines.length}</strong> {ui("| إجمالي الكميات المباعة:")}{' '}
-              <strong className="text-white">{formatNumber(totalQty)}</strong>
-            </p>
-            {totalDiscount > 0 && (
-              <p className="text-emerald-400">
-                {ui("مجموع الخصم الممنوح:")}<strong>{formatNumber(totalDiscount)} IDR</strong>
-              </p>
+            {isOpeningInvoice ? (
+              <>
+                <p className="text-amber-300 font-bold">
+                  نوع الفاتورة: فاتورة بيع سابقة / رصيد افتتاحي للعميل (بدون مخزون)
+                </p>
+                <p className="text-slate-300">
+                  المحصل سابقاً: <strong className="text-white">{formatNumber(openingPaidAmount)} IDR</strong> | صافي الدين المستحق: <strong className="text-amber-400">{formatNumber(netOpeningDebt)} IDR</strong>
+                </p>
+                <p className="text-slate-400">
+                  المحصل الآن: <strong className="text-emerald-400">{formatNumber(effectivePaidNow)} IDR</strong> | المتبقي على العميل: <strong className="text-rose-400">{formatNumber(Math.max(0, netOpeningDebt - effectivePaidNow))} IDR</strong>
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-slate-400">
+                  {ui("عدد السطور:")}<strong className="text-white">{lines.length}</strong> {ui("| إجمالي الكميات المباعة:")}{' '}
+                  <strong className="text-white">{formatNumber(totalQty)}</strong>
+                </p>
+                {totalDiscount > 0 && (
+                  <p className="text-emerald-400">
+                    {ui("مجموع الخصم الممنوح:")}<strong>{formatNumber(totalDiscount)} IDR</strong>
+                  </p>
+                )}
+                <p className="text-slate-400">
+                  {ui("المحصل الآن:")}<strong className="text-emerald-400">{formatNumber(effectivePaidNow)} IDR</strong> {ui("| المتبقي على العميل:")}{' '}
+                  <strong className="text-rose-400">{formatNumber(toDecimal(grandTotalSale).minus(effectivePaidNow).toNumber())} IDR</strong>
+                </p>
+              </>
             )}
-            <p className="text-slate-400">
-              {ui("المحصل الآن:")}<strong className="text-emerald-400">{formatNumber(effectivePaidNow)} IDR</strong> {ui("| المتبقي على العميل:")}{' '}
-              <strong className="text-rose-400">{formatNumber(toDecimal(grandTotalSale).minus(effectivePaidNow).toNumber())} IDR</strong>
-            </p>
           </div>
 
           <div className="text-left sm:text-left w-full sm:w-auto">
-            <p className="text-xs text-slate-400">{ui("صافي قيمة الفاتورة الإجمالية")}</p>
+            <p className="text-xs text-slate-400">{isOpeningInvoice ? ui("إجمالي الفاتورة الأصلية") : ui("صافي قيمة الفاتورة الإجمالية")}</p>
             <p className="text-2xl font-black text-amber-400 font-mono mt-0.5" dir="ltr">
               {formatNumber(grandTotalSale)} <span className="text-sm font-normal">IDR</span>
             </p>

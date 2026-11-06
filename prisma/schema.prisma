@@ -263,6 +263,9 @@ model PurchaseInvoice {
   supplierId  String
   supplier    Party        @relation(fields: [supplierId], references: [id])
   notes       String?
+  isOpeningInvoice   Boolean      @default(false)
+  openingTotalAmount Decimal      @default(0) @db.Decimal(18, 4)
+  openingPaidAmount  Decimal      @default(0) @db.Decimal(18, 4)
   status      RecordStatus @default(POSTED)
   voidReason  String?
   voidedAt    DateTime?
@@ -306,6 +309,9 @@ model SaleInvoice {
   customerId  String?      // إلزامي في البيع العادي، فارغ في هدية السائق العينية
   customer    Party?       @relation("CustomerSales", fields: [customerId], references: [id])
   notes       String?
+  isOpeningInvoice   Boolean      @default(false)
+  openingTotalAmount Decimal      @default(0) @db.Decimal(18, 4)
+  openingPaidAmount  Decimal      @default(0) @db.Decimal(18, 4)
   status      RecordStatus @default(POSTED)
   voidReason  String?
   voidedAt    DateTime?

@@ -220,59 +220,87 @@ export default function PurchaseDetailPage() {
         </div>
       </div>
 
-      {/* Lines Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-slate-100 bg-slate-50/50">
-          <h2 className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-            <Layers className="w-4 h-4 text-amber-600" />
-            سطور الأصناف في الفاتورة
-          </h2>
+      {/* Lines Table or Opening Invoice Card */}
+      {invoice.isOpeningInvoice ? (
+        <div className="bg-white rounded-2xl border border-amber-200 shadow-sm p-6 space-y-3">
+          <div className="flex items-center gap-2 text-amber-800 font-bold text-sm">
+            <Layers className="w-5 h-5 text-amber-600" />
+            <span>فاتورة سابقة / رصيد افتتاحي (بدون حركة مخزون)</span>
+          </div>
+          <p className="text-xs text-slate-600 leading-relaxed">
+            تم تسجيل هذه الفاتورة لتوثيق رصيد دين سابق للمورد عند فتح المحل أو قبل بدء تشغيل النظام. لا ترتبط هذه الفاتورة بسطور أصناف ولا تؤثر على كميات المخزون الحالية أو تكلفة البضاعة، وترتبط بها حركات السداد بشكل رسمي.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 border-t border-slate-100 text-xs">
+            <div>
+              <span className="text-slate-400 block">إجمالي الفاتورة الأصلية:</span>
+              <span className="font-bold font-mono text-slate-800 text-sm">{Number(invoice.openingTotalAmount || invoice.invoiceTotal).toLocaleString()} IDR</span>
+            </div>
+            <div>
+              <span className="text-slate-400 block">المسدد مسبقاً قبل النظام:</span>
+              <span className="font-bold font-mono text-emerald-700 text-sm">{Number(invoice.openingPaidAmount || 0).toLocaleString()} IDR</span>
+            </div>
+            <div>
+              <span className="text-slate-400 block">صافي الدين الافتتاحي عند التسجيل:</span>
+              <span className="font-bold font-mono text-amber-800 text-sm">
+                {(Number(invoice.openingTotalAmount || invoice.invoiceTotal) - Number(invoice.openingPaidAmount || 0)).toLocaleString()} IDR
+              </span>
+            </div>
+          </div>
         </div>
+      ) : (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="p-4 border-b border-slate-100 bg-slate-50/50">
+            <h2 className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <Layers className="w-4 h-4 text-amber-600" />
+              سطور الأصناف في الفاتورة
+            </h2>
+          </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-right text-xs">
-            <thead className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
-              <tr>
-                <th className="p-3">كود السطر</th>
-                <th className="p-3">الصنف</th>
-                <th className="p-3 text-center">الكمية</th>
-                <th className="p-3 text-left">تكلفة الوحدة</th>
-                <th className="p-3 text-left">تكلفة الوصول</th>
-                <th className="p-3 text-left">الخصم</th>
-                <th className="p-3 text-left font-bold">تكلفة البند</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {invoice.lines?.map((line: any) => (
-                <tr key={line.id} className="hover:bg-slate-50/50">
-                  <td className="p-3 font-mono text-amber-700 font-bold">{line.code}</td>
-                  <td className="p-3 font-bold text-slate-900">
-                    {line.item?.name}{' '}
-                    <span className="text-[10px] text-slate-400 font-normal">
-                      ({line.item?.unit?.name})
-                    </span>
-                  </td>
-                  <td className="p-3 text-center font-mono font-bold" dir="ltr">
-                    {Number(line.qty).toLocaleString()}
-                  </td>
-                  <td className="p-3 text-left font-mono" dir="ltr">
-                    {Number(line.unitCost).toLocaleString()}
-                  </td>
-                  <td className="p-3 text-left font-mono text-slate-500" dir="ltr">
-                    {Number(line.landedCost).toLocaleString()}
-                  </td>
-                  <td className="p-3 text-left font-mono text-slate-500" dir="ltr">
-                    {Number(line.discount).toLocaleString()}
-                  </td>
-                  <td className="p-3 text-left font-mono font-bold text-slate-900" dir="ltr">
-                    {Number(line.lineTotalCost).toLocaleString()}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-right text-xs">
+              <thead className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                <tr>
+                  <th className="p-3">كود السطر</th>
+                  <th className="p-3">الصنف</th>
+                  <th className="p-3 text-center">الكمية</th>
+                  <th className="p-3 text-left">تكلفة الوحدة</th>
+                  <th className="p-3 text-left">تكلفة الوصول</th>
+                  <th className="p-3 text-left">الخصم</th>
+                  <th className="p-3 text-left font-bold">تكلفة البند</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {invoice.lines?.map((line: any) => (
+                  <tr key={line.id} className="hover:bg-slate-50/50">
+                    <td className="p-3 font-mono text-amber-700 font-bold">{line.code}</td>
+                    <td className="p-3 font-bold text-slate-900">
+                      {line.item?.name}{' '}
+                      <span className="text-[10px] text-slate-400 font-normal">
+                        ({line.item?.unit?.name})
+                      </span>
+                    </td>
+                    <td className="p-3 text-center font-mono font-bold" dir="ltr">
+                      {Number(line.qty).toLocaleString()}
+                    </td>
+                    <td className="p-3 text-left font-mono" dir="ltr">
+                      {Number(line.unitCost).toLocaleString()}
+                    </td>
+                    <td className="p-3 text-left font-mono text-slate-500" dir="ltr">
+                      {Number(line.landedCost).toLocaleString()}
+                    </td>
+                    <td className="p-3 text-left font-mono text-slate-500" dir="ltr">
+                      {Number(line.discount).toLocaleString()}
+                    </td>
+                    <td className="p-3 text-left font-mono font-bold text-slate-900" dir="ltr">
+                      {Number(line.lineTotalCost).toLocaleString()}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Related Payments & Returns */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

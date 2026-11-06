@@ -22,7 +22,10 @@ export interface CreatePurchaseInvoiceInput {
   supplierId: string;
   dueDate?: string | null;
   notes?: string | null;
-  lines: PurchaseLineInput[];
+  lines?: PurchaseLineInput[];
+  isOpeningInvoice?: boolean;
+  openingTotalAmount?: number | string | Decimal | null;
+  openingPaidAmount?: number | string | Decimal | null;
   // Instant payment option
   paidNow?: number | string | Decimal | null;
   paymentAccount?: CashAccountType | null;
@@ -34,9 +37,21 @@ export async function createPurchaseInvoice(
 ) {
   return withLedgerTransaction(async () => {
 
-  const { invoiceDate, invoiceNo, supplierId, dueDate, notes, lines, paidNow, paymentAccount } = input;
+  const {
+    invoiceDate,
+    invoiceNo,
+    supplierId,
+    dueDate,
+    notes,
+    lines,
+    isOpeningInvoice,
+    openingTotalAmount,
+    openingPaidAmount,
+    paidNow,
+    paymentAccount,
+  } = input;
 
-  if (!lines || lines.length === 0) {
+  if (!isOpeningInvoice && (!lines || lines.length === 0)) {
     throw new Error('يجب إضافة سطر صنف واحد على الأقل في فاتورة الشراء');
   }
 
@@ -44,7 +59,7 @@ export async function createPurchaseInvoice(
   const setting = await prisma.systemSetting.findFirst();
   if (setting) {
     const minDate = `${setting.startYear}-01-01`;
-    if (invoiceDate < minDate) {
+    if (!isOpeningInvoice && invoiceDate < minDate) {
       throw new Error(`تاريخ الفاتورة (${invoiceDate}) يسبق سنة بداية النظام (${setting.startYear})`);
     }
     if (setting.lockedThroughDate) {
@@ -97,44 +112,61 @@ export async function createPurchaseInvoice(
   }> = [];
 
   let invoiceTotal = zero();
+  let openingTotalDec = zero();
+  let openingPaidDec = zero();
 
-  for (const line of lines) {
-    const item = await prisma.item.findUnique({ where: { id: line.itemId }, select: { isActive: true } });
-    if (!item?.isActive) throw new Error('الصنف غير نشط أو غير موجود');
-    const qty = toStorageDecimal(line.qty);
-    const unitCost = toStorageDecimal(line.unitCost);
-    const landedCost = toStorageDecimal(line.landedCost ?? 0);
-    const discount = toStorageDecimal(line.discount ?? 0);
+  if (isOpeningInvoice) {
+    openingTotalDec = toStorageDecimal(openingTotalAmount ?? 0);
+    if (openingTotalDec.lte(0)) {
+      throw new Error('إجمالي قيمة الفاتورة يجب أن يكون أكبر من الصفر');
+    }
+    openingPaidDec = toStorageDecimal(openingPaidAmount ?? 0);
+    if (openingPaidDec.lt(0)) {
+      throw new Error('المبلغ المسدد مسبقاً لا يمكن أن يكون سالباً');
+    }
+    if (openingPaidDec.gt(openingTotalDec)) {
+      throw new Error('المبلغ المسدد مسبقاً لا يمكن أن يتجاوز إجمالي الفاتورة');
+    }
+    invoiceTotal = openingTotalDec;
+  } else if (lines) {
+    for (const line of lines) {
+      const item = await prisma.item.findUnique({ where: { id: line.itemId }, select: { isActive: true } });
+      if (!item?.isActive) throw new Error('الصنف غير نشط أو غير موجود');
+      const qty = toStorageDecimal(line.qty);
+      const unitCost = toStorageDecimal(line.unitCost);
+      const landedCost = toStorageDecimal(line.landedCost ?? 0);
+      const discount = toStorageDecimal(line.discount ?? 0);
 
-    if (qty.lte(0)) {
-      throw new Error('كمية الصنف يجب أن تكون أكبر من الصفر');
-    }
-    if (unitCost.lt(0)) {
-      throw new Error('تكلفة الوحدة لا يمكن أن تكون سالبة');
-    }
-    if (landedCost.lt(0)) {
-      throw new Error('تكلفة الوصول لا يمكن أن تكون سالبة');
-    }
-    if (discount.lt(0)) {
-      throw new Error('خصم البند لا يمكن أن يكون سالباً');
-    }
+      if (qty.lte(0)) {
+        throw new Error('كمية الصنف يجب أن تكون أكبر من الصفر');
+      }
+      if (unitCost.lt(0)) {
+        throw new Error('تكلفة الوحدة لا يمكن أن تكون سالبة');
+      }
+      if (landedCost.lt(0)) {
+        throw new Error('تكلفة الوصول لا يمكن أن تكون سالبة');
+      }
+      if (discount.lt(0)) {
+        throw new Error('خصم البند لا يمكن أن يكون سالباً');
+      }
 
-    // lineTotalCost = qty * unitCost + landedCost - discount
-    const rawLineTotalCost = qty.times(unitCost).plus(landedCost).minus(discount);
-    if (rawLineTotalCost.lt(0)) {
-      throw new Error('خصم البند أكبر من إجمالي تكلفة البند');
-    }
-    const lineTotalCost = toStorageDecimal(roundMoney(rawLineTotalCost));
+      // lineTotalCost = qty * unitCost + landedCost - discount
+      const rawLineTotalCost = qty.times(unitCost).plus(landedCost).minus(discount);
+      if (rawLineTotalCost.lt(0)) {
+        throw new Error('خصم البند أكبر من إجمالي تكلفة البند');
+      }
+      const lineTotalCost = toStorageDecimal(roundMoney(rawLineTotalCost));
 
-    invoiceTotal = invoiceTotal.plus(lineTotalCost);
-    processedLines.push({
-      itemId: line.itemId,
-      qty,
-      unitCost,
-      landedCost,
-      discount,
-      lineTotalCost,
-    });
+      invoiceTotal = invoiceTotal.plus(lineTotalCost);
+      processedLines.push({
+        itemId: line.itemId,
+        qty,
+        unitCost,
+        landedCost,
+        discount,
+        lineTotalCost,
+      });
+    }
   }
 
   // Instant payment check
@@ -142,6 +174,10 @@ export async function createPurchaseInvoice(
   if (paymentDec.lt(0)) throw new Error('المبلغ المسدد لا يمكن أن يكون سالبًا');
   if (paymentDec.gt(0) && !paymentAccount) {
     throw new Error('يرجى تحديد حساب الدفع (خزينة / بنك) لتسجيل الدفعة المسددة');
+  }
+  const remainingDebt = isOpeningInvoice ? openingTotalDec.minus(openingPaidDec) : invoiceTotal;
+  if (paymentDec.gt(remainingDebt)) {
+    throw new Error('المبلغ المسدد الآن يتجاوز المتبقي من الفاتورة');
   }
 
   // 6. Execute atomic transaction
@@ -156,11 +192,14 @@ export async function createPurchaseInvoice(
         dueDate: dueDate ? new Date(dueDate) : null,
         supplierId,
         notes: notes ?? null,
+        isOpeningInvoice: !!isOpeningInvoice,
+        openingTotalAmount: isOpeningInvoice ? openingTotalDec.toString() : '0',
+        openingPaidAmount: isOpeningInvoice ? openingPaidDec.toString() : '0',
         status: 'POSTED',
       },
     });
 
-    // Create lines with sequential codes
+    // Create lines with sequential codes (only for regular invoices)
     let lineIdx = 0;
     for (const pLine of processedLines) {
       const code = await nextPurchaseLineCode(lineIdx++);
@@ -215,11 +254,12 @@ export async function createPurchaseInvoice(
       action: 'CREATE',
       entityType: 'PurchaseInvoice',
       entityCode: invoiceKey,
-      reason: 'إنشاء فاتورة شراء جديدة',
+      reason: isOpeningInvoice ? 'إنشاء فاتورة مشتريات سابقة (بدون مخزون)' : 'إنشاء فاتورة شراء جديدة',
       afterJson: {
         id: invoice.id,
         invoiceKey,
         supplierId,
+        isOpeningInvoice: !!isOpeningInvoice,
         invoiceTotal: invoiceTotal.toString(),
         linesCount: processedLines.length,
       },
@@ -227,7 +267,6 @@ export async function createPurchaseInvoice(
 
     return invoice;
   });
-
   });
 }
 

@@ -142,6 +142,19 @@ export interface SaleLineDomain {
   status: RecordStatus;
 }
 
+export interface OpeningInvoiceDomain {
+  id: string;
+  invoiceKey: string;
+  invoiceNo: string;
+  invoiceDate: string; // YYYY-MM-DD
+  dueDate: string | null;
+  partyId: string; // customerId or supplierId
+  notes: string | null;
+  openingTotalAmount: Decimal;
+  openingPaidAmount: Decimal;
+  status: RecordStatus;
+}
+
 export interface ReturnLineDomain {
   id: string;
   code: string; // R000001
@@ -311,6 +324,8 @@ export interface InvoiceBalanceItem {
   invoiceCredit: Decimal;
   daysOverdue: number;
   aging: AgingCategory;
+  isOpeningInvoice?: boolean;
+  notes?: string | null;
 }
 
 export interface PartySummaryItem {

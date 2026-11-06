@@ -856,6 +856,27 @@
         "isRequired": false
       },
       {
+        "name": "isOpeningInvoice",
+        "dbName": null,
+        "type": "Boolean",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingTotalAmount",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingPaidAmount",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
         "name": "status",
         "dbName": null,
         "type": "RecordStatus",
@@ -1027,6 +1048,27 @@
         "type": "String",
         "kind": "scalar",
         "isRequired": false
+      },
+      {
+        "name": "isOpeningInvoice",
+        "dbName": null,
+        "type": "Boolean",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingTotalAmount",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
+      },
+      {
+        "name": "openingPaidAmount",
+        "dbName": null,
+        "type": "Decimal",
+        "kind": "scalar",
+        "isRequired": true
       },
       {
         "name": "status",

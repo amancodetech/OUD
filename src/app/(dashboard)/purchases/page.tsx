@@ -311,7 +311,14 @@ export default function PurchasesPage() {
                 {filteredInvoices.map((inv) => (
                   <tr key={inv.id} className="hover:bg-slate-50/70 transition-colors">
                     <td className="p-3 font-bold text-slate-900 font-mono" dir="ltr">
-                      {tInvoiceKey(inv.invoiceKey)}
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span>{tInvoiceKey(inv.invoiceKey)}</span>
+                        {inv.isOpeningInvoice && (
+                          <span className="inline-block px-1.5 py-0.5 rounded text-[10px] font-sans font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                            افتتاحي (بدون مخزون)
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="p-3 text-slate-600">
                       {new Date(inv.invoiceDate).toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US')}
@@ -319,7 +326,13 @@ export default function PurchasesPage() {
                     <td className="p-3 font-medium text-slate-800">
                       {inv.supplier?.code} | {tLocalizedName(inv.supplier, locale)}
                     </td>
-                    <td className="p-3 text-slate-500">{inv.lines?.length || 0}</td>
+                    <td className="p-3 text-slate-500">
+                      {inv.isOpeningInvoice ? (
+                        <span className="text-[11px] text-amber-700 font-bold">رصيد سابق</span>
+                      ) : (
+                        inv.lines?.length || 0
+                      )}
+                    </td>
                     <td className={`p-3 font-bold text-slate-900 font-mono ${isRtl ? 'text-left' : 'text-right'}`} dir="ltr">
                       {inv.invoiceTotal?.toLocaleString()}
                     </td>
