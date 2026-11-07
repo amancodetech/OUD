@@ -32,6 +32,7 @@ import {
   PauseCircle,
   PlayCircle,
   Store,
+  Tag,
 } from 'lucide-react';
 import { MoneyInput } from '@/components/forms/MoneyInput';
 import { QtyInput } from '@/components/forms/QtyInput';
@@ -373,6 +374,27 @@ export default function NewSalePage() {
   // Grand Totals
   const totalQty = isOpeningInvoice ? 0 : lines.reduce((sum, l) => sum + (Number(l.qty) || 0), 0);
   const totalDiscount = isOpeningInvoice ? 0 : lines.reduce((sum, l) => sum + (Number(l.discount) || 0), 0);
+  const subtotalBeforeDiscount = isOpeningInvoice
+    ? 0
+    : lines.reduce((sum, l) => sum + (Number(l.qty) || 0) * (Number(l.unitPrice) || 0), 0);
+
+  const applyPercentageDiscount = (pct: number) => {
+    if (pct <= 0) {
+      setLines((prev) => prev.map((l) => ({ ...l, discount: 0 })));
+      return;
+    }
+    const factor = pct / 100;
+    setLines((prev) =>
+      prev.map((l) => {
+        const lineSubtotal = (Number(l.qty) || 0) * (Number(l.unitPrice) || 0);
+        return {
+          ...l,
+          discount: Math.round(lineSubtotal * factor),
+        };
+      })
+    );
+  };
+
   const netOpeningDebt = Math.max(0, (Number(openingTotalAmount) || 0) - (Number(openingPaidAmount) || 0));
   const grandTotalSale = isOpeningInvoice
     ? Number(openingTotalAmount) || 0
@@ -841,6 +863,7 @@ export default function NewSalePage() {
                 </div>
               ) : (
                 lines.map((line, idx) => {
+                  const lineTotalBeforeDiscount = (Number(line.qty) || 0) * (Number(line.unitPrice) || 0);
                   const net = roundMoney(
                     toDecimal(line.qty).times(line.unitPrice).minus(line.discount)
                   ).toNumber();
@@ -848,70 +871,120 @@ export default function NewSalePage() {
                   return (
                     <div
                       key={line.id}
-                      className="p-2 hover:bg-slate-50/70 rounded-xl transition flex items-center gap-2.5"
+                      className="p-2.5 hover:bg-slate-50/80 rounded-xl transition space-y-2 border border-slate-200/70 bg-white shadow-2xs"
                     >
-                      {/* Product Thumbnail */}
-                      <div className="w-10 h-10 shrink-0 rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
-                        <ProductImage
-                          src={line.imageUrl}
-                          alt={line.name}
-                          categoryPrefix={line.categoryPrefix}
-                          categoryName={line.categoryName}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-
-                      {/* Info & Price */}
-                      <div className="flex-1 min-w-0 space-y-0.5">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-slate-900 truncate">
-                            {line.name}
-                          </span>
-                          <span className="font-mono text-xs font-bold text-slate-900" dir="ltr">
-                            {formatNumber(net)}
-                          </span>
+                      {/* Top: Product Thumbnail, Name, Code, and Delete */}
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-10 h-10 shrink-0 rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
+                          <ProductImage
+                            src={line.imageUrl}
+                            alt={line.name}
+                            categoryPrefix={line.categoryPrefix}
+                            categoryName={line.categoryName}
+                            className="w-full h-full object-cover"
+                          />
                         </div>
-                        <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
-                          <span>
-                            {line.code} • {formatNumber(line.unitPrice)} IDR
-                          </span>
-                          {line.discount > 0 && (
-                            <span className="text-emerald-600">
-                              خصم: -{formatNumber(line.discount)}
+
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-slate-900 truncate">
+                              {line.name}
                             </span>
-                          )}
+                            <button
+                              type="button"
+                              onClick={() => removeLine(idx)}
+                              className="p-1 text-slate-300 hover:text-rose-600 rounded transition shrink-0"
+                              title="حذف البند من السلة"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                          <span className="text-[10px] text-amber-800 font-mono font-bold">
+                            {line.code} • {line.unitName || 'وحدة'}
+                          </span>
                         </div>
                       </div>
 
-                      {/* Stepper (+ / -) */}
-                      <div className="flex items-center gap-1 shrink-0 bg-slate-100 rounded-lg p-0.5 border border-slate-200">
-                        <button
-                          type="button"
-                          onClick={() => updateLineQty(idx, line.qty - 1)}
-                          className="w-5 h-5 flex items-center justify-center rounded bg-white hover:bg-slate-200 text-slate-700 font-bold text-xs"
+                      {/* Middle: Controls (Quantity Stepper, Editable Price, Editable Discount) */}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 items-center pt-1 border-t border-slate-100">
+                        {/* 1. Quantity Stepper */}
+                        <div className="flex items-center justify-between bg-slate-100 rounded-lg p-0.5 border border-slate-200">
+                          <button
+                            type="button"
+                            onClick={() => updateLineQty(idx, line.qty - 1)}
+                            className="w-6 h-6 flex items-center justify-center rounded bg-white hover:bg-slate-200 text-slate-700 font-bold text-xs shadow-2xs"
+                          >
+                            <Minus className="w-3 h-3" />
+                          </button>
+                          <span className="font-mono font-bold text-xs px-1 min-w-[24px] text-center">
+                            {line.qty}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => updateLineQty(idx, line.qty + 1)}
+                            className="w-6 h-6 flex items-center justify-center rounded bg-white hover:bg-slate-200 text-slate-700 font-bold text-xs shadow-2xs"
+                          >
+                            <Plus className="w-3 h-3" />
+                          </button>
+                        </div>
+
+                        {/* 2. Editable Unit Price Input */}
+                        <div
+                          className={`flex items-center gap-1 rounded-lg px-2 py-1 border transition-all ${
+                            line.unitPrice === 0
+                              ? 'bg-amber-50 border-amber-400 ring-1 ring-amber-300'
+                              : 'bg-slate-50 border-slate-200 focus-within:border-amber-500 focus-within:bg-white'
+                          }`}
                         >
-                          <Minus className="w-3 h-3" />
-                        </button>
-                        <span className="font-mono font-bold text-xs px-1.5 min-w-[20px] text-center">
-                          {line.qty}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => updateLineQty(idx, line.qty + 1)}
-                          className="w-5 h-5 flex items-center justify-center rounded bg-white hover:bg-slate-200 text-slate-700 font-bold text-xs"
-                        >
-                          <Plus className="w-3 h-3" />
-                        </button>
+                          <span className="text-[10px] font-bold text-slate-500 shrink-0">السعر:</span>
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            value={line.unitPrice ? formatNumber(line.unitPrice) : ''}
+                            placeholder="أدخل السعر"
+                            onChange={(e) => {
+                              const raw = e.target.value.replace(/[^\d]/g, '');
+                              updateLine(idx, 'unitPrice', Number(raw) || 0);
+                            }}
+                            className="w-full bg-transparent text-xs font-mono font-bold text-slate-900 focus:outline-none text-left"
+                            dir="ltr"
+                            title="انقر لتعديل سعر الحبة"
+                          />
+                        </div>
+
+                        {/* 3. Editable Discount Input */}
+                        <div className="flex items-center gap-1 rounded-lg px-2 py-1 bg-slate-50 border border-slate-200 focus-within:border-rose-400 focus-within:bg-white">
+                          <span className="text-[10px] font-bold text-rose-600 shrink-0">خصم:</span>
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            value={line.discount ? formatNumber(line.discount) : ''}
+                            placeholder="0"
+                            onChange={(e) => {
+                              const raw = e.target.value.replace(/[^\d]/g, '');
+                              const num = Number(raw) || 0;
+                              updateLine(idx, 'discount', Math.min(num, lineTotalBeforeDiscount));
+                            }}
+                            className="w-full bg-transparent text-xs font-mono font-bold text-rose-700 focus:outline-none text-left"
+                            dir="ltr"
+                            title="خصم البند بالروبية"
+                          />
+                        </div>
                       </div>
 
-                      {/* Delete */}
-                      <button
-                        type="button"
-                        onClick={() => removeLine(idx)}
-                        className="p-1 text-slate-300 hover:text-rose-600 rounded transition shrink-0"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+                      {/* Bottom: Line Total */}
+                      <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-100/70">
+                        <span className="text-[10px] text-slate-400">
+                          {line.qty} × {formatNumber(line.unitPrice)}
+                          {line.discount > 0 ? ` (خصم: -${formatNumber(line.discount)})` : ''}
+                        </span>
+                        <div className="text-left font-mono">
+                          <span className="text-[10px] text-slate-400 ml-1">الصافي:</span>
+                          <span className="font-bold text-amber-800 text-xs" dir="ltr">
+                            {formatNumber(net)} IDR
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   );
                 })
@@ -920,6 +993,57 @@ export default function NewSalePage() {
 
             {/* Cart Summary & Payment (Sticky Bottom of Cart) */}
             <div className="p-3.5 border-t border-slate-200 bg-slate-50/80 rounded-b-2xl space-y-3 shrink-0">
+              {/* Subtotal & Discount Breakdown */}
+              {lines.length > 0 && (
+                <div className="space-y-1.5 pb-2 border-b border-slate-200 text-xs">
+                  <div className="flex items-center justify-between text-slate-500">
+                    <span>المجموع قبل الخصم:</span>
+                    <span className="font-mono font-bold text-slate-700" dir="ltr">
+                      {formatNumber(subtotalBeforeDiscount)} IDR
+                    </span>
+                  </div>
+
+                  {totalDiscount > 0 && (
+                    <div className="flex items-center justify-between text-rose-600">
+                      <span>إجمالي الخصم الممنوح:</span>
+                      <span className="font-mono font-bold" dir="ltr">
+                        -{formatNumber(totalDiscount)} IDR
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Quick Overall Discount Bar */}
+                  <div className="pt-1 flex items-center justify-between gap-1">
+                    <span className="text-[11px] text-slate-500 font-bold flex items-center gap-1">
+                      <Tag className="w-3 h-3 text-amber-600" />
+                      <span>خصم الفاتورة:</span>
+                    </span>
+                    <div className="flex items-center gap-1">
+                      {[5, 10, 15, 20].map((pct) => (
+                        <button
+                          key={pct}
+                          type="button"
+                          onClick={() => applyPercentageDiscount(pct)}
+                          className="px-2 py-0.5 rounded-lg border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 text-[10px] font-bold font-mono transition"
+                        >
+                          %{pct}
+                        </button>
+                      ))}
+                      {totalDiscount > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => applyPercentageDiscount(0)}
+                          className="px-1.5 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 text-[10px] transition"
+                          title="إلغاء الخصم"
+                        >
+                          إلغاء
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Grand Total */}
               <div className="flex items-center justify-between">
                 <div>
